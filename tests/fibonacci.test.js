@@ -7,7 +7,7 @@ run({
   test: (ram, display) => {
     describe('fibonacci.ch8', () => {
       test('calculates the 12th Fibonacci number', () => {
-        expect(ram.[0x400]).toBe(144);
+        expect(ram[0x400]).toBe(144);
       });
     });
   }
