@@ -22,7 +22,9 @@ type randomByte func() uint8
 
 type CPU struct {
   RAM        []uint8
+  RAMSize    uint16
   Display    [256]uint8
+  DispSize   uint16
   stack      [12]uint16
   v          [16]uint8
   userFlags  [8]uint8
@@ -82,15 +84,17 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.sp = 11
   cpu.dt = 0
   cpu.st = 0
+  cpu.DispSize = 256
 
   switch(interpreter) {
   case STRICTVIP:
-    cpu.RAM = make([]uint8, 3216)
-  case VIP, SCHIP:
-    cpu.RAM = make([]uint8, 3583)
+    cpu.RAMSize = 3216
+  case VIP, SCHIP, BLINDVIP:
+    cpu.RAMSize = 3583
   case XOCHIP:
-    cpu.RAM = make([]uint8, 65024)
+    cpu.RAMSize = 65024
   }
+  cpu.RAM = make([]uint8, cpu.RAMSize)
 
   for i := range cpu.Display  { cpu.Display[i]  = 0     }
   for i := range cpu.Keyboard { cpu.Keyboard[i] = false }

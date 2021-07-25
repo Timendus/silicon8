@@ -38,18 +38,28 @@ func cycles(num int) {
   }
 }
 
-//export ram
+//export ramPtr
 func ramPtr() *uint8 {
   return &cpu.RAM[0]
 }
 
-//export display
+//export ramSize
+func ramSize() uint16 {
+  return cpu.RAMSize
+}
+
+//export displayPtr
 func displayPtr() *uint8 {
   return &cpu.Display[0]
 }
 
+//export displaySize
+func displaySize() uint16 {
+  return cpu.DispSize
+}
+
 // Call this routine on each rendering loop, both to check if you need to redraw
-// the screen, and to trigger the screen refresh "interrupt" when `drawQuirk` is
+// the screen, and to trigger the screen refresh "interrupt" when `dispQuirk` is
 // enabled.
 //export screenDirty
 func screenDirty() bool {

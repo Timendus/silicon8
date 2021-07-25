@@ -29,13 +29,13 @@ go.run(instance);
 cpu.initialize(VIP);
 
 // Load font and program into RAM
-const ram = new Uint8Array(cpu.memory.buffer, cpu.ram(), 4096);
+const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
 for ( let i = 0; i < font.length; i++ )
   ram[i] = font[i];
 for ( let i = 0x200; i < 0x200 + program.length; i++ )
   ram[i] = program[i - 0x200];
 
-const display = new Uint8Array(cpu.memory.buffer, cpu.display(), 256);
+const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
 
 const keys = {
   up: 5,
