@@ -6,6 +6,10 @@
     "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm ./src",
     "start": "npm run build && npm run run",
     "gorun": "GOPATH=$(pwd) go run silicon8/main",
-    "serve": "go run server.go"
+    "serve": "go run server.go",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6"
   }
 }

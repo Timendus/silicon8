@@ -16,6 +16,7 @@ const VIP       int = 0
 const STRICTVIP int = 1
 const SCHIP     int = 2
 const XOCHIP    int = 3
+const BLINDVIP  int = 4  // To run the emulator in headless VIP mode, which doesn't wait for display refresh
 
 type soundEvent func()
 type randomByte func() uint8
@@ -107,7 +108,7 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.shiftQuirk = interpreter == SCHIP
   cpu.jumpQuirk  = interpreter == SCHIP
   cpu.memQuirk   = interpreter != SCHIP
-  cpu.vfQuirk    = interpreter == VIP || interpreter == STRICTVIP
+  cpu.vfQuirk    = interpreter == VIP || interpreter == STRICTVIP || interpreter == BLINDVIP
   cpu.clipQuirk  = interpreter != XOCHIP
   cpu.dispQuirk  = interpreter == VIP || interpreter == STRICTVIP
   cpu.drawQuirk  = interpreter == STRICTVIP
