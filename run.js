@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 
+if ( process.argv.length != 3 || process.argv[2].substr(-4) != ".ch8" ) {
+  return console.error("Supply the path to a CHIP-8 ROM (*.ch8) as an argument");
+}
+
 const fs = require('fs');
-const program = new Uint8Array(fs.readFileSync('./space.ch8'));
+const program = new Uint8Array(fs.readFileSync(process.argv[2]));
 
 const font = require('./font');
 const Input = require('./input');
 const input = new Input();
 
-require('./html/wasm_exec');
+require('./docs/wasm_exec');
 const go = new Go();
-const mod = new WebAssembly.Module(fs.readFileSync('./html/silicon8.wasm'));
+const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
 go.importObject.env['silicon8/wasm.randomByte'] = () => Math.floor(Math.random() * Math.floor(256));
 go.importObject.env['silicon8/wasm.playSound'] = () => process.stdout.write('\x07');
 go.importObject.env['silicon8/wasm.stopSound'] = () => {};
