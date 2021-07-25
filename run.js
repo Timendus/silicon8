@@ -14,9 +14,11 @@ const input = new Input();
 require('./docs/wasm_exec');
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
-go.importObject.env['silicon8/wasm.randomByte'] = () => Math.floor(Math.random() * Math.floor(256));
-go.importObject.env['silicon8/wasm.playSound'] = () => process.stdout.write('\x07');
-go.importObject.env['silicon8/wasm.stopSound'] = () => {};
+Object.assign(go.importObject.env, {
+  'main.randomByte': () => Math.floor(Math.random() * Math.floor(256)),
+  'main.playSound':  () => process.stdout.write('\x07'),
+  'main.stopSound':  () => {}
+});
 const instance = new WebAssembly.Instance(mod, go.importObject);
 const cpu = instance.exports;
 

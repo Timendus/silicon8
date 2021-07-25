@@ -1,4 +1,4 @@
-package wasm
+package main
 
 import "silicon8"
 
