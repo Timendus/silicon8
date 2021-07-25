@@ -17,4 +17,5 @@ func main() {
 			resp.Header().Set("content-type", "application/wasm")
 		}
 		fs.ServeHTTP(resp, req)
-	}))}
+	}))
+}
