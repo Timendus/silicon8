@@ -7,7 +7,7 @@
     "start": "npm run build && npm run run",
     "gorun": "GOPATH=$(pwd) go run silicon8/main",
     "serve": "go run server.go",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "devDependencies": {
     "jest": "^27.0.6"
