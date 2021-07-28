@@ -216,7 +216,8 @@ func (cpu *CPU) Step() {
 
     switch(nn) {
     case 0x00:
-      cpu.i = op
+      cpu.pc += 2
+      cpu.i = uint16(cpu.RAM[cpu.pc]) << 8 | uint16(cpu.RAM[cpu.pc+1])
     case 0x02:
       // Load 16 bytes of audio buffer from (i)
       // (No-op in our implementation, at least for now)
