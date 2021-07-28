@@ -1,0 +1,21 @@
+: main
+	:monitor 0x400 8
+	i := 0x400
+	v0 := 0xAA
+	v1 := 0x55
+	save v1
+	save v1
+
+	v0 := 0
+	v1 := 0
+	i := 0x200
+	load v1
+	v2 := v0
+	v3 := v1
+	load v1
+	i := 0x404
+	save v3
+	loop again
+
+:org 0x400
+	0
