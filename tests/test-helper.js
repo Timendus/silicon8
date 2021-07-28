@@ -1,5 +1,5 @@
 const fs = require('fs');
-const font = require('../font');
+const font = require('../web-client/font');
 require('../docs/wasm_exec');
 
 const go = new Go();

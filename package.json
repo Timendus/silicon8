@@ -1,15 +1,21 @@
 {
   "name": "silicon8",
   "scripts": {
-    "build": "cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/wasm_exec.js && GOPATH=$(pwd) tinygo build -o docs/silicon8.wasm -target wasm silicon8/wasm",
-    "run": "./run.js ./testing-binaries/space.ch8",
+    "build": "webpack --mode production && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/wasm_exec.js && GOPATH=$(pwd) tinygo build -o docs/silicon8.wasm -target wasm silicon8/wasm",
+    "run": "./run.js ./tests/abc.ch8",
     "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm ./src",
     "start": "npm run build && npm run run",
     "gorun": "GOPATH=$(pwd) go run silicon8/main",
-    "serve": "go run server.go",
+    "serve": "webpack serve --open",
     "test": "jest --verbose"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "webpack": "^5.47.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "thimbleful": "^1.0.0"
   }
 }
