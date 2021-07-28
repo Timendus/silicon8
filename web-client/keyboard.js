@@ -1,4 +1,4 @@
-module.exports = cpu => {
+module.exports = instance => {
   const keys = {
     // Arrow keys
     38: 5, 		// up
@@ -34,13 +34,13 @@ module.exports = cpu => {
   };
 
   window.addEventListener('keydown', e => {
-    if ( cpu )
-      cpu.pressKey(keys[e.keyCode]);
+    if ( instance )
+      instance.pressKey(keys[e.keyCode]);
   });
 
   window.addEventListener('keyup', e => {
-    if ( cpu )
-      cpu.releaseKey(keys[e.keyCode]);
+    if ( instance )
+      instance.releaseKey(keys[e.keyCode]);
   });
 
 };
