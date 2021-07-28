@@ -1,0 +1,49 @@
+: main
+	:monitor 0x400 9
+	v0 := 50
+	v1 := 15 # 15 - 0x0F
+
+	# Addition
+	v2 := v0
+	v2 += v1 # 65 - 0x41
+
+	# OR
+	v3 := v0
+	v3 |= v1 # 63 - 0x3F
+
+	# AND
+	v4 := v0
+	v4 &= v1 # 2 - 0x02
+
+	# XOR
+	v5 := v0
+	v5 ^= v1 # 61 - 0x3D
+
+	# Shift right
+	v6 := v0
+	v6 >>= v6 # 25 - 0x19
+
+	# Shift left
+	v7 := v0
+	v7 <<= v7 # 100 - 0x64
+
+	# Subtraction in one direction
+	v0 -= v1 # 35 - 0x23
+
+	# Subtraction in the other direction
+	v1 =- v0 # 20 - 0x14
+
+	i := 0x400
+	save v7
+
+	# Addition to i
+	i := 0x400
+	v1 := 8
+	i += v1
+	v0 := 0xAA
+	save v0
+
+	loop again
+
+:org 0x400
+	0
