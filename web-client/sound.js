@@ -1,5 +1,20 @@
 let gainNode;
 
+module.exports = {
+  playSound: () => {
+    setVolume(0.1);
+  },
+  stopSound: () => {
+    setVolume(0);
+  }
+};
+
+function setVolume(gain) {
+  // Sound may only play after a "user gesture", so do it this way:
+  if ( !gainNode ) setupSound();
+  gainNode.gain.value = gain;
+}
+
 function setupSound() {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
 
@@ -15,18 +30,3 @@ function setupSound() {
 
   oscillator.start();
 }
-
-function setVolume(gain) {
-  // Sound may only play after a "user gesture", so do it this way:
-  if ( !gainNode ) setupSound();
-  gainNode.gain.value = gain;
-}
-
-module.exports = {
-  playSound: () => {
-    setVolume(0.1);
-  },
-  stopSound: () => {
-    setVolume(0);
-  }
-};
