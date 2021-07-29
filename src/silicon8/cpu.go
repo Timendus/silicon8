@@ -112,9 +112,6 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.clipQuirk  = interpreter != XOCHIP
   cpu.dispQuirk  = interpreter == VIP || interpreter == STRICTVIP
   cpu.drawQuirk  = interpreter == STRICTVIP
-
-  cpu.RegisterSoundCallbacks(func() {}, func() {})
-  cpu.RegisterRandomGenerator(func() uint8 { return 0 })
 }
 
 func (cpu *CPU) RegisterSoundCallbacks(playSound soundEvent, stopSound soundEvent) {

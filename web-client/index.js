@@ -16,8 +16,9 @@ window.addEventListener('load', async () => {
   const Emulator = require('./emulator');
   const keyboard = require('./keyboard');
   const render = require('./display');
+  const { playSound, stopSound } = require('./sound');
 
-  const instance = new Emulator({ render });
+  const instance = new Emulator({ render, playSound, stopSound });
   await instance.init();
   keyboard(instance);
 
