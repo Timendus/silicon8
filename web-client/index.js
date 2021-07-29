@@ -1,12 +1,5 @@
 import Thimbleful from 'thimbleful';
 
-if (!WebAssembly.instantiateStreaming) { // polyfill
-  WebAssembly.instantiateStreaming = async (resp, importObject) => {
-    const source = await (await resp).arrayBuffer();
-    return await WebAssembly.instantiate(source, importObject);
-  };
-}
-
 const VIP       = 0;
 const STRICTVIP = 1;
 const SCHIP     = 2;
