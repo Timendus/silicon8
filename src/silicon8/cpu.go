@@ -362,32 +362,37 @@ func (cpu *CPU) maths(x, y, n uint8) {
   case 0x4:
     // Set VF to 01 if a carry occurs
     // Set VF to 00 if a carry does not occur
-    cpu.setFlags((cpu.v[x] + cpu.v[y]) > 0xFF)
+    flag := (cpu.v[x] + cpu.v[y]) > 0xFF
     cpu.v[x] += cpu.v[y]
+    cpu.setFlag(flag)
   case 0x5:
     // Set VF to 00 if a borrow occurs
     // Set VF to 01 if a borrow does not occur
-    cpu.setFlags(cpu.v[x] > cpu.v[y])
+    flag := cpu.v[x] >= cpu.v[y]
     cpu.v[x] -= cpu.v[y]
+    cpu.setFlag(flag)
   case 0x6:
     if cpu.shiftQuirk {
       y = x
     }
     // Set register VF to the least significant bit prior to the shift
-    cpu.setFlags(cpu.v[y] & 0b00000001 > 0)
+    flag := cpu.v[y] & 0b00000001 > 0
     cpu.v[x] = cpu.v[y] >> 1
+    cpu.setFlag(flag)
   case 0x7:
     // Set VF to 00 if a borrow occurs
     // Set VF to 01 if a borrow does not occur
-    cpu.setFlags(cpu.v[y] > cpu.v[x])
+    flag := cpu.v[y] >= cpu.v[x]
     cpu.v[x] = cpu.v[y] - cpu.v[x]
+    cpu.setFlag(flag)
   case 0xE:
     if cpu.shiftQuirk {
       y = x
     }
     // Set register VF to the most significant bit prior to the shift
-    cpu.setFlags(cpu.v[y] & 0b10000000 > 0)
+    flag := cpu.v[y] & 0b10000000 > 0
     cpu.v[x] = cpu.v[y] << 1
+    cpu.setFlag(flag)
   }
 }
 
@@ -429,7 +434,7 @@ func (cpu *CPU) draw(x, y, n uint8) {
     cpu.Display[dispOffset] ^= rightPart
   }
   cpu.SD = true
-  cpu.setFlags(erases)
+  cpu.setFlag(erases)
 
   if cpu.drawQuirk {
     /**
@@ -463,7 +468,7 @@ func (cpu *CPU) getkey(x uint8) {
   }
 }
 
-func (cpu *CPU) setFlags(comparison bool) {
+func (cpu *CPU) setFlag(comparison bool) {
   cpu.v[0xF] = 0
   if comparison {
     cpu.v[0xF] = 1
