@@ -276,9 +276,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
   switch(op) {
   case 0x00E0:
     // Clear screen
-    for i := 0; i < len(cpu.Display); i++ {
-      cpu.Display[i] = 0;
-    }
+    for i := range cpu.Display { cpu.Display[i] = 0 }
     cpu.SD = true
   case 0x00EE:
     // Return
@@ -392,6 +390,13 @@ func (cpu *CPU) maths(x, y, n uint8) {
   }
 }
 
+func (cpu *CPU) setFlag(comparison bool) {
+  cpu.v[0xF] = 0
+  if comparison {
+    cpu.v[0xF] = 1
+  }
+}
+
 func (cpu *CPU) draw(x, y, n uint8) {
   if cpu.dispQuirk {
     switch(cpu.WaitForInt) {
@@ -461,12 +466,5 @@ func (cpu *CPU) getkey(x uint8) {
       if p { return }
     }
     cpu.waitForKey = true
-  }
-}
-
-func (cpu *CPU) setFlag(comparison bool) {
-  cpu.v[0xF] = 0
-  if comparison {
-    cpu.v[0xF] = 1
   }
 }
