@@ -1,0 +1,33 @@
+: main
+	:monitor 0x400 1
+	v0 := 14
+	v2 := 2
+	jump0 jump-table
+
+: jump-table
+	jump first
+	jump second
+	0 0 # third
+	0 0 # fourth
+	0 0 # fifth
+	0 0 # sixth
+	0 0 # seventh
+	jump eighth
+	# Etc...
+
+: first
+	v0 := 1
+	jump done
+
+: second
+  v0 := 2
+	jump done
+
+: eighth
+  v0 := 8
+	jump done
+
+: done
+  i := 0x400
+	save v0
+	loop again
