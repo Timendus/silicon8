@@ -8,40 +8,40 @@
 
 	# Addition (no overflow)
 	v2 := v0
-	v2 += v1 # 65 - 0x41
+	v2 += v1 # 65 (0x41)
 	v3 := vF
 
 	# OR
 	v4 := v0
-	v4 |= v1 # 63 - 0x3F
+	v4 |= v1 # 63 (0x3F)
 	v5 := vF
 
 	# AND
 	v6 := v0
-	v6 &= v1 # 2 - 0x02
+	v6 &= v1 # 2 (0x02)
 	v7 := vF
 
 	# XOR
 	v8 := v0
-	v8 ^= v1 # 61 - 0x3D
+	v8 ^= v1 # 61 (0x3D)
 	v9 := vF
 
 	# Shift right (no LSB)
 	vA := v0
-	vA >>= vA # 25 - 0x19
+	vA >>= vA # 25 (0x19)
 	vB := vF
 
 	# Shift left (no MSB)
 	vC := v0
-	vC <<= vC # 100 - 0x64
+	vC <<= vC # 100 (0x64)
 	vD := vF
 
 	# Subtraction in one direction (no carry)
-	v0 -= v1 # 35 - 0x23
+	v0 -= v1 # 35 (0x23)
 	vE := vF
 
 	# Subtraction in the other direction (no carry)
-	v1 =- v0 # 20 - 0x14
+	v1 =- v0 # 20 (0x14)
 
 	i := 0x400
 	save vF
@@ -61,25 +61,25 @@
 
 	# Addition (with overflow)
 	v2 := v0
-	v2 += v1 # 300 - 0x2C
+	v2 += v1 # 300 (0x2C)
 	v3 := vF
 
 	# Shift right (with LSB)
 	v4 := 3
-	v4 >>= v4 # 1 - 0x1
+	v4 >>= v4 # 1 (0x1)
 	v5 := vF
 
 	# Shift left (with MSB)
 	v6 := v0
-	v6 <<= v6 # 400 - 0x90
+	v6 <<= v6 # 400 (0x90)
 	v7 := vF
 
 	# Subtraction in one direction (with carry)
-	v1 -= v0 # -100 - 0x9C
+	v1 -= v0 # 100 - 200 = -100 = 156 (0x9C)
 	v8 := vF
 
 	# Subtraction in the other direction (with carry)
-	v0 =- v1 # -100 - 0x9C
+	v0 =- v1 # 156 - 200 = -44 = 212 (0xD4)
 	v9 := vF
 
 	i := 0x411

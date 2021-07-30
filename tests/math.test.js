@@ -45,7 +45,7 @@ run({
 
       describe('with complications (overflow, carry, etc)', () => {
         test('does subtraction right', () => {
-          expect(ram[0x411]).toBe(0xD4); // Why?
+          expect(ram[0x411]).toBe(0xD4);
           expect(ram[0x419]).toBe(0);
         });
         test('does the other subtraction right', () => {
