@@ -1,0 +1,12 @@
+﻿: main
+  v0 := 30
+	buzzer := v0
+: beep
+	v0 := 60
+	delay := v0
+: wait
+	v0 := delay
+	if v0 > 0 then jump wait
+	v0 := 30
+	buzzer := v0
+	jump beep

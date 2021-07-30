@@ -2,12 +2,13 @@ const fs = require('fs');
 const font = require('../web-client/font');
 require('../docs/wasm_exec');
 
+let randomByte, playSound, stopSound;
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
 Object.assign(go.importObject.env, {
-  'main.randomByte': () => Math.floor(Math.random() * Math.floor(256)),
-  'main.playSound':  () => {},
-  'main.stopSound':  () => {}
+  'main.randomByte': () => randomByte(),
+  'main.playSound':  () => playSound(),
+  'main.stopSound':  () => stopSound()
 });
 const instance = new WebAssembly.Instance(mod, go.importObject);
 const cpu = instance.exports;
@@ -22,7 +23,11 @@ module.exports = {
     BLINDVIP:  4
   },
 
-  run: ({type, rom, cycles, test}) => {
+  run: ({type, rom, cycles, test, callbacks = {}}) => {
+    randomByte = () => callbacks.randomByte ? callbacks.randomByte() : Math.floor(Math.random() * Math.floor(256));
+    playSound  = () => callbacks.playSound  ? callbacks.playSound()  : null;
+    stopSound  = () => callbacks.stopSound  ? callbacks.stopSound()  : null;
+
     const program = new Uint8Array(fs.readFileSync(rom));
     cpu.initialize(type);
 

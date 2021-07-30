@@ -1,0 +1,9 @@
+: main
+	v0 := random 63
+	v1 := random 31
+	i := dot
+	sprite v0 v1 1
+	jump main
+
+: dot
+  0b10000000
