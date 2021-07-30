@@ -362,7 +362,7 @@ func (cpu *CPU) maths(x, y, n uint8) {
   case 0x4:
     // Set VF to 01 if a carry occurs
     // Set VF to 00 if a carry does not occur
-    flag := (cpu.v[x] + cpu.v[y]) > 0xFF
+    flag := (0xFF - cpu.v[x]) < cpu.v[y]
     cpu.v[x] += cpu.v[y]
     cpu.setFlag(flag)
   case 0x5:
