@@ -152,24 +152,20 @@ func (cpu *CPU) Step() {
       cpu.pc += 2
     }
   case 0x5000:
+    if (x > y) {
+      n := x
+      x = y
+      y = n
+    }
+
     switch(n) {
     case 2:
-      var i uint8
-      var j uint16 = 0
-      d := 1
-      if (x > y) { d = -1 }
-      for i = x; i <= y; i = uint8(int(i)+d) {
-        cpu.RAM[cpu.i + j] = cpu.v[i]
-        j++
+      for i := x; i <= y; i++ {
+        cpu.RAM[cpu.i + uint16(i - x)] = cpu.v[i]
       }
     case 3:
-      var i uint8
-      var j uint16 = 0
-      d := 1
-      if (x > y) { d = -1 }
-      for i = x; i <= y; i = uint8(int(i)+d) {
-        cpu.v[i] = cpu.RAM[cpu.i + j]
-        j++
+      for i := x; i <= y; i++ {
+        cpu.v[i] = cpu.RAM[cpu.i + uint16(i - x)]
       }
     default:
       if cpu.v[x] == cpu.v[y] {
