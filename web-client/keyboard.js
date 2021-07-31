@@ -34,7 +34,9 @@ module.exports = instance => {
   };
 
   window.addEventListener('keydown', e => {
-    if ( instance )
+    if ( e.keyCode == 13 && instance )
+      instance.dumpStatus();
+    if ( keys[e.keyCode] && instance )
       instance.pressKey(keys[e.keyCode]);
   });
 

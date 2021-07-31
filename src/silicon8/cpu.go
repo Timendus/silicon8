@@ -125,6 +125,26 @@ func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
   cpu.random = random
 }
 
+func (cpu *CPU) DumpStatus() {
+  println("Status dump:")
+  println("   pc:", cpu.pc, "sp:", cpu.sp, "i:", cpu.i, "dt:", cpu.dt, "st:", cpu.st)
+  for i := range cpu.v {
+    if i < 10 {
+      print("   v", i, ":  ", cpu.v[i], "\n")
+    } else {
+      print("   v", i, ": ", cpu.v[i], "\n")
+    }
+  }
+  println("Quirks flags:")
+  println("   shiftQuirk:", cpu.shiftQuirk)
+  println("   jumpQuirk: ", cpu.jumpQuirk)
+  println("   memQuirk:  ", cpu.memQuirk)
+  println("   vfQuirk:   ", cpu.vfQuirk)
+  println("   clipQuirk: ", cpu.clipQuirk)
+  println("   dispQuirk: ", cpu.dispQuirk)
+  println("   drawQuirk: ", cpu.drawQuirk)
+}
+
 func (cpu *CPU) A(address uint16) uint16 {
   if address >= 0 && int(address) < len(cpu.RAM) {
     return address
@@ -135,6 +155,7 @@ func (cpu *CPU) A(address uint16) uint16 {
       opcode = uint16(cpu.RAM[opcodeAddr]) << 8 | uint16(cpu.RAM[opcodeAddr+1])
     }
     warn("Program attempted to access RAM outside of memory", opcodeAddr, opcode)
+    cpu.DumpStatus()
     cpu.running = false;
     return 0
   }

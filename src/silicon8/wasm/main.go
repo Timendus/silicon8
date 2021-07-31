@@ -31,6 +31,11 @@ func initialize(cpuType int) {
   cpu.Reset(cpuType)
 }
 
+//export dumpStatus
+func dumpStatus() {
+  cpu.DumpStatus();
+}
+
 //export cycles
 func cycles(num int) {
   for i := 0; i < num; i++ {

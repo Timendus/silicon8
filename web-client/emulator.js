@@ -61,6 +61,10 @@ module.exports = class {
     for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
   }
 
+  dumpStatus() {
+    this._cpu.dumpStatus();
+  }
+
   pressKey(key) {
     this._cpu.pressKey(key);
   }
