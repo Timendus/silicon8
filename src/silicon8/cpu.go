@@ -7,7 +7,6 @@ package silicon8
     * 16x16 sprites
   * XO-CHIP opcodes
     * plane n
-  * Safely handling of accessing memory out of range
 */
 
 import "time"
@@ -52,6 +51,8 @@ type CPU struct {
   playSound  soundEvent
   stopSound  soundEvent
   random     randomByte
+
+  running    bool
 }
 
 func (cpu *CPU) Start() {
@@ -104,6 +105,7 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.WaitForInt = 0
   cpu.playing    = false
   cpu.SD         = true
+  cpu.running    = true
 
   cpu.shiftQuirk = interpreter == SCHIP
   cpu.jumpQuirk  = interpreter == SCHIP
@@ -123,12 +125,31 @@ func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
   cpu.random = random
 }
 
+func (cpu *CPU) A(address uint16) uint16 {
+  if address >= 0 && int(address) < len(cpu.RAM) {
+    return address
+  } else {
+    opcodeAddr := cpu.pc - 2
+    var opcode uint16 = 0
+    if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
+      opcode = uint16(cpu.RAM[opcodeAddr]) << 8 | uint16(cpu.RAM[opcodeAddr+1])
+    }
+    warn("Program attempted to access RAM outside of memory", opcodeAddr, opcode)
+    cpu.running = false;
+    return 0
+  }
+}
+
 func (cpu *CPU) Step() {
-  var op  uint16 = uint16(cpu.RAM[cpu.pc]) << 8 | uint16(cpu.RAM[cpu.pc+1])
-  var x   uint8  = cpu.RAM[cpu.pc]   & 0x0F
-  var y   uint8  = cpu.RAM[cpu.pc+1] & 0xF0 >> 4
-  var n   uint8  = cpu.RAM[cpu.pc+1] & 0x0F
-  var nn  uint8  = cpu.RAM[cpu.pc+1] & 0xFF
+  if !cpu.running {
+    return
+  }
+
+  var op  uint16 = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+  var x   uint8  = cpu.RAM[cpu.A(cpu.pc)]   & 0x0F
+  var y   uint8  = cpu.RAM[cpu.A(cpu.pc+1)] & 0xF0 >> 4
+  var n   uint8  = cpu.RAM[cpu.A(cpu.pc+1)] & 0x0F
+  var nn  uint8  = cpu.RAM[cpu.A(cpu.pc+1)] & 0xFF
   var nnn uint16 = uint16(x) << 8 | uint16(nn)
 
   info("Processing instruction", cpu.pc, op)
@@ -161,11 +182,11 @@ func (cpu *CPU) Step() {
     switch(n) {
     case 2:
       for i := x; i <= y; i++ {
-        cpu.RAM[cpu.i + uint16(i - x)] = cpu.v[i]
+        cpu.RAM[cpu.A(cpu.i + uint16(i - x))] = cpu.v[i]
       }
     case 3:
       for i := x; i <= y; i++ {
-        cpu.v[i] = cpu.RAM[cpu.i + uint16(i - x)]
+        cpu.v[i] = cpu.RAM[cpu.A(cpu.i + uint16(i - x))]
       }
     default:
       if cpu.v[x] == cpu.v[y] {
@@ -210,7 +231,7 @@ func (cpu *CPU) Step() {
     switch(nn) {
     case 0x00:
       cpu.pc += 2
-      cpu.i = uint16(cpu.RAM[cpu.pc]) << 8 | uint16(cpu.RAM[cpu.pc+1])
+      cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
     case 0x02:
       // Load 16 bytes of audio buffer from (i)
       // (No-op in our implementation, at least for now)
@@ -229,13 +250,13 @@ func (cpu *CPU) Step() {
     case 0x30:
       cpu.i = uint16(cpu.v[x] * 10) + 80
     case 0x33:
-      cpu.RAM[cpu.i + 0] = cpu.v[x] / 100
-      cpu.RAM[cpu.i + 1] = cpu.v[x] % 100 / 10
-      cpu.RAM[cpu.i + 2] = cpu.v[x] % 10
+      cpu.RAM[cpu.A(cpu.i + 0)] = cpu.v[x] / 100
+      cpu.RAM[cpu.A(cpu.i + 1)] = cpu.v[x] % 100 / 10
+      cpu.RAM[cpu.A(cpu.i + 2)] = cpu.v[x] % 10
     case 0x55:
       var i uint8
       for i = 0; i <= x; i++ {
-        cpu.RAM[cpu.i + uint16(i)] = cpu.v[i]
+        cpu.RAM[cpu.A(cpu.i + uint16(i))] = cpu.v[i]
       }
       if cpu.memQuirk {
         cpu.i += uint16(x) + 1
@@ -243,7 +264,7 @@ func (cpu *CPU) Step() {
     case 0x65:
       var i uint8
       for i = 0; i <= x; i++ {
-        cpu.v[i] = cpu.RAM[cpu.i + uint16(i)]
+        cpu.v[i] = cpu.RAM[cpu.A(cpu.i + uint16(i))]
       }
       if cpu.memQuirk {
         cpu.i += uint16(x) + 1
@@ -288,7 +309,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
     cpu.scrollLeft()
   case 0x00FD:
     // "Exit" interpreter. Will just halt in our implementation
-    cpu.pc -= 2
+    cpu.running = false
   case 0x00FE:
     // Set normal screen resolution
     // TODO
@@ -418,7 +439,7 @@ func (cpu *CPU) draw(x, y, n uint8) {
   erases := false
   var i uint8
   for i = 0; i < n; i++ {
-    sprite := cpu.RAM[cpu.i + uint16(i)]
+    sprite := cpu.RAM[cpu.A(cpu.i + uint16(i))]
     leftPart := sprite >> (xPos % 8)
     rightPart := sprite << (8 - (xPos % 8))
     dispOffset := uint16(topLeftOffset) + uint16(i) * 8
