@@ -90,11 +90,11 @@ func (cpu *CPU) Reset(interpreter int) {
 
   switch(interpreter) {
   case STRICTVIP:
-    cpu.RAMSize = 3216
+    cpu.RAMSize = 3216 + 512
   case VIP, SCHIP, BLINDVIP:
-    cpu.RAMSize = 3583
+    cpu.RAMSize = 3583 + 512
   case XOCHIP:
-    cpu.RAMSize = 65024
+    cpu.RAMSize = 65023 + 512
   }
   cpu.RAM = make([]uint8, cpu.RAMSize)
 
