@@ -19,16 +19,16 @@ In the console, using NodeJS:
 ```bash
 git clone git@github.com:Timendus/silicon8.git
 cd silicon8
-./run.js ./tests/abc.ch8 # Should run the emulator with a given CHIP-8 binary
+./run.js ./tests/abc.ch8 # Should run the interpreter with a given CHIP-8 binary
 ```
 
-Key `Q` or `Ctrl+C` exits the emulator.
+Key `Q` or `Ctrl+C` exits the interpreter.
 
 ### How to serve the website
 
 ```bash
 npm install
-npm run serve # Should serve the website on localhost:8080
+npm run serve # Should serve the web version on localhost:8080
 ```
 
 ### How to build
@@ -60,3 +60,21 @@ still a to do. But I can probably use this pretty much as a drop-in replacement
 for my existing [web based Chip-8 play thing](https://github.com/Timendus/chip-8).
 
 We'll see where this goes 😄
+
+### July 2021
+
+Alright, having a couple of days off, it's time to finish(?) this project 😉
+
+First, I added the ability to provide it with a CHIP-8 binary of your choice as
+a command line parameter. Having to hard-code the ROM has annoyed me for a
+while.
+
+Second, it was time to start finding the interpretation issues that were still
+present, so I decided to start writing some automated tests. After about a week
+of writing tests and fixing bugs here and there, on and off, I think I now feel
+kind of safe saying that the interpreter works as it should for CHIP-8.
+
+Also, I added a web-based front-end for the interpreter that works nicer and
+looks better than the console based version.
+
+Next up: Time to work on the SCHIP and XOCHIP features some more 😄
