@@ -1,5 +1,6 @@
 const fs = require('fs');
-const font = require('../web-client/font');
+const font = require('../shared/font');
+const types = require('../shared/types');
 require('../docs/wasm_exec');
 
 let randomByte, playSound, stopSound;
@@ -15,13 +16,7 @@ const cpu = instance.exports;
 go.run(instance);
 
 module.exports = {
-  types: {
-    VIP:       0, // Note that these halt for display refresh, use BLINDVIP instead
-    STRICTVIP: 1, // Note that these halt for display refresh, use BLINDVIP instead
-    SCHIP:     2,
-    XOCHIP:    3,
-    BLINDVIP:  4
-  },
+  types,
 
   run: ({type, rom, cycles, test, callbacks = {}}) => {
     randomByte = () => callbacks.randomByte ? callbacks.randomByte() : Math.floor(Math.random() * Math.floor(256));
@@ -38,7 +33,8 @@ module.exports = {
     const ramSize = cpu.ramSize();
     for ( let i = 0; i < ramSize; i++ ) ram[i] = 0;
     // Load font and program into RAM
-    for ( let i = 0; i < font.length; i++ ) ram[i] = font[i];
+    const fontData = font(type);
+    for ( let i = 0; i < fontData.length; i++ ) ram[i] = fontData[i];
     for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
 
     cpu.cycles(cycles);

@@ -7,7 +7,8 @@ if ( process.argv.length != 3 || process.argv[2].substr(-4) != ".ch8" ) {
 const fs = require('fs');
 const program = new Uint8Array(fs.readFileSync(process.argv[2]));
 
-const font = require('./web-client/font');
+const font = require('./shared/font');
+const types = require('./shared/types');
 const Input = require('./input');
 const input = new Input();
 
@@ -22,18 +23,14 @@ Object.assign(go.importObject.env, {
 const instance = new WebAssembly.Instance(mod, go.importObject);
 const cpu = instance.exports;
 
-const VIP       = 0;
-const STRICTVIP = 1;
-const SCHIP     = 2;
-const XOCHIP    = 3;
-
 go.run(instance);
-cpu.initialize(VIP);
+cpu.initialize(types.VIP);
 
 // Load font and program into RAM
 const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
-for ( let i = 0; i < font.length; i++ )
-  ram[i] = font[i];
+const fontData = font(types.VIP);
+for ( let i = 0; i < fontData.length; i++ )
+  ram[i] = fontData[i];
 for ( let i = 0x200; i < 0x200 + program.length; i++ )
   ram[i] = program[i - 0x200];
 
