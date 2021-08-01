@@ -26,7 +26,8 @@ type CPU struct {
   RAMSize    uint16
   Display    []uint8
   DispSize   uint16
-  stack      [12]uint16
+  Stack      []uint16
+  StackSize  uint8
   v          [16]uint8
   userFlags  [8]uint8
   i          uint16
@@ -89,15 +90,21 @@ func (cpu *CPU) Reset(interpreter int) {
   switch(interpreter) {
   case STRICTVIP:
     cpu.RAMSize = 3216 + 512
-  case VIP, SCHIP, BLINDVIP:
+    cpu.StackSize = 12
+  case VIP, BLINDVIP:
     cpu.RAMSize = 3583 + 512
+    cpu.StackSize = 12
+  case SCHIP:
+    cpu.RAMSize = 3583 + 512
+    cpu.StackSize = 16 // According to http://devernay.free.fr/hacks/chip8/schip.txt: "Subroutine nesting is limited to 16 levels"
   case XOCHIP:
     cpu.RAMSize = 65023 + 512
+    cpu.StackSize = 12
   }
 
   // Initialize registers
   cpu.pc = 0x0200
-  cpu.sp = 11
+  cpu.sp = cpu.StackSize - 1
   cpu.dt = 0
   cpu.st = 0
 
@@ -105,6 +112,7 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.DispSize = 256
   cpu.Display = make([]uint8, cpu.DispSize)
   cpu.RAM = make([]uint8, cpu.RAMSize)
+  cpu.Stack = make([]uint16, cpu.StackSize)
 
   for i := range cpu.Display  { cpu.Display[i]  = 0     }
   for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
@@ -198,7 +206,7 @@ func (cpu *CPU) Step() {
   case 0x1000:
     cpu.pc = nnn
   case 0x2000:
-    cpu.stack[cpu.sp] = cpu.pc
+    cpu.Stack[cpu.sp] = cpu.pc
     cpu.sp--
     cpu.pc = nnn
   case 0x3000:
@@ -344,7 +352,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
   case 0x00EE:
     // Return
     cpu.sp++
-    cpu.pc = cpu.stack[cpu.sp]
+    cpu.pc = cpu.Stack[cpu.sp]
   case 0x00FB:
     cpu.scrollRight()
   case 0x00FC:
