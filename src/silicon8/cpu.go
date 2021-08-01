@@ -106,10 +106,8 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.Display = make([]uint8, cpu.DispSize)
   cpu.RAM = make([]uint8, cpu.RAMSize)
 
-  for i := range cpu.Display  { cpu.Display[i]  = 0     }
-  for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
-
   // Initialize internal variables
+  for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
   cpu.waitForKey = false
   cpu.WaitForInt = 0
   cpu.playing    = false
