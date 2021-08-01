@@ -15,6 +15,7 @@ func main() {
   cpu.Reset(silicon8.VIP)
   cpu.RegisterSoundCallbacks(playSound, stopSound)
   cpu.RegisterRandomGenerator(func() uint8 { return uint8(randomByte()) })
+  cpu.RegisterDisplayCallback(setDisplaySize)
   cpu.Start()
 }
 
@@ -23,6 +24,7 @@ func main() {
 func playSound()
 func stopSound()
 func randomByte() int  // This too, because math/rand gives weird errors with tinygo
+func setDisplaySize(int, int, int)
 
 // The rest of this file is the API for the host environment
 

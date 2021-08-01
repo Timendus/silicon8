@@ -19,11 +19,12 @@ const BLINDVIP  int = 4  // To run the emulator in headless VIP mode, which does
 
 type soundEvent func()
 type randomByte func() uint8
+type displaySetter func(int, int, int)
 
 type CPU struct {
   RAM        []uint8
   RAMSize    uint16
-  Display    [256]uint8
+  Display    []uint8
   DispSize   uint16
   stack      [12]uint16
   v          [16]uint8
@@ -39,6 +40,8 @@ type CPU struct {
   WaitForInt uint8 // Waiting for display refresh "interrupt"?
   playing    bool  // Playing sound?
   SD         bool  // Screen dirty?
+  plane      uint8 // XO-Chip: Current drawing plane
+  planes     uint8 //          How many planes in total?
 
   shiftQuirk bool  // Shift result to source register instead of target register
   jumpQuirk  bool  // 'jump0' uses v[x] instead of v0 for jump offset
@@ -51,6 +54,7 @@ type CPU struct {
   playSound  soundEvent
   stopSound  soundEvent
   random     randomByte
+  setDispRes displaySetter
 
   running    bool
 }
@@ -82,12 +86,6 @@ func (cpu *CPU) Start() {
 }
 
 func (cpu *CPU) Reset(interpreter int) {
-  cpu.pc = 0x0200
-  cpu.sp = 11
-  cpu.dt = 0
-  cpu.st = 0
-  cpu.DispSize = 256
-
   switch(interpreter) {
   case STRICTVIP:
     cpu.RAMSize = 3216 + 512
@@ -96,17 +94,31 @@ func (cpu *CPU) Reset(interpreter int) {
   case XOCHIP:
     cpu.RAMSize = 65023 + 512
   }
+
+  // Initialize registers
+  cpu.pc = 0x0200
+  cpu.sp = 11
+  cpu.dt = 0
+  cpu.st = 0
+
+  // Initialize memory
+  cpu.DispSize = 256
+  cpu.Display = make([]uint8, cpu.DispSize)
   cpu.RAM = make([]uint8, cpu.RAMSize)
 
   for i := range cpu.Display  { cpu.Display[i]  = 0     }
   for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
 
+  // Initialize internal variables
   cpu.waitForKey = false
   cpu.WaitForInt = 0
   cpu.playing    = false
   cpu.SD         = true
   cpu.running    = true
+  cpu.plane      = 1
+  cpu.planes     = 1
 
+  // Determine quirks to use
   cpu.shiftQuirk = interpreter == SCHIP
   cpu.jumpQuirk  = interpreter == SCHIP
   cpu.memQuirk   = interpreter != SCHIP
@@ -123,6 +135,10 @@ func (cpu *CPU) RegisterSoundCallbacks(playSound soundEvent, stopSound soundEven
 
 func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
   cpu.random = random
+}
+
+func (cpu *CPU) RegisterDisplayCallback(setDisplaySize displaySetter) {
+  cpu.setDispRes = setDisplaySize
 }
 
 func (cpu *CPU) DumpStatus() {
@@ -253,6 +269,11 @@ func (cpu *CPU) Step() {
     case 0x00:
       cpu.pc += 2
       cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+    case 0x01:
+      // Enable the second plane
+      cpu.planes = 2
+      // Select plane X
+      cpu.plane = x
     case 0x02:
       // Load 16 bytes of audio buffer from (i)
       // (No-op in our implementation, at least for now)
@@ -333,10 +354,14 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
     cpu.running = false
   case 0x00FE:
     // Set normal screen resolution
-    // TODO
+    cpu.DispSize = 256 * uint16(cpu.planes)
+    cpu.Display = make([]uint8, cpu.DispSize)
+    cpu.setDispRes(64, 32, int(cpu.planes))
   case 0x00FF:
     // Set extended screen resolution
-    // TODO
+    cpu.DispSize = 1024 * uint16(cpu.planes)
+    cpu.Display = make([]uint8, cpu.DispSize)
+    cpu.setDispRes(128, 64, int(cpu.planes))
   default:
     warn("RCA 1802 assembly calls not supported", cpu.pc - 2, op)
   }
