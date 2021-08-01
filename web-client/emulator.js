@@ -32,12 +32,11 @@ module.exports = class {
     .then(result => {
       this._cpu = result.instance.exports;
       go.run(result.instance);
-      const display = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
-
       setInterval(() => {
         this._cpu.cycles(this._cyclesPerFrame);
         if ( this._cpu.screenDirty() ) {
-          this._display.render(display);
+          if ( this._dispBuffer )
+            this._display.render(this._dispBuffer);
           this._cpu.setScreenClean();
         }
       }, 1000 / 60);
@@ -54,6 +53,7 @@ module.exports = class {
   loadProgram(type, program) {
     this._cpu.initialize(type);
     const ram = new Uint8Array(this._cpu.memory.buffer, this._cpu.ramPtr(), this._cpu.ramSize());
+    this._dispBuffer = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
     // Clear RAM
     const ramSize = this._cpu.ramSize();
     for ( let i = 0; i < ramSize; i++ ) ram[i] = 0;
