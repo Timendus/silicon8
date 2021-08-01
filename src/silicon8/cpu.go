@@ -26,6 +26,8 @@ type CPU struct {
   RAMSize    uint16
   Display    []uint8
   DispSize   uint16
+  DispWidth  uint16
+  DispHeight uint16
   stack      [12]uint16
   v          [16]uint8
   userFlags  [8]uint8
@@ -102,8 +104,7 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.st = 0
 
   // Initialize memory
-  cpu.DispSize = 256
-  cpu.Display = make([]uint8, cpu.DispSize)
+  cpu.initDisplay(64, 32, 1)
   cpu.RAM = make([]uint8, cpu.RAMSize)
 
   // Initialize internal variables
@@ -137,6 +138,19 @@ func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
 
 func (cpu *CPU) RegisterDisplayCallback(setDisplaySize displaySetter) {
   cpu.setDispRes = setDisplaySize
+}
+
+func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
+  cpu.DispWidth = width
+  cpu.DispHeight = height
+  cpu.planes = planes
+  cpu.DispSize = cpu.DispWidth * cpu.DispHeight / 8 * uint16(planes)
+  cpu.Display = make([]uint8, cpu.DispSize)
+
+  // Update outside world too
+  if ( cpu.setDispRes != nil ) {
+    cpu.setDispRes(int(width), int(height), int(planes))
+  }
 }
 
 func (cpu *CPU) DumpStatus() {
@@ -268,8 +282,10 @@ func (cpu *CPU) Step() {
       cpu.pc += 2
       cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
     case 0x01:
-      // Enable the second plane
-      cpu.planes = 2
+      // Enable the second plane if it hasn't been enabled yet
+      if cpu.planes == 1 {
+        cpu.initDisplay(cpu.DispWidth, cpu.DispHeight, 2)
+      }
       // Select plane X
       cpu.plane = x
     case 0x02:
@@ -352,14 +368,10 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
     cpu.running = false
   case 0x00FE:
     // Set normal screen resolution
-    cpu.DispSize = 256 * uint16(cpu.planes)
-    cpu.Display = make([]uint8, cpu.DispSize)
-    cpu.setDispRes(64, 32, int(cpu.planes))
+    cpu.initDisplay(64, 32, cpu.planes)
   case 0x00FF:
     // Set extended screen resolution
-    cpu.DispSize = 1024 * uint16(cpu.planes)
-    cpu.Display = make([]uint8, cpu.DispSize)
-    cpu.setDispRes(128, 64, int(cpu.planes))
+    cpu.initDisplay(128, 64, cpu.planes)
   default:
     warn("RCA 1802 assembly calls not supported", cpu.pc - 2, op)
   }
