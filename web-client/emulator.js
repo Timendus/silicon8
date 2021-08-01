@@ -23,7 +23,10 @@ module.exports = class {
       'main.randomByte': () => Math.floor(Math.random() * 256) & 0xFF,
       'main.playSound':  playSound,
       'main.stopSound':  stopSound,
-      'main.setDisplaySize': display.setSize
+      'main.setDisplaySize': (w, h, p) => {
+        this._resetDispBuffer();
+        display.setSize(w, h, p);
+      }
     });
   }
 
@@ -52,8 +55,8 @@ module.exports = class {
 
   loadProgram(type, program) {
     this._cpu.initialize(type);
+    this._resetDispBuffer();
     const ram = new Uint8Array(this._cpu.memory.buffer, this._cpu.ramPtr(), this._cpu.ramSize());
-    this._dispBuffer = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
     // Clear RAM
     const ramSize = this._cpu.ramSize();
     for ( let i = 0; i < ramSize; i++ ) ram[i] = 0;
@@ -73,6 +76,10 @@ module.exports = class {
 
   releaseKey(key) {
     this._cpu.releaseKey(key);
+  }
+
+  _resetDispBuffer() {
+    this._dispBuffer = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
   }
 
 }

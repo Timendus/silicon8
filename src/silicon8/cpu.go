@@ -3,10 +3,9 @@ package silicon8
 /*
  TODO:
   * SCHIP opcodes
-    * Extended resolution mode
     * 16x16 sprites
   * XO-CHIP opcodes
-    * plane n
+    * plane n (opcode works, but draw routine only draws to plane 1)
 */
 
 import "time"
@@ -489,25 +488,33 @@ func (cpu *CPU) draw(x, y, n uint8) {
     }
   }
 
-  xPos := cpu.v[x] & 63 // Wrap around the screen
-  yPos := cpu.v[y] & 31
-  topLeftOffset := yPos * 8 + xPos / 8
+  xPos := cpu.v[x]
+  yPos := cpu.v[y]
+  // Wrap around the screen
+  for xPos >= uint8(cpu.DispWidth)  {
+    xPos -= uint8(cpu.DispWidth)
+  }
+  for yPos >= uint8(cpu.DispHeight) {
+    yPos -= uint8(cpu.DispHeight)
+  }
+  topLeftOffset := uint16(yPos) * cpu.DispWidth / 8 + uint16(xPos) / 8
   erases := false
+  planeSize := cpu.DispSize / uint16(cpu.planes)
   var i uint8
   for i = 0; i < n; i++ {
     sprite := cpu.RAM[cpu.A(cpu.i + uint16(i))]
     leftPart := sprite >> (xPos % 8)
     rightPart := sprite << (8 - (xPos % 8))
-    dispOffset := uint16(topLeftOffset) + uint16(i) * 8
-    if !cpu.clipQuirk { dispOffset = dispOffset % 256 }
+    dispOffset := uint16(topLeftOffset) + uint16(i) * cpu.DispWidth / 8
+    if !cpu.clipQuirk { dispOffset = dispOffset % planeSize }
 
-    if dispOffset > 255 { break }
+    if dispOffset > planeSize { break }
     erases = erases || (cpu.Display[dispOffset] & leftPart) != 0
     cpu.Display[dispOffset] ^= leftPart
 
     dispOffset++
-    if dispOffset > 255 { break }
-    if cpu.clipQuirk && dispOffset % 8 == 0 { continue }
+    if dispOffset > planeSize { break }
+    if cpu.clipQuirk && dispOffset % (cpu.DispWidth / 8) == 0 { continue }
     erases = erases || (cpu.Display[dispOffset] & rightPart) != 0
     cpu.Display[dispOffset] ^= rightPart
   }
