@@ -13,16 +13,17 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
 
 module.exports = class {
 
-  constructor({playSound, stopSound, render}) {
+  constructor({playSound, stopSound, display}) {
     this._cyclesPerFrame = 30;
-    this._render = render;
+    this._display = display;
     playSound ||= () => {};
     stopSound ||= () => {};
 
     Object.assign(go.importObject.env, {
       'main.randomByte': () => Math.floor(Math.random() * 256) & 0xFF,
       'main.playSound':  playSound,
-      'main.stopSound':  stopSound
+      'main.stopSound':  stopSound,
+      'main.setDisplaySize': display.setSize
     });
   }
 
@@ -36,7 +37,7 @@ module.exports = class {
       setInterval(() => {
         this._cpu.cycles(this._cyclesPerFrame);
         if ( this._cpu.screenDirty() ) {
-          this._render(display);
+          this._display.render(display);
           this._cpu.setScreenClean();
         }
       }, 1000 / 60);
