@@ -54,10 +54,16 @@ canvas.dragging {
   border: 1px solid rgba(255, 255, 255, 0.7);
   background-color: rgba(0, 0, 0, 0.5);
   color: rgba(255, 255, 255, 0.7);
+
+  /* Prevent mobile browser from selecting text on button */
   -webkit-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   user-select: none;
+
+  /* Prevent mobile browser from adding 300ms delay to touch events */
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
 }
 .keyboard button:active {
   background-color: rgba(0, 0, 0, 0.7);
