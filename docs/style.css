@@ -36,11 +36,66 @@ canvas.dragging {
   border-radius: 1vw;
 }
 
+.keyboard {
+  display: none;
+  position: fixed;
+  top: 50%;
+  margin-top: -30vh;
+  font-size: 0;
+  width: 30vh;
+  height: 60vh;
+}
+.keyboard button {
+  font-size: 3vw;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 50%;
+  height: 25%;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+}
+.keyboard button:active {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.left-keyboard {
+  left: 1vw;
+}
+.right-keyboard {
+  right: 1vw;
+}
+
 @media screen and (max-aspect-ratio: 1/1) {
   canvas {
     left: calc(50% - 14.5vh);
     width: 34vh;
     margin-top: -9.5vh;
     filter: blur(0.05vh);
+  }
+
+  .keyboard {
+    margin-top: auto;
+    top: auto;
+    bottom: 1vh;
+    width: 15vh;
+    height: 30vh;
+  }
+  .keyboard button {
+    font-size: 3vh;
+  }
+  .left-keyboard {
+    left: auto;
+    right: 50%;
+  }
+  .right-keyboard {
+    right: auto;
+    left: 50%;
+  }
+}
+
+/* Only show buttons on touch devices */
+@media (hover: none) {
+  .keyboard {
+    display: block;
   }
 }
