@@ -17,6 +17,12 @@ const BLINDVIP  int = 3  // To run the emulator in headless VIP mode, which does
 const SCHIP     int = 4
 const XOCHIP    int = 5
 
+const STRICTVIP_RAM_SIZE uint16 = 3216 + 512
+const VIP_SCHIP_RAM_SIZE uint16 = 3583 + 512
+const XOCHIP_RAM_SIZE    uint16 = 65023 + 512
+const DEFAULT_STACK_SIZE uint8  = 12
+const SCHIP_STACK_SIZE   uint8  = 16  // According to http://devernay.free.fr/hacks/chip8/schip.txt: "Subroutine nesting is limited to 16 levels"
+
 type soundEvent func()
 type randomByte func() uint8
 type displaySetter func(int, int, int)
@@ -104,20 +110,20 @@ func (cpu *CPU) Reset(interpreter int) {
 
   switch(interpreter) {
   case STRICTVIP:
-    cpu.RAMSize = 3216 + 512
-    cpu.StackSize = 12
+    cpu.RAMSize = STRICTVIP_RAM_SIZE
+    cpu.StackSize = DEFAULT_STACK_SIZE
   case VIP, BLINDVIP:
-    cpu.RAMSize = 3583 + 512
-    cpu.StackSize = 12
+    cpu.RAMSize = VIP_SCHIP_RAM_SIZE
+    cpu.StackSize = DEFAULT_STACK_SIZE
   case SCHIP:
-    cpu.RAMSize = 3583 + 512
-    cpu.StackSize = 16 // According to http://devernay.free.fr/hacks/chip8/schip.txt: "Subroutine nesting is limited to 16 levels"
+    cpu.RAMSize = VIP_SCHIP_RAM_SIZE
+    cpu.StackSize = SCHIP_STACK_SIZE
   case XOCHIP:
-    cpu.RAMSize = 65023 + 512
-    cpu.StackSize = 12
+    cpu.RAMSize = XOCHIP_RAM_SIZE
+    cpu.StackSize = DEFAULT_STACK_SIZE
   case AUTO: // Takes maximum sizes, determines limits at runtime
-    cpu.RAMSize = 65023 + 512
-    cpu.StackSize = 16
+    cpu.RAMSize = XOCHIP_RAM_SIZE
+    cpu.StackSize = SCHIP_STACK_SIZE
   }
 
   // Initialize registers
@@ -202,19 +208,36 @@ func (cpu *CPU) DumpStatus() {
 }
 
 func (cpu *CPU) A(address uint16) uint16 {
-  if address >= 0 && int(address) < len(cpu.RAM) {
-    return address
-  } else {
-    opcodeAddr := cpu.pc - 2
-    var opcode uint16 = 0
-    if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
-      opcode = uint16(cpu.RAM[opcodeAddr]) << 8 | uint16(cpu.RAM[opcodeAddr+1])
-    }
-    warn("Program attempted to access RAM outside of memory", opcodeAddr, opcode)
-    cpu.DumpStatus()
-    cpu.running = false;
+  if address >= cpu.RAMSize {
+    cpu.Error("Program attempted to access RAM outside of memory")
     return 0
   }
+  if address >= VIP_SCHIP_RAM_SIZE {
+    cpu.bumpSpecType(XOCHIP)
+  }
+  return address
+}
+
+func (cpu *CPU) S(address uint8) uint8 {
+  if address >= cpu.StackSize {
+    cpu.Error("Program attempted to access invalid stack memory")
+    return 0
+  }
+  if cpu.StackSize == SCHIP_STACK_SIZE && address < (SCHIP_STACK_SIZE - DEFAULT_STACK_SIZE) {
+    cpu.bumpSpecType(SCHIP)
+  }
+  return address
+}
+
+func (cpu *CPU) Error(msg string) {
+  opcodeAddr := cpu.pc - 2
+  var opcode uint16 = 0
+  if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
+    opcode = uint16(cpu.RAM[opcodeAddr]) << 8 | uint16(cpu.RAM[opcodeAddr+1])
+  }
+  warn(msg, opcodeAddr, opcode)
+  cpu.DumpStatus()
+  cpu.running = false;
 }
 
 func (cpu *CPU) bumpSpecType(newType int) {
@@ -249,7 +272,7 @@ func (cpu *CPU) Step() {
   case 0x1000:
     cpu.pc = nnn
   case 0x2000:
-    cpu.Stack[cpu.sp] = cpu.pc
+    cpu.Stack[cpu.S(cpu.sp)] = cpu.pc
     cpu.sp--
     cpu.pc = nnn
   case 0x3000:
@@ -407,7 +430,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
   case 0x00EE:
     // Return
     cpu.sp++
-    cpu.pc = cpu.Stack[cpu.sp]
+    cpu.pc = cpu.Stack[cpu.S(cpu.sp)]
   case 0x00FB:
     cpu.scrollRight()
     cpu.bumpSpecType(SCHIP)
