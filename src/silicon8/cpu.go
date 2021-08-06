@@ -3,10 +3,9 @@ package silicon8
 /*
  TODO:
   * SCHIP opcodes
-    * Extended resolution mode
     * 16x16 sprites
   * XO-CHIP opcodes
-    * plane n
+    * plane n (opcode works, but draw routine only draws to plane 1)
 */
 
 import "time"
@@ -19,12 +18,15 @@ const BLINDVIP  int = 4  // To run the emulator in headless VIP mode, which does
 
 type soundEvent func()
 type randomByte func() uint8
+type displaySetter func(int, int, int)
 
 type CPU struct {
   RAM        []uint8
   RAMSize    uint16
-  Display    [256]uint8
+  Display    []uint8
   DispSize   uint16
+  DispWidth  uint16
+  DispHeight uint16
   stack      [12]uint16
   v          [16]uint8
   userFlags  [8]uint8
@@ -39,6 +41,8 @@ type CPU struct {
   WaitForInt uint8 // Waiting for display refresh "interrupt"?
   playing    bool  // Playing sound?
   SD         bool  // Screen dirty?
+  plane      uint8 // XO-Chip: Current drawing plane
+  planes     uint8 //          How many planes in total?
 
   shiftQuirk bool  // Shift result to source register instead of target register
   jumpQuirk  bool  // 'jump0' uses v[x] instead of v0 for jump offset
@@ -51,6 +55,7 @@ type CPU struct {
   playSound  soundEvent
   stopSound  soundEvent
   random     randomByte
+  setDispRes displaySetter
 
   running    bool
 }
@@ -82,12 +87,6 @@ func (cpu *CPU) Start() {
 }
 
 func (cpu *CPU) Reset(interpreter int) {
-  cpu.pc = 0x0200
-  cpu.sp = 11
-  cpu.dt = 0
-  cpu.st = 0
-  cpu.DispSize = 256
-
   switch(interpreter) {
   case STRICTVIP:
     cpu.RAMSize = 3216 + 512
@@ -96,17 +95,28 @@ func (cpu *CPU) Reset(interpreter int) {
   case XOCHIP:
     cpu.RAMSize = 65023 + 512
   }
+
+  // Initialize registers
+  cpu.pc = 0x0200
+  cpu.sp = 11
+  cpu.dt = 0
+  cpu.st = 0
+
+  // Initialize memory
+  cpu.initDisplay(64, 32, 1)
   cpu.RAM = make([]uint8, cpu.RAMSize)
 
-  for i := range cpu.Display  { cpu.Display[i]  = 0     }
+  // Initialize internal variables
   for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
-
   cpu.waitForKey = false
   cpu.WaitForInt = 0
   cpu.playing    = false
   cpu.SD         = true
   cpu.running    = true
+  cpu.plane      = 1
+  cpu.planes     = 1
 
+  // Determine quirks to use
   cpu.shiftQuirk = interpreter == SCHIP
   cpu.jumpQuirk  = interpreter == SCHIP
   cpu.memQuirk   = interpreter != SCHIP
@@ -123,6 +133,23 @@ func (cpu *CPU) RegisterSoundCallbacks(playSound soundEvent, stopSound soundEven
 
 func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
   cpu.random = random
+}
+
+func (cpu *CPU) RegisterDisplayCallback(setDisplaySize displaySetter) {
+  cpu.setDispRes = setDisplaySize
+}
+
+func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
+  cpu.DispWidth = width
+  cpu.DispHeight = height
+  cpu.planes = planes
+  cpu.DispSize = cpu.DispWidth * cpu.DispHeight / 8 * uint16(planes)
+  cpu.Display = make([]uint8, cpu.DispSize)
+
+  // Update outside world too
+  if ( cpu.setDispRes != nil ) {
+    cpu.setDispRes(int(width), int(height), int(planes))
+  }
 }
 
 func (cpu *CPU) DumpStatus() {
@@ -253,6 +280,13 @@ func (cpu *CPU) Step() {
     case 0x00:
       cpu.pc += 2
       cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+    case 0x01:
+      // Enable the second plane if it hasn't been enabled yet
+      if cpu.planes == 1 {
+        cpu.initDisplay(cpu.DispWidth, cpu.DispHeight, 2)
+      }
+      // Select plane X
+      cpu.plane = x
     case 0x02:
       // Load 16 bytes of audio buffer from (i)
       // (No-op in our implementation, at least for now)
@@ -333,10 +367,10 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
     cpu.running = false
   case 0x00FE:
     // Set normal screen resolution
-    // TODO
+    cpu.initDisplay(64, 32, cpu.planes)
   case 0x00FF:
     // Set extended screen resolution
-    // TODO
+    cpu.initDisplay(128, 64, cpu.planes)
   default:
     warn("RCA 1802 assembly calls not supported", cpu.pc - 2, op)
   }
@@ -454,25 +488,33 @@ func (cpu *CPU) draw(x, y, n uint8) {
     }
   }
 
-  xPos := cpu.v[x] & 63 // Wrap around the screen
-  yPos := cpu.v[y] & 31
-  topLeftOffset := yPos * 8 + xPos / 8
+  xPos := cpu.v[x]
+  yPos := cpu.v[y]
+  // Wrap around the screen
+  for xPos >= uint8(cpu.DispWidth)  {
+    xPos -= uint8(cpu.DispWidth)
+  }
+  for yPos >= uint8(cpu.DispHeight) {
+    yPos -= uint8(cpu.DispHeight)
+  }
+  topLeftOffset := uint16(yPos) * cpu.DispWidth / 8 + uint16(xPos) / 8
   erases := false
+  planeSize := cpu.DispSize / uint16(cpu.planes)
   var i uint8
   for i = 0; i < n; i++ {
     sprite := cpu.RAM[cpu.A(cpu.i + uint16(i))]
     leftPart := sprite >> (xPos % 8)
     rightPart := sprite << (8 - (xPos % 8))
-    dispOffset := uint16(topLeftOffset) + uint16(i) * 8
-    if !cpu.clipQuirk { dispOffset = dispOffset % 256 }
+    dispOffset := uint16(topLeftOffset) + uint16(i) * cpu.DispWidth / 8
+    if !cpu.clipQuirk { dispOffset = dispOffset % planeSize }
 
-    if dispOffset > 255 { break }
+    if dispOffset > planeSize { break }
     erases = erases || (cpu.Display[dispOffset] & leftPart) != 0
     cpu.Display[dispOffset] ^= leftPart
 
     dispOffset++
-    if dispOffset > 255 { break }
-    if cpu.clipQuirk && dispOffset % 8 == 0 { continue }
+    if dispOffset > planeSize { break }
+    if cpu.clipQuirk && dispOffset % (cpu.DispWidth / 8) == 0 { continue }
     erases = erases || (cpu.Display[dispOffset] & rightPart) != 0
     cpu.Display[dispOffset] ^= rightPart
   }

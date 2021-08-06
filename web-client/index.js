@@ -8,10 +8,10 @@ const XOCHIP    = 3;
 window.addEventListener('load', async () => {
   const Emulator = require('./emulator');
   const keyboard = require('./keyboard');
-  const render = require('./display');
+  const display = require('./display');
   const { playSound, stopSound } = require('./sound');
 
-  const instance = new Emulator({ render, playSound, stopSound });
+  const instance = new Emulator({ display, playSound, stopSound });
   await instance.init();
   keyboard(instance);
 

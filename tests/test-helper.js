@@ -3,13 +3,14 @@ const font = require('../shared/font');
 const types = require('../shared/types');
 require('../docs/wasm_exec');
 
-let randomByte, playSound, stopSound;
+let randomByte, playSound, stopSound, setDisplaySize;
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
 Object.assign(go.importObject.env, {
-  'main.randomByte': () => randomByte(),
-  'main.playSound':  () => playSound(),
-  'main.stopSound':  () => stopSound()
+  'main.randomByte':     () => randomByte(),
+  'main.playSound':      () => playSound(),
+  'main.stopSound':      () => stopSound(),
+  'main.setDisplaySize': () => setDisplaySize()
 });
 const instance = new WebAssembly.Instance(mod, go.importObject);
 const cpu = instance.exports;
@@ -19,14 +20,13 @@ module.exports = {
   types,
 
   run: ({type, rom, cycles, test, callbacks = {}}) => {
-    randomByte = () => callbacks.randomByte ? callbacks.randomByte() : Math.floor(Math.random() * Math.floor(256));
-    playSound  = () => callbacks.playSound  ? callbacks.playSound()  : null;
-    stopSound  = () => callbacks.stopSound  ? callbacks.stopSound()  : null;
+    randomByte     = () => callbacks.randomByte     ? callbacks.randomByte()     : Math.floor(Math.random() * Math.floor(256));
+    playSound      = () => callbacks.playSound      ? callbacks.playSound()      : null;
+    stopSound      = () => callbacks.stopSound      ? callbacks.stopSound()      : null;
+    setDisplaySize = () => callbacks.setDisplaySize ? callbacks.setDisplaySize() : null;
 
     const program = new Uint8Array(fs.readFileSync(rom));
     cpu.initialize(type);
-
-    const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
     const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
 
     // Clear RAM
@@ -38,6 +38,7 @@ module.exports = {
     for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
 
     cpu.cycles(cycles);
+    const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
     test(ram, display);
   }
 };
