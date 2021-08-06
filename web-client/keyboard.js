@@ -10,19 +10,19 @@ module.exports = instance => {
     49: 1,		// 1
     50: 2,		// 2
     51: 3,		// 3
-    52: 'C',	// 4
+    52: 0xC,	// 4
     81: 4, 		// Q
     87: 5, 		// W
     69: 6, 		// E
-    82: 'D', 	// R
+    82: 0xD, 	// R
     65: 7, 		// A
     83: 8, 		// S
     68: 9, 		// D
-    70: 'E', 	// F
-    90: 'A', 	// Z
+    70: 0xE, 	// F
+    90: 0xA, 	// Z
     88: 0, 		// X
-    67: 'B', 	// C
-    86: 'F', 	// V
+    67: 0xB, 	// C
+    86: 0xF, 	// V
 
     // Other number keys
     48: 0,
@@ -45,4 +45,12 @@ module.exports = instance => {
       instance.releaseKey(keys[e.keyCode]);
   });
 
+  document.querySelectorAll('.keyboard button').forEach(button => {
+    button.addEventListener('touchstart', () => {
+      instance.pressKey(button.dataset.value);
+    }, { passive: true });
+    button.addEventListener('touchend', () => {
+      instance.releaseKey(button.dataset.value);
+    }, { passive: true });
+  });
 };

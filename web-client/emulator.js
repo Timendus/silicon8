@@ -23,7 +23,10 @@ module.exports = class {
       'main.randomByte': () => Math.floor(Math.random() * 256) & 0xFF,
       'main.playSound':  playSound,
       'main.stopSound':  stopSound,
-      'main.setDisplaySize': display.setSize
+      'main.setDisplaySize': (w, h, p) => {
+        this._resetDispBuffer();
+        display.setSize(w, h, p);
+      }
     });
   }
 
@@ -32,12 +35,11 @@ module.exports = class {
     .then(result => {
       this._cpu = result.instance.exports;
       go.run(result.instance);
-      const display = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
-
       setInterval(() => {
         this._cpu.cycles(this._cyclesPerFrame);
         if ( this._cpu.screenDirty() ) {
-          this._display.render(display);
+          if ( this._dispBuffer )
+            this._display.render(this._dispBuffer);
           this._cpu.setScreenClean();
         }
       }, 1000 / 60);
@@ -53,6 +55,7 @@ module.exports = class {
 
   loadProgram(type, program) {
     this._cpu.initialize(type);
+    this._resetDispBuffer();
     const ram = new Uint8Array(this._cpu.memory.buffer, this._cpu.ramPtr(), this._cpu.ramSize());
     // Clear RAM
     const ramSize = this._cpu.ramSize();
@@ -73,6 +76,10 @@ module.exports = class {
 
   releaseKey(key) {
     this._cpu.releaseKey(key);
+  }
+
+  _resetDispBuffer() {
+    this._dispBuffer = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
   }
 
 }

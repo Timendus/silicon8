@@ -3,10 +3,9 @@ package silicon8
 /*
  TODO:
   * SCHIP opcodes
-    * Extended resolution mode
     * 16x16 sprites
   * XO-CHIP opcodes
-    * plane n
+    * plane n (opcode works, but draw routine only draws to plane 1)
 */
 
 import "time"
@@ -26,6 +25,8 @@ type CPU struct {
   RAMSize    uint16
   Display    []uint8
   DispSize   uint16
+  DispWidth  uint16
+  DispHeight uint16
   Stack      []uint16
   StackSize  uint8
   v          [16]uint8
@@ -109,15 +110,12 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.st = 0
 
   // Initialize memory
-  cpu.DispSize = 256
-  cpu.Display = make([]uint8, cpu.DispSize)
+  cpu.initDisplay(64, 32, 1)
   cpu.RAM = make([]uint8, cpu.RAMSize)
   cpu.Stack = make([]uint16, cpu.StackSize)
 
-  for i := range cpu.Display  { cpu.Display[i]  = 0     }
-  for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
-
   // Initialize internal variables
+  for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
   cpu.waitForKey = false
   cpu.WaitForInt = 0
   cpu.playing    = false
@@ -147,6 +145,19 @@ func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
 
 func (cpu *CPU) RegisterDisplayCallback(setDisplaySize displaySetter) {
   cpu.setDispRes = setDisplaySize
+}
+
+func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
+  cpu.DispWidth = width
+  cpu.DispHeight = height
+  cpu.planes = planes
+  cpu.DispSize = cpu.DispWidth * cpu.DispHeight / 8 * uint16(planes)
+  cpu.Display = make([]uint8, cpu.DispSize)
+
+  // Update outside world too
+  if ( cpu.setDispRes != nil ) {
+    cpu.setDispRes(int(width), int(height), int(planes))
+  }
 }
 
 func (cpu *CPU) DumpStatus() {
@@ -278,8 +289,10 @@ func (cpu *CPU) Step() {
       cpu.pc += 2
       cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
     case 0x01:
-      // Enable the second plane
-      cpu.planes = 2
+      // Enable the second plane if it hasn't been enabled yet
+      if cpu.planes == 1 {
+        cpu.initDisplay(cpu.DispWidth, cpu.DispHeight, 2)
+      }
       // Select plane X
       cpu.plane = x
     case 0x02:
@@ -362,14 +375,10 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
     cpu.running = false
   case 0x00FE:
     // Set normal screen resolution
-    cpu.DispSize = 256 * uint16(cpu.planes)
-    cpu.Display = make([]uint8, cpu.DispSize)
-    cpu.setDispRes(64, 32, int(cpu.planes))
+    cpu.initDisplay(64, 32, cpu.planes)
   case 0x00FF:
     // Set extended screen resolution
-    cpu.DispSize = 1024 * uint16(cpu.planes)
-    cpu.Display = make([]uint8, cpu.DispSize)
-    cpu.setDispRes(128, 64, int(cpu.planes))
+    cpu.initDisplay(128, 64, cpu.planes)
   default:
     warn("RCA 1802 assembly calls not supported", cpu.pc - 2, op)
   }
@@ -487,25 +496,33 @@ func (cpu *CPU) draw(x, y, n uint8) {
     }
   }
 
-  xPos := cpu.v[x] & 63 // Wrap around the screen
-  yPos := cpu.v[y] & 31
-  topLeftOffset := yPos * 8 + xPos / 8
+  xPos := cpu.v[x]
+  yPos := cpu.v[y]
+  // Wrap around the screen
+  for xPos >= uint8(cpu.DispWidth)  {
+    xPos -= uint8(cpu.DispWidth)
+  }
+  for yPos >= uint8(cpu.DispHeight) {
+    yPos -= uint8(cpu.DispHeight)
+  }
+  topLeftOffset := uint16(yPos) * cpu.DispWidth / 8 + uint16(xPos) / 8
   erases := false
+  planeSize := cpu.DispSize / uint16(cpu.planes)
   var i uint8
   for i = 0; i < n; i++ {
     sprite := cpu.RAM[cpu.A(cpu.i + uint16(i))]
     leftPart := sprite >> (xPos % 8)
     rightPart := sprite << (8 - (xPos % 8))
-    dispOffset := uint16(topLeftOffset) + uint16(i) * 8
-    if !cpu.clipQuirk { dispOffset = dispOffset % 256 }
+    dispOffset := uint16(topLeftOffset) + uint16(i) * cpu.DispWidth / 8
+    if !cpu.clipQuirk { dispOffset = dispOffset % planeSize }
 
-    if dispOffset > 255 { break }
+    if dispOffset > planeSize { break }
     erases = erases || (cpu.Display[dispOffset] & leftPart) != 0
     cpu.Display[dispOffset] ^= leftPart
 
     dispOffset++
-    if dispOffset > 255 { break }
-    if cpu.clipQuirk && dispOffset % 8 == 0 { continue }
+    if dispOffset > planeSize { break }
+    if cpu.clipQuirk && dispOffset % (cpu.DispWidth / 8) == 0 { continue }
     erases = erases || (cpu.Display[dispOffset] & rightPart) != 0
     cpu.Display[dispOffset] ^= rightPart
   }
