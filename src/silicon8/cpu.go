@@ -230,14 +230,18 @@ func (cpu *CPU) S(address uint8) uint8 {
 }
 
 func (cpu *CPU) Error(msg string) {
+  cpu.WarnAtCurrentPC(msg)
+  cpu.DumpStatus()
+  cpu.running = false;
+}
+
+func (cpu *CPU) WarnAtCurrentPC(msg string) {
   opcodeAddr := cpu.pc - 2
   var opcode uint16 = 0
   if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
     opcode = uint16(cpu.RAM[opcodeAddr]) << 8 | uint16(cpu.RAM[opcodeAddr+1])
   }
   warn(msg, opcodeAddr, opcode)
-  cpu.DumpStatus()
-  cpu.running = false;
 }
 
 func (cpu *CPU) bumpSpecType(newType int) {
@@ -247,7 +251,12 @@ func (cpu *CPU) bumpSpecType(newType int) {
   if newType > cpu.specType {
     cpu.specType = newType
     cpu.SetQuirks()
-    println("Upgraded to", newType)
+    switch(newType) {
+    case SCHIP:
+      cpu.WarnAtCurrentPC("Auto-upgraded interpreter to SCHIP")
+    case XOCHIP:
+      cpu.WarnAtCurrentPC("Auto-upgraded interpreter to XOCHIP")
+    }
   }
 }
 
