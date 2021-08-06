@@ -2,14 +2,11 @@ const types = require('../shared/types');
 
 module.exports = type => {
   switch(type) {
-    case types.VIP:
-    case types.STRICTVIP:
-    case types.BLINDVIP:
-    case types.AUTO:
-      return fonts.chip8;
     case types.SCHIP:
     case types.XOCHIP:
       return fonts.schip;
+    default:
+      return fonts.chip8;
   }
 };
 
