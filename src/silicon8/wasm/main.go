@@ -12,7 +12,6 @@ var cpu silicon8.CPU
 
 func main() {
   cpu = silicon8.CPU{}
-  cpu.Reset(silicon8.VIP)
   cpu.RegisterSoundCallbacks(playSound, stopSound)
   cpu.RegisterRandomGenerator(func() uint8 { return uint8(randomByte()) })
   cpu.RegisterDisplayCallback(setDisplaySize)

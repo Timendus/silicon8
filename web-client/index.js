@@ -1,9 +1,5 @@
 import Thimbleful from 'thimbleful';
-
-const VIP       = 0;
-const STRICTVIP = 1;
-const SCHIP     = 2;
-const XOCHIP    = 3;
+const types = require('../shared/types');
 
 window.addEventListener('load', async () => {
   const Emulator = require('./emulator');
@@ -22,7 +18,7 @@ window.addEventListener('load', async () => {
     0xee
   ]);
 
-  instance.loadProgram(VIP, program);
+  instance.loadProgram(types.AUTO, program);
 
   const fileTarget = Thimbleful.FileTarget.instance();
   fileTarget.register('#display', (file, data) => {
@@ -32,6 +28,6 @@ window.addEventListener('load', async () => {
     const program = new Uint8Array(new ArrayBuffer(data.length));
     for ( let i = 0; i < data.length; i++ )
       program[i] = data.charCodeAt(i);
-    instance.loadProgram(VIP, program);
+    instance.loadProgram(types.AUTO, program);
   });
 });

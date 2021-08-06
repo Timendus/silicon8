@@ -10,17 +10,19 @@ package silicon8
 
 import "time"
 
-const VIP       int = 0
+const AUTO      int = 0
 const STRICTVIP int = 1
-const SCHIP     int = 2
-const XOCHIP    int = 3
-const BLINDVIP  int = 4  // To run the emulator in headless VIP mode, which doesn't wait for display refresh
+const VIP       int = 2
+const BLINDVIP  int = 3  // To run the emulator in headless VIP mode, which doesn't wait for display refresh
+const SCHIP     int = 4
+const XOCHIP    int = 5
 
 type soundEvent func()
 type randomByte func() uint8
 type displaySetter func(int, int, int)
 
 type CPU struct {
+  // Registers and memory
   RAM        []uint8
   RAMSize    uint16
   Display    []uint8
@@ -37,6 +39,7 @@ type CPU struct {
   dt         uint8
   st         uint8
 
+  // Interpreter internal state
   Keyboard   [16]bool
   waitForKey bool  // Waiting for key press?
   WaitForInt uint8 // Waiting for display refresh "interrupt"?
@@ -44,7 +47,11 @@ type CPU struct {
   SD         bool  // Screen dirty?
   plane      uint8 // XO-Chip: Current drawing plane
   planes     uint8 //          How many planes in total?
+  specType   int
+  typeFixed  bool
+  running    bool
 
+  // Quirks flags
   shiftQuirk bool  // Shift result to source register instead of target register
   jumpQuirk  bool  // 'jump0' uses v[x] instead of v0 for jump offset
   memQuirk   bool  // Load and save opcodes advance i
@@ -53,12 +60,11 @@ type CPU struct {
   dispQuirk  bool  // Halt for display refresh before drawing sprite
   drawQuirk  bool  // Draw instruction messes up i, v[x] and v[y]
 
+  // External event handlers
   playSound  soundEvent
   stopSound  soundEvent
   random     randomByte
   setDispRes displaySetter
-
-  running    bool
 }
 
 func (cpu *CPU) Start() {
@@ -88,6 +94,14 @@ func (cpu *CPU) Start() {
 }
 
 func (cpu *CPU) Reset(interpreter int) {
+  if interpreter != AUTO {
+    cpu.specType = interpreter
+    cpu.typeFixed = true
+  } else {
+    cpu.specType = VIP
+    cpu.typeFixed = false
+  }
+
   switch(interpreter) {
   case STRICTVIP:
     cpu.RAMSize = 3216 + 512
@@ -101,6 +115,9 @@ func (cpu *CPU) Reset(interpreter int) {
   case XOCHIP:
     cpu.RAMSize = 65023 + 512
     cpu.StackSize = 12
+  case AUTO: // Takes maximum sizes, determines limits at runtime
+    cpu.RAMSize = 65023 + 512
+    cpu.StackSize = 16
   }
 
   // Initialize registers
@@ -125,13 +142,17 @@ func (cpu *CPU) Reset(interpreter int) {
   cpu.planes     = 1
 
   // Determine quirks to use
-  cpu.shiftQuirk = interpreter == SCHIP
-  cpu.jumpQuirk  = interpreter == SCHIP
-  cpu.memQuirk   = interpreter != SCHIP
-  cpu.vfQuirk    = interpreter == VIP || interpreter == STRICTVIP || interpreter == BLINDVIP
-  cpu.clipQuirk  = interpreter != XOCHIP
-  cpu.dispQuirk  = interpreter == VIP || interpreter == STRICTVIP
-  cpu.drawQuirk  = interpreter == STRICTVIP
+  cpu.SetQuirks()
+}
+
+func (cpu *CPU) SetQuirks() {
+  cpu.shiftQuirk = cpu.specType == SCHIP
+  cpu.jumpQuirk  = cpu.specType == SCHIP
+  cpu.memQuirk   = cpu.specType != SCHIP
+  cpu.vfQuirk    = cpu.specType == VIP || cpu.specType == STRICTVIP || cpu.specType == BLINDVIP
+  cpu.clipQuirk  = cpu.specType != XOCHIP
+  cpu.dispQuirk  = cpu.specType == VIP || cpu.specType == STRICTVIP
+  cpu.drawQuirk  = cpu.specType == STRICTVIP
 }
 
 func (cpu *CPU) RegisterSoundCallbacks(playSound soundEvent, stopSound soundEvent) {
@@ -196,6 +217,17 @@ func (cpu *CPU) A(address uint16) uint16 {
   }
 }
 
+func (cpu *CPU) bumpSpecType(newType int) {
+  if cpu.typeFixed {
+    return
+  }
+  if newType > cpu.specType {
+    cpu.specType = newType
+    cpu.SetQuirks()
+    println("Upgraded to", newType)
+  }
+}
+
 func (cpu *CPU) Step() {
   if !cpu.running {
     return
@@ -240,10 +272,12 @@ func (cpu *CPU) Step() {
       for i := x; i <= y; i++ {
         cpu.RAM[cpu.A(cpu.i + uint16(i - x))] = cpu.v[i]
       }
+      cpu.bumpSpecType(XOCHIP)
     case 3:
       for i := x; i <= y; i++ {
         cpu.v[i] = cpu.RAM[cpu.A(cpu.i + uint16(i - x))]
       }
+      cpu.bumpSpecType(XOCHIP)
     default:
       if cpu.v[x] == cpu.v[y] {
         cpu.pc += 2
@@ -288,6 +322,7 @@ func (cpu *CPU) Step() {
     case 0x00:
       cpu.pc += 2
       cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+      cpu.bumpSpecType(XOCHIP)
     case 0x01:
       // Enable the second plane if it hasn't been enabled yet
       if cpu.planes == 1 {
@@ -295,9 +330,11 @@ func (cpu *CPU) Step() {
       }
       // Select plane X
       cpu.plane = x
+      cpu.bumpSpecType(XOCHIP)
     case 0x02:
       // Load 16 bytes of audio buffer from (i)
       // (No-op in our implementation, at least for now)
+      cpu.bumpSpecType(XOCHIP)
     case 0x07:
       cpu.v[x] = cpu.dt
     case 0x0A:
@@ -312,6 +349,7 @@ func (cpu *CPU) Step() {
       cpu.i = uint16(cpu.v[x] * 5)
     case 0x30:
       cpu.i = uint16(cpu.v[x] * 10) + 80
+      cpu.bumpSpecType(SCHIP)
     case 0x33:
       cpu.RAM[cpu.A(cpu.i + 0)] = cpu.v[x] / 100
       cpu.RAM[cpu.A(cpu.i + 1)] = cpu.v[x] % 100 / 10
@@ -337,11 +375,13 @@ func (cpu *CPU) Step() {
       for i = 0; i <= x; i++ {
         cpu.userFlags[i] = cpu.v[i]
       }
+      cpu.bumpSpecType(SCHIP)
     case 0x85:
       var i uint8
       for i = 0; i <= x; i++ {
         cpu.v[i] = cpu.userFlags[i]
       }
+      cpu.bumpSpecType(SCHIP)
     }
 
   }
@@ -351,9 +391,11 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
   switch(op & 0xFFF0) {
   case 0x00C0:
     cpu.scrollDown(n)
+    cpu.bumpSpecType(SCHIP)
     return
   case 0x00D0:
     cpu.scrollUp(n)
+    cpu.bumpSpecType(XOCHIP)
     return
   }
 
@@ -368,19 +410,26 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
     cpu.pc = cpu.Stack[cpu.sp]
   case 0x00FB:
     cpu.scrollRight()
+    cpu.bumpSpecType(SCHIP)
   case 0x00FC:
     cpu.scrollLeft()
+    cpu.bumpSpecType(SCHIP)
   case 0x00FD:
     // "Exit" interpreter. Will just halt in our implementation
     cpu.running = false
+    cpu.bumpSpecType(SCHIP)
   case 0x00FE:
     // Set normal screen resolution
     cpu.initDisplay(64, 32, cpu.planes)
+    cpu.bumpSpecType(SCHIP)
   case 0x00FF:
     // Set extended screen resolution
     cpu.initDisplay(128, 64, cpu.planes)
+    cpu.bumpSpecType(SCHIP)
   default:
     warn("RCA 1802 assembly calls not supported", cpu.pc - 2, op)
+    cpu.DumpStatus()
+    cpu.running = false
   }
 }
 
@@ -539,6 +588,10 @@ func (cpu *CPU) draw(x, y, n uint8) {
     cpu.i = 0
     cpu.v[x] = 0
     cpu.v[y] = 0
+  }
+
+  if n == 0 {
+    cpu.bumpSpecType(SCHIP)
   }
 }
 

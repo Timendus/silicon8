@@ -5,6 +5,7 @@ module.exports = type => {
     case types.VIP:
     case types.STRICTVIP:
     case types.BLINDVIP:
+    case types.AUTO:
       return fonts.chip8;
     case types.SCHIP:
     case types.XOCHIP:
