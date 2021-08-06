@@ -176,7 +176,7 @@ func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
   cpu.Display = make([]uint8, cpu.DispSize)
 
   // Update outside world too
-  if ( cpu.setDispRes != nil ) {
+  if cpu.setDispRes != nil {
     cpu.setDispRes(int(width), int(height), int(planes))
   }
 }
