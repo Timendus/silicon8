@@ -3,7 +3,7 @@
   "scripts": {
     "build": "webpack --mode production && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/wasm_exec.js && GOPATH=$(pwd) tinygo build -o docs/silicon8.wasm -target wasm silicon8/wasm",
     "run": "./run.js ./tests/abc.ch8",
-    "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm ./src",
+    "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm silicon8/wasm",
     "start": "npm run build && npm run run",
     "gorun": "GOPATH=$(pwd) go run silicon8/main",
     "serve": "webpack serve --open",
