@@ -48,13 +48,13 @@ type CPU struct {
 	running    bool
 
 	// Quirks flags
-	shiftQuirk bool  // Shift result to source register instead of target register
-	jumpQuirk  bool  // 'jump0' uses v[x] instead of v0 for jump offset
-	memQuirk   bool  // Load and save opcodes advance i
-	vfQuirk    bool  // vF is cleared after OR, AND and XOR opcodes
-	clipQuirk  bool  // Sprites are clipped instead of wrapped at edges of display
-	dispQuirk  bool  // Halt for display refresh before drawing sprite
-	drawQuirk  bool  // Draw instruction messes up i, v[x] and v[y]
+	shiftQuirk bool // Shift result to source register instead of target register
+	jumpQuirk  bool // 'jump0' uses v[x] instead of v0 for jump offset
+	memQuirk   bool // Load and save opcodes advance i
+	vfQuirk    bool // vF is cleared after OR, AND and XOR opcodes
+	clipQuirk  bool // Sprites are clipped instead of wrapped at edges of display
+	dispQuirk  bool // Halt for display refresh before drawing sprite
+	drawQuirk  bool // Draw instruction messes up i, v[x] and v[y]
 
 	// External event handlers
 	playSound  soundEvent

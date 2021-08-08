@@ -45,7 +45,7 @@ func (cpu *CPU) Reset(interpreter int) {
 		cpu.typeFixed = false
 	}
 
-	switch(interpreter) {
+	switch interpreter {
 	case STRICTVIP:
 		cpu.RAMSize = STRICTVIP_RAM_SIZE
 		cpu.StackSize = DEFAULT_STACK_SIZE
@@ -75,7 +75,10 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.Stack = make([]uint16, cpu.StackSize)
 
 	// Initialize internal variables
-	for i := range cpu.Keyboard { cpu.Keyboard[i] = false }
+	for i := range cpu.Keyboard {
+		cpu.Keyboard[i] = false
+	}
+
 	cpu.waitForKey = false
 	cpu.WaitForInt = 0
 	cpu.playing    = false
@@ -147,7 +150,7 @@ func (cpu *CPU) S(address uint8) uint8 {
 		cpu.Error("Program attempted to access invalid stack memory")
 		return 0
 	}
-	if cpu.StackSize == SCHIP_STACK_SIZE && address < (SCHIP_STACK_SIZE - DEFAULT_STACK_SIZE) {
+	if cpu.StackSize == SCHIP_STACK_SIZE && address < (SCHIP_STACK_SIZE-DEFAULT_STACK_SIZE) {
 		cpu.bumpSpecType(SCHIP)
 	}
 	return address
@@ -156,14 +159,14 @@ func (cpu *CPU) S(address uint8) uint8 {
 func (cpu *CPU) Error(msg string) {
 	cpu.WarnAtCurrentPC(msg)
 	cpu.DumpStatus()
-	cpu.running = false;
+	cpu.running = false
 }
 
 func (cpu *CPU) WarnAtCurrentPC(msg string) {
 	opcodeAddr := cpu.pc - 2
 	var opcode uint16 = 0
 	if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
-		opcode = uint16(cpu.RAM[opcodeAddr]) << 8 | uint16(cpu.RAM[opcodeAddr+1])
+		opcode = uint16(cpu.RAM[opcodeAddr])<<8 | uint16(cpu.RAM[opcodeAddr+1])
 	}
 	warn(msg, opcodeAddr, opcode)
 }
@@ -175,7 +178,7 @@ func (cpu *CPU) bumpSpecType(newType int) {
 	if newType > cpu.specType {
 		cpu.specType = newType
 		cpu.SetQuirks()
-		switch(newType) {
+		switch newType {
 		case SCHIP:
 			cpu.WarnAtCurrentPC("Auto-upgraded interpreter to SCHIP")
 		case XOCHIP:

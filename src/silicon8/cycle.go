@@ -17,7 +17,7 @@ func (cpu *CPU) Cycle() {
 	info("Processing instruction", cpu.pc, op)
 	cpu.pc += 2
 
-	switch(op & 0xF000) {
+	switch op & 0xF000 {
 	case 0x0000:
 		cpu.machineCall(op, n)
 	case 0x1000:
@@ -35,21 +35,21 @@ func (cpu *CPU) Cycle() {
 			cpu.pc += 2
 		}
 	case 0x5000:
-		if (x > y) {
+		if x > y {
 			n := x
 			x = y
 			y = n
 		}
 
-		switch(n) {
+		switch n {
 		case 2:
 			for i := x; i <= y; i++ {
-				cpu.RAM[cpu.A(cpu.i + uint16(i - x))] = cpu.v[i]
+				cpu.RAM[cpu.A(cpu.i+uint16(i-x))] = cpu.v[i]
 			}
 			cpu.bumpSpecType(XOCHIP)
 		case 3:
 			for i := x; i <= y; i++ {
-				cpu.v[i] = cpu.RAM[cpu.A(cpu.i + uint16(i - x))]
+				cpu.v[i] = cpu.RAM[cpu.A(cpu.i+uint16(i-x))]
 			}
 			cpu.bumpSpecType(XOCHIP)
 		default:
@@ -80,7 +80,7 @@ func (cpu *CPU) Cycle() {
 	case 0xD000:
 		cpu.draw(x, y, n)
 	case 0xE000:
-		switch(nn) {
+		switch nn {
 		case 0x9E:
 			if cpu.Keyboard[cpu.v[x]] {
 				cpu.pc += 2
@@ -92,10 +92,10 @@ func (cpu *CPU) Cycle() {
 		}
 	case 0xF000:
 
-		switch(nn) {
+		switch nn {
 		case 0x00:
 			cpu.pc += 2
-			cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+			cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
 			cpu.bumpSpecType(XOCHIP)
 		case 0x01:
 			// Enable the second plane if it hasn't been enabled yet
@@ -124,7 +124,9 @@ func (cpu *CPU) Cycle() {
 			} else {
 				cpu.pc -= 2
 				for _, p := range cpu.Keyboard {
-					if p { return }
+					if p {
+						return
+					}
 				}
 				cpu.waitForKey = true
 			}
@@ -137,16 +139,16 @@ func (cpu *CPU) Cycle() {
 		case 0x29:
 			cpu.i = uint16(cpu.v[x] * 5)
 		case 0x30:
-			cpu.i = uint16(cpu.v[x] * 10) + 80
+			cpu.i = uint16(cpu.v[x]*10) + 80
 			cpu.bumpSpecType(SCHIP)
 		case 0x33:
-			cpu.RAM[cpu.A(cpu.i + 0)] = cpu.v[x] / 100
-			cpu.RAM[cpu.A(cpu.i + 1)] = cpu.v[x] % 100 / 10
-			cpu.RAM[cpu.A(cpu.i + 2)] = cpu.v[x] % 10
+			cpu.RAM[cpu.A(cpu.i+0)] = cpu.v[x] / 100
+			cpu.RAM[cpu.A(cpu.i+1)] = cpu.v[x] % 100 / 10
+			cpu.RAM[cpu.A(cpu.i+2)] = cpu.v[x] % 10
 		case 0x55:
 			var i uint8
 			for i = 0; i <= x; i++ {
-				cpu.RAM[cpu.A(cpu.i + uint16(i))] = cpu.v[i]
+				cpu.RAM[cpu.A(cpu.i+uint16(i))] = cpu.v[i]
 			}
 			if cpu.memQuirk {
 				cpu.i += uint16(x) + 1
@@ -154,7 +156,7 @@ func (cpu *CPU) Cycle() {
 		case 0x65:
 			var i uint8
 			for i = 0; i <= x; i++ {
-				cpu.v[i] = cpu.RAM[cpu.A(cpu.i + uint16(i))]
+				cpu.v[i] = cpu.RAM[cpu.A(cpu.i+uint16(i))]
 			}
 			if cpu.memQuirk {
 				cpu.i += uint16(x) + 1
@@ -177,7 +179,7 @@ func (cpu *CPU) Cycle() {
 }
 
 func (cpu *CPU) machineCall(op uint16, n uint8) {
-	switch(op & 0xFFF0) {
+	switch op & 0xFFF0 {
 	case 0x00C0:
 		cpu.scrollDown(n)
 		cpu.bumpSpecType(SCHIP)
@@ -188,10 +190,12 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 		return
 	}
 
-	switch(op) {
+	switch op {
 	case 0x00E0:
 		// Clear screen
-		for i := range cpu.Display { cpu.Display[i] = 0 }
+		for i := range cpu.Display {
+			cpu.Display[i] = 0
+		}
 		cpu.SD = true
 	case 0x00EE:
 		// Return
@@ -216,7 +220,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 		cpu.initDisplay(128, 64, cpu.planes)
 		cpu.bumpSpecType(SCHIP)
 	default:
-		warn("RCA 1802 assembly calls not supported", cpu.pc - 2, op)
+		warn("RCA 1802 assembly calls not supported", cpu.pc-2, op)
 		cpu.DumpStatus()
 		cpu.running = false
 	}
@@ -257,7 +261,7 @@ func (cpu *CPU) scrollRight() {
 }
 
 func (cpu *CPU) maths(x, y, n uint8) {
-	switch(n) {
+	switch n {
 	case 0x0:
 		cpu.v[x] = cpu.v[y]
 	case 0x1:
@@ -321,7 +325,7 @@ func (cpu *CPU) setFlag(comparison bool) {
 
 func (cpu *CPU) draw(x, y, n uint8) {
 	if cpu.dispQuirk {
-		switch(cpu.WaitForInt) {
+		switch cpu.WaitForInt {
 		case 0:
 			cpu.WaitForInt = 1
 			cpu.pc -= 2
@@ -337,7 +341,7 @@ func (cpu *CPU) draw(x, y, n uint8) {
 	xPos := cpu.v[x]
 	yPos := cpu.v[y]
 	// Wrap around the screen
-	for xPos >= uint8(cpu.DispWidth)  {
+	for xPos >= uint8(cpu.DispWidth) {
 		xPos -= uint8(cpu.DispWidth)
 	}
 	for yPos >= uint8(cpu.DispHeight) {
@@ -352,15 +356,23 @@ func (cpu *CPU) draw(x, y, n uint8) {
 		leftPart := sprite >> (xPos % 8)
 		rightPart := sprite << (8 - (xPos % 8))
 		dispOffset := uint16(topLeftOffset) + uint16(i) * cpu.DispWidth / 8
-		if !cpu.clipQuirk { dispOffset = dispOffset % planeSize }
+		if !cpu.clipQuirk {
+			dispOffset = dispOffset % planeSize
+		}
 
-		if dispOffset > planeSize { break }
+		if dispOffset > planeSize {
+			break
+		}
 		erases = erases || (cpu.Display[dispOffset] & leftPart) != 0
 		cpu.Display[dispOffset] ^= leftPart
 
 		dispOffset++
-		if dispOffset > planeSize { break }
-		if cpu.clipQuirk && dispOffset % (cpu.DispWidth / 8) == 0 { continue }
+		if dispOffset > planeSize {
+			break
+		}
+		if cpu.clipQuirk && dispOffset % (cpu.DispWidth / 8) == 0 {
+			continue
+		}
 		erases = erases || (cpu.Display[dispOffset] & rightPart) != 0
 		cpu.Display[dispOffset] ^= rightPart
 	}

@@ -5,11 +5,11 @@ package silicon8
 import "fmt"
 
 func info(message string, addr, opcode uint16) {
-	log(message, addr, opcode);
+	log(message, addr, opcode)
 }
 
 func warn(message string, addr, opcode uint16) {
-	log(message, addr, opcode);
+	log(message, addr, opcode)
 }
 
 func log(message string, addr, opcode uint16) {
