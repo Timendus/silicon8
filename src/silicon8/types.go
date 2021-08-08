@@ -25,8 +25,8 @@ type CPU struct {
 	DispSize   uint16
 	DispWidth  uint16
 	DispHeight uint16
-	Stack      []uint16
-	StackSize  uint8
+	stack      []uint16
+	stackSize  uint8
 	v          [16]uint8
 	userFlags  [8]uint8
 	i          uint16

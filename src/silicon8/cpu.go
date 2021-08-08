@@ -48,31 +48,31 @@ func (cpu *CPU) Reset(interpreter int) {
 	switch interpreter {
 	case STRICTVIP:
 		cpu.RAMSize = STRICTVIP_RAM_SIZE
-		cpu.StackSize = DEFAULT_STACK_SIZE
+		cpu.stackSize = DEFAULT_STACK_SIZE
 	case VIP, BLINDVIP:
 		cpu.RAMSize = VIP_SCHIP_RAM_SIZE
-		cpu.StackSize = DEFAULT_STACK_SIZE
+		cpu.stackSize = DEFAULT_STACK_SIZE
 	case SCHIP:
 		cpu.RAMSize = VIP_SCHIP_RAM_SIZE
-		cpu.StackSize = SCHIP_STACK_SIZE
+		cpu.stackSize = SCHIP_STACK_SIZE
 	case XOCHIP:
 		cpu.RAMSize = XOCHIP_RAM_SIZE
-		cpu.StackSize = DEFAULT_STACK_SIZE
+		cpu.stackSize = DEFAULT_STACK_SIZE
 	case AUTO: // Takes maximum sizes, determines limits at runtime
 		cpu.RAMSize = XOCHIP_RAM_SIZE
-		cpu.StackSize = SCHIP_STACK_SIZE
+		cpu.stackSize = SCHIP_STACK_SIZE
 	}
 
 	// Initialize registers
 	cpu.pc = 0x0200
-	cpu.sp = cpu.StackSize - 1
+	cpu.sp = cpu.stackSize - 1
 	cpu.dt = 0
 	cpu.st = 0
 
 	// Initialize memory
 	cpu.initDisplay(64, 32, 1)
 	cpu.RAM = make([]uint8, cpu.RAMSize)
-	cpu.Stack = make([]uint16, cpu.StackSize)
+	cpu.stack = make([]uint16, cpu.stackSize)
 
 	// Initialize internal variables
 	for i := range cpu.Keyboard {
@@ -88,10 +88,10 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.planes = 1
 
 	// Determine quirks to use
-	cpu.SetQuirks()
+	cpu.setQuirks()
 }
 
-func (cpu *CPU) SetQuirks() {
+func (cpu *CPU) setQuirks() {
 	cpu.shiftQuirk = cpu.specType == SCHIP
 	cpu.jumpQuirk = cpu.specType == SCHIP
 	cpu.memQuirk = cpu.specType != SCHIP
@@ -134,9 +134,9 @@ func (cpu *CPU) DumpStatus() {
 	println("   drawQuirk: ", cpu.drawQuirk)
 }
 
-func (cpu *CPU) A(address uint16) uint16 {
+func (cpu *CPU) a(address uint16) uint16 {
 	if address >= cpu.RAMSize {
-		cpu.Error("Program attempted to access RAM outside of memory")
+		cpu.error("Program attempted to access RAM outside of memory")
 		return 0
 	}
 	if address >= VIP_SCHIP_RAM_SIZE {
@@ -145,24 +145,24 @@ func (cpu *CPU) A(address uint16) uint16 {
 	return address
 }
 
-func (cpu *CPU) S(address uint8) uint8 {
-	if address >= cpu.StackSize {
-		cpu.Error("Program attempted to access invalid stack memory")
+func (cpu *CPU) s(address uint8) uint8 {
+	if address >= cpu.stackSize {
+		cpu.error("Program attempted to access invalid stack memory")
 		return 0
 	}
-	if cpu.StackSize == SCHIP_STACK_SIZE && address < (SCHIP_STACK_SIZE-DEFAULT_STACK_SIZE) {
+	if cpu.stackSize == SCHIP_STACK_SIZE && address < (SCHIP_STACK_SIZE-DEFAULT_STACK_SIZE) {
 		cpu.bumpSpecType(SCHIP)
 	}
 	return address
 }
 
-func (cpu *CPU) Error(msg string) {
-	cpu.WarnAtCurrentPC(msg)
+func (cpu *CPU) error(msg string) {
+	cpu.warnAtCurrentPC(msg)
 	cpu.DumpStatus()
 	cpu.running = false
 }
 
-func (cpu *CPU) WarnAtCurrentPC(msg string) {
+func (cpu *CPU) warnAtCurrentPC(msg string) {
 	opcodeAddr := cpu.pc - 2
 	var opcode uint16 = 0
 	if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
@@ -177,12 +177,12 @@ func (cpu *CPU) bumpSpecType(newType int) {
 	}
 	if newType > cpu.specType {
 		cpu.specType = newType
-		cpu.SetQuirks()
+		cpu.setQuirks()
 		switch newType {
 		case SCHIP:
-			cpu.WarnAtCurrentPC("Auto-upgraded interpreter to SCHIP")
+			cpu.warnAtCurrentPC("Auto-upgraded interpreter to SCHIP")
 		case XOCHIP:
-			cpu.WarnAtCurrentPC("Auto-upgraded interpreter to XOCHIP")
+			cpu.warnAtCurrentPC("Auto-upgraded interpreter to XOCHIP")
 		}
 	}
 }

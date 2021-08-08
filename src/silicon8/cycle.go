@@ -7,11 +7,11 @@ func (cpu *CPU) Cycle() {
 		return
 	}
 
-	var op uint16 = uint16(cpu.RAM[cpu.A(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
-	var x uint8 = cpu.RAM[cpu.A(cpu.pc)] & 0x0F
-	var y uint8 = cpu.RAM[cpu.A(cpu.pc+1)] & 0xF0 >> 4
-	var n uint8 = cpu.RAM[cpu.A(cpu.pc+1)] & 0x0F
-	var nn uint8 = cpu.RAM[cpu.A(cpu.pc+1)] & 0xFF
+	var op uint16 = uint16(cpu.RAM[cpu.a(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.a(cpu.pc+1)])
+	var x uint8 = cpu.RAM[cpu.a(cpu.pc)] & 0x0F
+	var y uint8 = cpu.RAM[cpu.a(cpu.pc+1)] & 0xF0 >> 4
+	var n uint8 = cpu.RAM[cpu.a(cpu.pc+1)] & 0x0F
+	var nn uint8 = cpu.RAM[cpu.a(cpu.pc+1)] & 0xFF
 	var nnn uint16 = uint16(x)<<8 | uint16(nn)
 
 	info("Processing instruction", cpu.pc, op)
@@ -23,7 +23,7 @@ func (cpu *CPU) Cycle() {
 	case 0x1000:
 		cpu.pc = nnn
 	case 0x2000:
-		cpu.Stack[cpu.S(cpu.sp)] = cpu.pc
+		cpu.stack[cpu.s(cpu.sp)] = cpu.pc
 		cpu.sp--
 		cpu.pc = nnn
 	case 0x3000:
@@ -44,12 +44,12 @@ func (cpu *CPU) Cycle() {
 		switch n {
 		case 2:
 			for i := x; i <= y; i++ {
-				cpu.RAM[cpu.A(cpu.i+uint16(i-x))] = cpu.v[i]
+				cpu.RAM[cpu.a(cpu.i+uint16(i-x))] = cpu.v[i]
 			}
 			cpu.bumpSpecType(XOCHIP)
 		case 3:
 			for i := x; i <= y; i++ {
-				cpu.v[i] = cpu.RAM[cpu.A(cpu.i+uint16(i-x))]
+				cpu.v[i] = cpu.RAM[cpu.a(cpu.i+uint16(i-x))]
 			}
 			cpu.bumpSpecType(XOCHIP)
 		default:
@@ -95,7 +95,7 @@ func (cpu *CPU) Cycle() {
 		switch nn {
 		case 0x00:
 			cpu.pc += 2
-			cpu.i = uint16(cpu.RAM[cpu.A(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+			cpu.i = uint16(cpu.RAM[cpu.a(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.a(cpu.pc+1)])
 			cpu.bumpSpecType(XOCHIP)
 		case 0x01:
 			// Enable the second plane if it hasn't been enabled yet
@@ -142,13 +142,13 @@ func (cpu *CPU) Cycle() {
 			cpu.i = uint16(cpu.v[x]*10) + 80
 			cpu.bumpSpecType(SCHIP)
 		case 0x33:
-			cpu.RAM[cpu.A(cpu.i+0)] = cpu.v[x] / 100
-			cpu.RAM[cpu.A(cpu.i+1)] = cpu.v[x] % 100 / 10
-			cpu.RAM[cpu.A(cpu.i+2)] = cpu.v[x] % 10
+			cpu.RAM[cpu.a(cpu.i+0)] = cpu.v[x] / 100
+			cpu.RAM[cpu.a(cpu.i+1)] = cpu.v[x] % 100 / 10
+			cpu.RAM[cpu.a(cpu.i+2)] = cpu.v[x] % 10
 		case 0x55:
 			var i uint8
 			for i = 0; i <= x; i++ {
-				cpu.RAM[cpu.A(cpu.i+uint16(i))] = cpu.v[i]
+				cpu.RAM[cpu.a(cpu.i+uint16(i))] = cpu.v[i]
 			}
 			if cpu.memQuirk {
 				cpu.i += uint16(x) + 1
@@ -156,7 +156,7 @@ func (cpu *CPU) Cycle() {
 		case 0x65:
 			var i uint8
 			for i = 0; i <= x; i++ {
-				cpu.v[i] = cpu.RAM[cpu.A(cpu.i+uint16(i))]
+				cpu.v[i] = cpu.RAM[cpu.a(cpu.i+uint16(i))]
 			}
 			if cpu.memQuirk {
 				cpu.i += uint16(x) + 1
@@ -200,7 +200,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 	case 0x00EE:
 		// Return
 		cpu.sp++
-		cpu.pc = cpu.Stack[cpu.S(cpu.sp)]
+		cpu.pc = cpu.stack[cpu.s(cpu.sp)]
 	case 0x00FB:
 		cpu.scrollRight()
 		cpu.bumpSpecType(SCHIP)
@@ -352,7 +352,7 @@ func (cpu *CPU) draw(x, y, n uint8) {
 	planeSize := cpu.DispSize / uint16(cpu.planes)
 	var i uint8
 	for i = 0; i < n; i++ {
-		sprite := cpu.RAM[cpu.A(cpu.i+uint16(i))]
+		sprite := cpu.RAM[cpu.a(cpu.i+uint16(i))]
 		leftPart := sprite >> (xPos % 8)
 		rightPart := sprite << (8 - (xPos % 8))
 		dispOffset := uint16(topLeftOffset) + uint16(i)*cpu.DispWidth/8
