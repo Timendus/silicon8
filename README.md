@@ -78,3 +78,22 @@ Also, I added a web-based front-end for the interpreter that works nicer and
 looks better than the console based version.
 
 Next up: Time to work on the SCHIP and XOCHIP features some more 😄
+
+### August 2021
+
+SCHIP high resolution mode works. Most instructions have been implemented (not
+all have been tested) except for the 16 by 16 pixel sprites and XO-CHIP's four
+colour mode. I'm going to refactor stuff a bit before I fix those, because I
+intend to just hand the external runtime a colour bitmap to render from the
+(WebAssembly) Go package. That should make it easier to implement a runtime and
+allows for a fancy 16-colour mode. In theory. We'll see 😄
+
+I tried to add an auto-detect mode that tries to determine the version of CHIP-8
+used at runtime. I figured that programs that use specific instructions or
+access memory outside of the regular limits can be safely bumped to SCHIP or
+XO-CHIP. The feature works, but the number of programs that are accurately
+auto-detected is lower than I expected. A program can use none of the SCHIP
+features, and still expect to be run on SCHIP with all the quirks of that
+platform, for example. Same with developers writing programs for XO-CHIP without
+actually using anything beyond CHIP-8 and SCHIP instructions. No way to tell.
+
