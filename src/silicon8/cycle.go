@@ -7,12 +7,12 @@ func (cpu *CPU) Cycle() {
 		return
 	}
 
-	var op  uint16 = uint16(cpu.RAM[cpu.A(cpu.pc)]) << 8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
-	var x   uint8  = cpu.RAM[cpu.A(cpu.pc)]   & 0x0F
-	var y   uint8  = cpu.RAM[cpu.A(cpu.pc+1)] & 0xF0 >> 4
-	var n   uint8  = cpu.RAM[cpu.A(cpu.pc+1)] & 0x0F
-	var nn  uint8  = cpu.RAM[cpu.A(cpu.pc+1)] & 0xFF
-	var nnn uint16 = uint16(x) << 8 | uint16(nn)
+	var op uint16 = uint16(cpu.RAM[cpu.A(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.A(cpu.pc+1)])
+	var x uint8 = cpu.RAM[cpu.A(cpu.pc)] & 0x0F
+	var y uint8 = cpu.RAM[cpu.A(cpu.pc+1)] & 0xF0 >> 4
+	var n uint8 = cpu.RAM[cpu.A(cpu.pc+1)] & 0x0F
+	var nn uint8 = cpu.RAM[cpu.A(cpu.pc+1)] & 0xFF
+	var nnn uint16 = uint16(x)<<8 | uint16(nn)
 
 	info("Processing instruction", cpu.pc, op)
 	cpu.pc += 2
@@ -227,24 +227,24 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 }
 
 func (cpu *CPU) scrollDown(n uint8) {
-	for i := 8 * (32 - n); i > 8 * n; i-- {
-		cpu.Display[i + 8 * n] = cpu.Display[i]
+	for i := 8 * (32 - n); i > 8*n; i-- {
+		cpu.Display[i+8*n] = cpu.Display[i]
 	}
 }
 
 func (cpu *CPU) scrollUp(n uint8) {
-	for i := 8 * n; i < 8 * (32 - n); i++ {
-		cpu.Display[i - 8 * n] = cpu.Display[i]
+	for i := 8 * n; i < 8*(32-n); i++ {
+		cpu.Display[i-8*n] = cpu.Display[i]
 	}
 }
 
 func (cpu *CPU) scrollLeft() {
 	for y := 0; y < 32; y++ {
 		for x := 0; x < 7; x++ {
-			i := y * 32 + x
-			cpu.Display[i] = cpu.Display[i] << 4 | cpu.Display[i+1] >> 4
+			i := y*32 + x
+			cpu.Display[i] = cpu.Display[i]<<4 | cpu.Display[i+1]>>4
 		}
-		i := y * 32 + 7
+		i := y*32 + 7
 		cpu.Display[i] = cpu.Display[i] << 4
 	}
 }
@@ -252,8 +252,8 @@ func (cpu *CPU) scrollLeft() {
 func (cpu *CPU) scrollRight() {
 	for y := 0; y < 32; y++ {
 		for x := 7; x > 0; x-- {
-			i := y * 32 + x
-			cpu.Display[i] = cpu.Display[i] >> 4 | cpu.Display[i-1] << 4
+			i := y*32 + x
+			cpu.Display[i] = cpu.Display[i]>>4 | cpu.Display[i-1]<<4
 		}
 		i := y * 32
 		cpu.Display[i] = cpu.Display[i] >> 4
@@ -296,7 +296,7 @@ func (cpu *CPU) maths(x, y, n uint8) {
 			y = x
 		}
 		// Set register VF to the least significant bit prior to the shift
-		flag := cpu.v[y] & 0b00000001 > 0
+		flag := cpu.v[y]&0b00000001 > 0
 		cpu.v[x] = cpu.v[y] >> 1
 		cpu.setFlag(flag)
 	case 0x7:
@@ -310,7 +310,7 @@ func (cpu *CPU) maths(x, y, n uint8) {
 			y = x
 		}
 		// Set register VF to the most significant bit prior to the shift
-		flag := cpu.v[y] & 0b10000000 > 0
+		flag := cpu.v[y]&0b10000000 > 0
 		cpu.v[x] = cpu.v[y] << 1
 		cpu.setFlag(flag)
 	}
@@ -347,15 +347,15 @@ func (cpu *CPU) draw(x, y, n uint8) {
 	for yPos >= uint8(cpu.DispHeight) {
 		yPos -= uint8(cpu.DispHeight)
 	}
-	topLeftOffset := uint16(yPos) * cpu.DispWidth / 8 + uint16(xPos) / 8
+	topLeftOffset := uint16(yPos)*cpu.DispWidth/8 + uint16(xPos)/8
 	erases := false
 	planeSize := cpu.DispSize / uint16(cpu.planes)
 	var i uint8
 	for i = 0; i < n; i++ {
-		sprite := cpu.RAM[cpu.A(cpu.i + uint16(i))]
+		sprite := cpu.RAM[cpu.A(cpu.i+uint16(i))]
 		leftPart := sprite >> (xPos % 8)
 		rightPart := sprite << (8 - (xPos % 8))
-		dispOffset := uint16(topLeftOffset) + uint16(i) * cpu.DispWidth / 8
+		dispOffset := uint16(topLeftOffset) + uint16(i)*cpu.DispWidth/8
 		if !cpu.clipQuirk {
 			dispOffset = dispOffset % planeSize
 		}
@@ -363,17 +363,17 @@ func (cpu *CPU) draw(x, y, n uint8) {
 		if dispOffset > planeSize {
 			break
 		}
-		erases = erases || (cpu.Display[dispOffset] & leftPart) != 0
+		erases = erases || (cpu.Display[dispOffset]&leftPart) != 0
 		cpu.Display[dispOffset] ^= leftPart
 
 		dispOffset++
 		if dispOffset > planeSize {
 			break
 		}
-		if cpu.clipQuirk && dispOffset % (cpu.DispWidth / 8) == 0 {
+		if cpu.clipQuirk && dispOffset%(cpu.DispWidth/8) == 0 {
 			continue
 		}
-		erases = erases || (cpu.Display[dispOffset] & rightPart) != 0
+		erases = erases || (cpu.Display[dispOffset]&rightPart) != 0
 		cpu.Display[dispOffset] ^= rightPart
 	}
 	cpu.SD = true

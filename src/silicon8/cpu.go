@@ -81,11 +81,11 @@ func (cpu *CPU) Reset(interpreter int) {
 
 	cpu.waitForKey = false
 	cpu.WaitForInt = 0
-	cpu.playing    = false
-	cpu.SD         = true
-	cpu.running    = true
-	cpu.plane      = 1
-	cpu.planes     = 1
+	cpu.playing = false
+	cpu.SD = true
+	cpu.running = true
+	cpu.plane = 1
+	cpu.planes = 1
 
 	// Determine quirks to use
 	cpu.SetQuirks()
@@ -93,12 +93,12 @@ func (cpu *CPU) Reset(interpreter int) {
 
 func (cpu *CPU) SetQuirks() {
 	cpu.shiftQuirk = cpu.specType == SCHIP
-	cpu.jumpQuirk  = cpu.specType == SCHIP
-	cpu.memQuirk   = cpu.specType != SCHIP
-	cpu.vfQuirk    = cpu.specType == VIP || cpu.specType == STRICTVIP || cpu.specType == BLINDVIP
-	cpu.clipQuirk  = cpu.specType != XOCHIP
-	cpu.dispQuirk  = cpu.specType == VIP || cpu.specType == STRICTVIP
-	cpu.drawQuirk  = cpu.specType == STRICTVIP
+	cpu.jumpQuirk = cpu.specType == SCHIP
+	cpu.memQuirk = cpu.specType != SCHIP
+	cpu.vfQuirk = cpu.specType == VIP || cpu.specType == STRICTVIP || cpu.specType == BLINDVIP
+	cpu.clipQuirk = cpu.specType != XOCHIP
+	cpu.dispQuirk = cpu.specType == VIP || cpu.specType == STRICTVIP
+	cpu.drawQuirk = cpu.specType == STRICTVIP
 }
 
 func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
