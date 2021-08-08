@@ -40,7 +40,7 @@ func dumpStatus() {
 //export cycles
 func cycles(num int) {
   for i := 0; i < num; i++ {
-    cpu.Step()
+    cpu.Cycle()
   }
 }
 
