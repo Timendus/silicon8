@@ -1,9 +1,9 @@
 package main
 
 import (
-  "silicon8"
-  "math/rand"
-  "github.com/therecipe/qt/core"
+	"silicon8"
+	"math/rand"
+	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/widgets"
 )
@@ -11,13 +11,13 @@ import (
 var cpu silicon8.CPU
 
 func main() {
-  cpu = silicon8.CPU{}
-  cpu.Reset(silicon8.VIP)
-  cpu.RegisterRandomGenerator(func() int { return uint8(rand.Intn(256)) })
-  cpu.Start()
+	cpu = silicon8.CPU{}
+	cpu.Reset(silicon8.VIP)
+	cpu.RegisterRandomGenerator(func() int { return uint8(rand.Intn(256)) })
+	cpu.Start()
 
-  var window = widgets.NewQMainWindow(nil, 0)
+	var window = widgets.NewQMainWindow(nil, 0)
 	window.SetWindowTitle("Sprite Editor")
 	window.SetMinimumSize2(360, 520)
-  window.Show()
+	window.Show()
 }
