@@ -15,7 +15,7 @@ const SCHIP_STACK_SIZE   uint8  = 16  // According to http://devernay.free.fr/ha
 
 type soundEvent func()
 type randomByte func() uint8
-type displaySetter func(int, int, int)
+type renderEvent func(int, int, []uint8)
 
 type CPU struct {
 	// Registers and memory
@@ -45,6 +45,7 @@ type CPU struct {
 	planes     uint8 //          How many planes in total?
 	specType   int
 	typeFixed  bool
+	cyclesPerFrame int
 	running    bool
 
 	// Quirks flags
@@ -60,5 +61,5 @@ type CPU struct {
 	playSound  soundEvent
 	stopSound  soundEvent
 	random     randomByte
-	setDispRes displaySetter
+	render     renderEvent
 }

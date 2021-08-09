@@ -1,47 +1,41 @@
 package main
 
+// This is the wrapper code to use Silicon8 as WebAssembly with TinyGo
+
 import "silicon8"
 
-/*
- TODO:
-	* Export the rest of the state?
-*/
-
-// We support a single CPU for now
+// We currently support a single CPU
 var cpu silicon8.CPU
 
 func main() {
 	cpu = silicon8.CPU{}
 	cpu.RegisterSoundCallbacks(playSound, stopSound)
 	cpu.RegisterRandomGenerator(func() uint8 { return uint8(randomByte()) })
-	cpu.RegisterDisplayCallback(setDisplaySize)
-	cpu.Start()
+	cpu.RegisterDisplayCallback(render)
 }
 
-// To implement in host environment
+// To implement in host environment:
 
 func playSound()
 func stopSound()
 func randomByte() int  // This too, because math/rand gives weird errors with tinygo
-func setDisplaySize(int, int, int)
+func render(int, int, []uint8) // width, height, pointer to display data
 
-// The rest of this file is the API for the host environment
+// API for use in the host environment:
 
-//export initialize
-func initialize(cpuType int) {
+//export start
+func start() {
+	cpu.Start()
+}
+
+//export stop
+func stop() {
+	cpu.Stop()
+}
+
+//export reset
+func reset(cpuType int) {
 	cpu.Reset(cpuType)
-}
-
-//export dumpStatus
-func dumpStatus() {
-	cpu.DumpStatus();
-}
-
-//export cycles
-func cycles(num int) {
-	for i := 0; i < num; i++ {
-		cpu.Cycle()
-	}
 }
 
 //export ramPtr
@@ -54,30 +48,9 @@ func ramSize() uint16 {
 	return cpu.RAMSize
 }
 
-//export displayPtr
-func displayPtr() *uint8 {
-	return &cpu.Display[0]
-}
-
-//export displaySize
-func displaySize() uint16 {
-	return cpu.DispSize
-}
-
-// Call this routine on each rendering loop, both to check if you need to redraw
-// the screen, and to trigger the screen refresh "interrupt" when `dispQuirk` is
-// enabled.
-//export screenDirty
-func screenDirty() bool {
-	if cpu.WaitForInt == 1 {
-		cpu.WaitForInt = 2
-	}
-	return cpu.SD
-}
-
-//export setScreenClean
-func setScreenClean() {
-	cpu.SD = false
+//export clockTick
+func clockTick() {
+	cpu.ClockTick()
 }
 
 //export pressKey
@@ -88,4 +61,33 @@ func pressKey(key uint8) {
 //export releaseKey
 func releaseKey(key uint8) {
 	if key < 16 { cpu.Keyboard[key] = false }
+}
+
+//export setCyclesPerFrame
+func setCyclesPerFrame(cycles int) {
+	cpu.SetCyclesPerFrame(cycles)
+}
+
+//export dumpStatus
+func dumpStatus() {
+	cpu.DumpStatus();
+}
+
+// For testing purposes only:
+
+//export runCycles
+func runCycles(num int) {
+	for i := 0; i < num; i++ {
+		cpu.Cycle()
+	}
+}
+
+//export displayPtr
+func displayPtr() *uint8 {
+	return &cpu.Display[0]
+}
+
+//export displaySize
+func displaySize() uint16 {
+	return cpu.DispSize
 }

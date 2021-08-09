@@ -8,35 +8,57 @@ package silicon8
 		* plane n (opcode works, but draw routine only draws to plane 1)
 */
 
-import "time"
-
 func (cpu *CPU) Start() {
-	go func() {
-		for {
-			time.Sleep(1000 / 60 * time.Millisecond)
-			if cpu.dt > 0 {
-				cpu.dt--
-			}
-			if cpu.st > 0 {
-				if !cpu.playing {
-					cpu.playing = true
-					cpu.playSound()
-				}
-				cpu.st--
-			} else {
-				if cpu.playing {
-					cpu.playing = false
-					cpu.stopSound()
-				}
-			}
-		}
-	}()
+	cpu.running = true
+}
 
-	neverDone := make(chan bool)
-	<-neverDone
+func (cpu *CPU) Stop() {
+	cpu.running = false
+}
+
+func (cpu *CPU) SetCyclesPerFrame(cycles int) {
+	cpu.cyclesPerFrame = cycles
+}
+
+func (cpu *CPU) ClockTick() {
+	// Tick timers
+	if cpu.dt > 0 {
+		cpu.dt--
+	}
+
+	if cpu.st > 0 {
+		if !cpu.playing {
+			cpu.playing = true
+			cpu.playSound()
+		}
+		cpu.st--
+	} else {
+		if cpu.playing {
+			cpu.playing = false
+			cpu.stopSound()
+		}
+	}
+
+	// Run cycles
+	for i := 0; i < cpu.cyclesPerFrame; i++ {
+		cpu.Cycle()
+	}
+
+	// Render display if dirty
+	if cpu.SD {
+		cpu.render(int(cpu.DispWidth), int(cpu.DispHeight), cpu.Display)
+		cpu.SD = false
+	}
+
+	// Register display redraw interrupt for dispQuirk
+	if cpu.WaitForInt == 1 {
+		cpu.WaitForInt = 2
+	}
 }
 
 func (cpu *CPU) Reset(interpreter int) {
+	cpu.Stop()
+
 	if interpreter != AUTO {
 		cpu.specType = interpreter
 		cpu.typeFixed = true
@@ -86,9 +108,20 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.running = true
 	cpu.plane = 1
 	cpu.planes = 1
+	cpu.cyclesPerFrame = 30
 
 	// Determine quirks to use
 	cpu.setQuirks()
+
+	cpu.Start()
+}
+
+func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
+	cpu.DispWidth = width
+	cpu.DispHeight = height
+	cpu.planes = planes
+	cpu.DispSize = cpu.DispWidth * cpu.DispHeight / 8 * uint16(planes)
+	cpu.Display = make([]uint8, cpu.DispSize)
 }
 
 func (cpu *CPU) setQuirks() {
@@ -99,19 +132,6 @@ func (cpu *CPU) setQuirks() {
 	cpu.clipQuirk = cpu.specType != XOCHIP
 	cpu.dispQuirk = cpu.specType == VIP || cpu.specType == STRICTVIP
 	cpu.drawQuirk = cpu.specType == STRICTVIP
-}
-
-func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
-	cpu.DispWidth = width
-	cpu.DispHeight = height
-	cpu.planes = planes
-	cpu.DispSize = cpu.DispWidth * cpu.DispHeight / 8 * uint16(planes)
-	cpu.Display = make([]uint8, cpu.DispSize)
-
-	// Update outside world too
-	if cpu.setDispRes != nil {
-		cpu.setDispRes(int(width), int(height), int(planes))
-	}
 }
 
 func (cpu *CPU) DumpStatus() {
@@ -132,43 +152,6 @@ func (cpu *CPU) DumpStatus() {
 	println("   clipQuirk: ", cpu.clipQuirk)
 	println("   dispQuirk: ", cpu.dispQuirk)
 	println("   drawQuirk: ", cpu.drawQuirk)
-}
-
-func (cpu *CPU) a(address uint16) uint16 {
-	if address >= cpu.RAMSize {
-		cpu.error("Program attempted to access RAM outside of memory")
-		return 0
-	}
-	if address >= VIP_SCHIP_RAM_SIZE {
-		cpu.bumpSpecType(XOCHIP)
-	}
-	return address
-}
-
-func (cpu *CPU) s(address uint8) uint8 {
-	if address >= cpu.stackSize {
-		cpu.error("Program attempted to access invalid stack memory")
-		return 0
-	}
-	if cpu.stackSize == SCHIP_STACK_SIZE && address < (SCHIP_STACK_SIZE-DEFAULT_STACK_SIZE) {
-		cpu.bumpSpecType(SCHIP)
-	}
-	return address
-}
-
-func (cpu *CPU) error(msg string) {
-	cpu.warnAtCurrentPC(msg)
-	cpu.DumpStatus()
-	cpu.running = false
-}
-
-func (cpu *CPU) warnAtCurrentPC(msg string) {
-	opcodeAddr := cpu.pc - 2
-	var opcode uint16 = 0
-	if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
-		opcode = uint16(cpu.RAM[opcodeAddr])<<8 | uint16(cpu.RAM[opcodeAddr+1])
-	}
-	warn(msg, opcodeAddr, opcode)
 }
 
 func (cpu *CPU) bumpSpecType(newType int) {

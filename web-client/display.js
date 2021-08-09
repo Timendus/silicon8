@@ -1,11 +1,10 @@
 const canvas  = document.getElementById('display');
 const context = canvas.getContext('2d');
 
-let width, height, planes;
-setDisplayResolution(64, 32);
-
 module.exports = {
-  render: bytes => {
+  render: (width, height, bytes) => {
+    canvas.width = width;
+    canvas.height = height;
     const imageData = context.createImageData(width, height);
     for ( let y = 0; y < height; y++ ) {
       for ( let x = 0; x < width; x++ ) {
@@ -19,17 +18,5 @@ module.exports = {
       }
     }
     context.putImageData(imageData, 0, 0);
-  },
-  setSize: (w, h, p) => {
-    setDisplayResolution(w, h);
-    planes = p;
-    console.log({ w, h, p });
   }
 };
-
-function setDisplayResolution(w, h) {
-  width = w;
-  height = h;
-  canvas.width = w;
-  canvas.height = h;
-}

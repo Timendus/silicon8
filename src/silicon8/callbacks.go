@@ -9,6 +9,6 @@ func (cpu *CPU) RegisterRandomGenerator(random randomByte) {
 	cpu.random = random
 }
 
-func (cpu *CPU) RegisterDisplayCallback(setDisplaySize displaySetter) {
-	cpu.setDispRes = setDisplaySize
+func (cpu *CPU) RegisterDisplayCallback(render renderEvent) {
+	cpu.render = render
 }

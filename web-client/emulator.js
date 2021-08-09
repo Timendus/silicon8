@@ -14,8 +14,6 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
 module.exports = class {
 
   constructor({playSound, stopSound, display}) {
-    this._cyclesPerFrame = 30;
-    this._display = display;
     playSound ||= () => {};
     stopSound ||= () => {};
 
@@ -23,9 +21,9 @@ module.exports = class {
       'main.randomByte': () => Math.floor(Math.random() * 256) & 0xFF,
       'main.playSound':  playSound,
       'main.stopSound':  stopSound,
-      'main.setDisplaySize': (w, h, p) => {
-        this._resetDispBuffer();
-        display.setSize(w, h, p);
+      'main.render': (width, height, dataPtr) => {
+        const bytes = new Uint8Array(this._cpu.memory.buffer, dataPtr, width * height / 8);
+        display.render(width, height, bytes);
       }
     });
   }
@@ -35,14 +33,7 @@ module.exports = class {
     .then(result => {
       this._cpu = result.instance.exports;
       go.run(result.instance);
-      setInterval(() => {
-        this._cpu.cycles(this._cyclesPerFrame);
-        if ( this._cpu.screenDirty() ) {
-          if ( this._dispBuffer )
-            this._display.render(this._dispBuffer);
-          this._cpu.setScreenClean();
-        }
-      }, 1000 / 60);
+      setInterval(() => this._cpu.clockTick(), 1000 / 60);
     })
     .catch(e => {
       console.error(e);
@@ -50,16 +41,12 @@ module.exports = class {
   }
 
   setCyclesPerFrame(newCycles) {
-    this._cyclesPerFrame = newCycles;
+    this._cpu.setCyclesPerFrame(newCycles);
   }
 
   loadProgram(type, program) {
-    this._cpu.initialize(type);
-    this._resetDispBuffer();
+    this._cpu.reset(type);
     const ram = new Uint8Array(this._cpu.memory.buffer, this._cpu.ramPtr(), this._cpu.ramSize());
-    // Clear RAM
-    const ramSize = this._cpu.ramSize();
-    for ( let i = 0; i < ramSize; i++ ) ram[i] = 0;
     // Load font and program into RAM
     const fontData = font(type);
     for ( let i = 0; i < fontData.length; i++ ) ram[i] = fontData[i];
@@ -76,10 +63,6 @@ module.exports = class {
 
   releaseKey(key) {
     this._cpu.releaseKey(key);
-  }
-
-  _resetDispBuffer() {
-    this._dispBuffer = new Uint8Array(this._cpu.memory.buffer, this._cpu.displayPtr(), this._cpu.displaySize());
   }
 
 }
