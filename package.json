@@ -5,7 +5,8 @@
     "run": "./run.js ./tests/abc.ch8",
     "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm silicon8/wasm",
     "start": "npm run build && npm run run",
-    "gorun": "GOPATH=$(pwd) go run silicon8/main",
+    "go-install": "GOPATH=$(pwd) go get silicon8-qt",
+    "go-start": "GOPATH=$(pwd) go run silicon8-qt",
     "serve": "webpack serve --open",
     "test": "jest --verbose"
   },
