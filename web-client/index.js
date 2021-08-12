@@ -1,7 +1,7 @@
 import Thimbleful from 'thimbleful';
 const types = require('../shared/types');
 
-import welcome from "!!binary-loader!../welcome.ch8";
+import welcome from "!!binary-loader!./welcome.ch8";
 const welcomeProgram = new Uint8Array(welcome.length);
 for (let i = 0; i < welcome.length; i++)
   welcomeProgram[i] = welcome.charCodeAt(i);
