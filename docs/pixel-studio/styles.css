@@ -1,0 +1,102 @@
+html, body, * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: #eaeaea;
+  font: 15px Roboto, Tahoma, Arial, sans-serif;
+  color: lightgray;
+  min-height: 100vh;
+}
+
+#images {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 40vh;
+  width: 100vw;
+  background-color: #6f6f6f;
+}
+
+#template, #image {
+  border: 5px dashed lightgray;
+  width: 45vw;
+  height: 36vh;
+  text-align: center;
+  line-height: 36vh;
+
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+#template, #image {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#template {
+  cursor: pointer;
+}
+
+#template.loaded, #image.loaded {
+  border: 0;
+  color: transparent;
+}
+
+#data {
+  display: flex;
+  align-items: stretch;
+  height: 60vh;
+}
+#data #settings {
+  background-color: #4a4a4a;
+}
+
+#settings {
+  height: 100%;
+  overflow-y: auto;
+}
+#settings fieldset {
+  display: block;
+  max-width: 600px;
+  margin: 2em;
+  padding: 1em;
+  border: 1px solid lightgray;
+}
+#settings legend {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+#settings label {
+  display: block;
+  margin: 1em;
+}
+#settings input {
+  border: 0px;
+  vertical-align: middle;
+  padding: 1em 2em;
+  border-radius: 1em;
+}
+#settings button {
+  padding: 1em;
+  border-radius: 5px;
+  border: 0px;
+  cursor: pointer;
+}
+
+#table {
+  width: 100%;
+  text-align: center;
+  padding: 2em;
+  overflow-y: scroll;
+}
+#table pre {
+  display: inline-block;
+  text-align: left;
+  color: #333;
+}
