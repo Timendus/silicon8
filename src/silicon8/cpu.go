@@ -4,6 +4,7 @@ package silicon8
  TODO:
   * Rewrite scroll routines to scroll selected plane(s)
 	* Re-implement clipQuirk in draw function
+	* Properly skip over i := long 0xNNNN
 */
 
 func (cpu *CPU) Start() {
