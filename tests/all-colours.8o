@@ -1,0 +1,51 @@
+:macro s8plane N {
+	:byte { 0xF0 + N }
+	:byte 0x01
+}
+
+: main
+	s8plane 1
+	i := square
+	v1 := 8
+	drawrow
+	v1 := 24
+	drawrow
+
+	s8plane 2
+	v1 := 16
+	drawrow
+	v1 := 24
+	drawrow
+
+	s8plane 4
+	v0 := 24
+	drawcolumn
+	v0 := 40
+	drawcolumn
+
+	s8plane 8
+	v0 := 32
+	drawcolumn
+	v0 := 40
+	drawcolumn
+
+	loop again
+
+: drawrow
+	v0 := 16
+	loop
+	sprite v0 v1 8
+	v0 += 8
+	if v0 == 48 then return
+	again
+
+: drawcolumn
+	v1 := 0
+	loop
+	sprite v0 v1 8
+	v1 += 8
+	if v1 == 32 then return
+	again
+
+: square
+	0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
