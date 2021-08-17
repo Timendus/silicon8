@@ -2,10 +2,8 @@ package silicon8
 
 /*
  TODO:
-	* SCHIP opcodes
-		* 16x16 sprites
-	* XO-CHIP opcodes
-		* plane n (opcode works, but draw routine only draws to plane 1)
+  * Rewrite scroll routines to scroll selected plane(s)
+	* Re-implement clipQuirk in draw function
 */
 
 func (cpu *CPU) Start() {
@@ -46,6 +44,7 @@ func (cpu *CPU) ClockTick() {
 
 	// Render display if dirty
 	if cpu.SD {
+		cpu.renderToDisplayBuffer()
 		cpu.render(int(cpu.DispWidth), int(cpu.DispHeight), cpu.Display)
 		cpu.SD = false
 	}
@@ -93,8 +92,10 @@ func (cpu *CPU) Reset(interpreter int) {
 
 	// Initialize memory
 	cpu.initDisplay(64, 32, 1)
-	cpu.RAM = make([]uint8, cpu.RAMSize)
 	cpu.stack = make([]uint16, cpu.stackSize)
+	cpu.planeBuffer = make([]uint8, 128 * 64) // Make space for the max display
+	cpu.Display = make([]uint8, 128 * 64 * 3) // size, we'll use the relevant part
+	cpu.RAM = make([]uint8, cpu.RAMSize)
 
 	// Initialize internal variables
 	for i := range cpu.Keyboard {
@@ -114,14 +115,6 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.setQuirks()
 
 	cpu.Start()
-}
-
-func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
-	cpu.DispWidth = width
-	cpu.DispHeight = height
-	cpu.planes = planes
-	cpu.DispSize = cpu.DispWidth * cpu.DispHeight / 8 * uint16(planes)
-	cpu.Display = make([]uint8, cpu.DispSize)
 }
 
 func (cpu *CPU) setQuirks() {

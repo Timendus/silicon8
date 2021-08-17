@@ -89,5 +89,5 @@ func displayPtr() *uint8 {
 
 //export displaySize
 func displaySize() uint16 {
-	return cpu.DispSize
+	return cpu.DispWidth * cpu.DispHeight * 3
 }

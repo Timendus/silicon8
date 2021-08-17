@@ -6,16 +6,13 @@ module.exports = {
     canvas.width = width;
     canvas.height = height;
     const imageData = context.createImageData(width, height);
-    for ( let y = 0; y < height; y++ ) {
-      for ( let x = 0; x < width; x++ ) {
-        const memoryOffset  = Math.floor(y * width / 8 + x / 8);
-        const pixelOffset   = x % 8;
-        const displayOffset = y * width * 4 + x * 4;
-        imageData.data[displayOffset+0] = bytes[memoryOffset] & (0b10000000 >> pixelOffset) ? 0xFF : 0x00;
-        imageData.data[displayOffset+1] = bytes[memoryOffset] & (0b10000000 >> pixelOffset) ? 0xAA : 0x00;
-        imageData.data[displayOffset+2] = bytes[memoryOffset] & (0b10000000 >> pixelOffset) ? 0x44 : 0x00;
-        imageData.data[displayOffset+3] = 0xDD;
-      }
+    for ( let i = 0; i < height * width; i++ ) {
+      const displayOffset  = i * 4;
+      const silicon8Offset = i * 3;
+      imageData.data[displayOffset+0] = bytes[silicon8Offset+0];
+      imageData.data[displayOffset+1] = bytes[silicon8Offset+1];
+      imageData.data[displayOffset+2] = bytes[silicon8Offset+2];
+      imageData.data[displayOffset+3] = 0xFF;
     }
     context.putImageData(imageData, 0, 0);
   }

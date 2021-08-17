@@ -22,7 +22,7 @@ module.exports = class {
       'main.playSound':  playSound,
       'main.stopSound':  stopSound,
       'main.render': (width, height, dataPtr) => {
-        const bytes = new Uint8Array(this._cpu.memory.buffer, dataPtr, width * height / 8);
+        const bytes = new Uint8Array(this._cpu.memory.buffer, dataPtr, width * height * 3);
         display.render(width, height, bytes);
       }
     });

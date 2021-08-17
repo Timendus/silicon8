@@ -192,11 +192,7 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 
 	switch op {
 	case 0x00E0:
-		// Clear screen
-		for i := range cpu.Display {
-			cpu.Display[i] = 0
-		}
-		cpu.SD = true
+		cpu.clearScreen()
 	case 0x00EE:
 		// Return
 		cpu.sp++
@@ -223,40 +219,6 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 		warn("RCA 1802 assembly calls not supported", cpu.pc-2, op)
 		cpu.DumpStatus()
 		cpu.running = false
-	}
-}
-
-func (cpu *CPU) scrollDown(n uint8) {
-	for i := 8 * (32 - n); i > 8*n; i-- {
-		cpu.Display[i+8*n] = cpu.Display[i]
-	}
-}
-
-func (cpu *CPU) scrollUp(n uint8) {
-	for i := 8 * n; i < 8*(32-n); i++ {
-		cpu.Display[i-8*n] = cpu.Display[i]
-	}
-}
-
-func (cpu *CPU) scrollLeft() {
-	for y := 0; y < 32; y++ {
-		for x := 0; x < 7; x++ {
-			i := y*32 + x
-			cpu.Display[i] = cpu.Display[i]<<4 | cpu.Display[i+1]>>4
-		}
-		i := y*32 + 7
-		cpu.Display[i] = cpu.Display[i] << 4
-	}
-}
-
-func (cpu *CPU) scrollRight() {
-	for y := 0; y < 32; y++ {
-		for x := 7; x > 0; x-- {
-			i := y*32 + x
-			cpu.Display[i] = cpu.Display[i]>>4 | cpu.Display[i-1]<<4
-		}
-		i := y * 32
-		cpu.Display[i] = cpu.Display[i] >> 4
 	}
 }
 
@@ -320,78 +282,5 @@ func (cpu *CPU) setFlag(comparison bool) {
 	cpu.v[0xF] = 0
 	if comparison {
 		cpu.v[0xF] = 1
-	}
-}
-
-func (cpu *CPU) draw(x, y, n uint8) {
-	if cpu.dispQuirk {
-		switch cpu.WaitForInt {
-		case 0:
-			cpu.WaitForInt = 1
-			cpu.pc -= 2
-			return
-		case 1:
-			cpu.pc -= 2
-			return
-		case 2:
-			cpu.WaitForInt = 0
-		}
-	}
-
-	xPos := cpu.v[x]
-	yPos := cpu.v[y]
-	// Wrap around the screen
-	for xPos >= uint8(cpu.DispWidth) {
-		xPos -= uint8(cpu.DispWidth)
-	}
-	for yPos >= uint8(cpu.DispHeight) {
-		yPos -= uint8(cpu.DispHeight)
-	}
-	topLeftOffset := uint16(yPos)*cpu.DispWidth/8 + uint16(xPos)/8
-	erases := false
-	planeSize := cpu.DispSize / uint16(cpu.planes)
-	var i uint8
-	for i = 0; i < n; i++ {
-		sprite := cpu.RAM[cpu.a(cpu.i+uint16(i))]
-		leftPart := sprite >> (xPos % 8)
-		rightPart := sprite << (8 - (xPos % 8))
-		dispOffset := uint16(topLeftOffset) + uint16(i)*cpu.DispWidth/8
-		if !cpu.clipQuirk {
-			dispOffset = dispOffset % planeSize
-		}
-
-		if dispOffset > planeSize {
-			break
-		}
-		erases = erases || (cpu.Display[dispOffset]&leftPart) != 0
-		cpu.Display[dispOffset] ^= leftPart
-
-		dispOffset++
-		if dispOffset > planeSize {
-			break
-		}
-		if cpu.clipQuirk && dispOffset%(cpu.DispWidth/8) == 0 {
-			continue
-		}
-		erases = erases || (cpu.Display[dispOffset]&rightPart) != 0
-		cpu.Display[dispOffset] ^= rightPart
-	}
-	cpu.SD = true
-	cpu.setFlag(erases)
-
-	if cpu.drawQuirk {
-		/**
-		 * "First is that I, VX and VY are all altered by this routine, so the
-		 * Chip-8 programmer should not expect them to be available for reuse with
-		 * their original values. These would have to be explicitly set again."
-		 * -- https://laurencescotford.com/chip-8-on-the-cosmac-vip-drawing-sprites/
-		 **/
-		cpu.i = 0
-		cpu.v[x] = 0
-		cpu.v[y] = 0
-	}
-
-	if n == 0 {
-		cpu.bumpSpecType(SCHIP)
 	}
 }
