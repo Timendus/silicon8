@@ -103,7 +103,6 @@ In no particular order 😉
 
 * [ ] Move font data from JS to Go, and select the right one based on
 interpreter type
-* [ ] Fix NodeJS terminal version
 * [ ] Write more tests for SCHIP and XO-CHIP instructions
 * [ ] Rewrite scroll routines to scroll selected plane(s)
 * [ ] Re-implement clipQuirk in draw function
