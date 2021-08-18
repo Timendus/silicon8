@@ -39,6 +39,6 @@ module.exports = {
 
     cpu.runCycles(cycles);
     const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
-    test(ram, display);
+    test(Array.from(ram), Array.from(display));
   }
 };
