@@ -94,8 +94,8 @@ func (cpu *CPU) Cycle() {
 
 		switch nn {
 		case 0x00:
-			cpu.pc += 2
 			cpu.i = uint16(cpu.RAM[cpu.a(cpu.pc)])<<8 | uint16(cpu.RAM[cpu.a(cpu.pc+1)])
+			cpu.pc += 2
 			cpu.bumpSpecType(XOCHIP)
 		case 0x01:
 			// Enable the second plane if it hasn't been enabled yet
