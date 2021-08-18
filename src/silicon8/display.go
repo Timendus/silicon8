@@ -150,7 +150,7 @@ func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
 	cpu.planes = planes
 }
 
-func (cpu *CPU) renderToDisplayBuffer() {
+func (cpu *CPU) RenderToDisplayBuffer() {
 	var r, g, b uint8
 	for i := 0; i < int(cpu.DispHeight * cpu.DispWidth); i++ {
 		switch cpu.planeBuffer[i] {

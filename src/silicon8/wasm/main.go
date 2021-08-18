@@ -80,6 +80,7 @@ func runCycles(num int) {
 	for i := 0; i < num; i++ {
 		cpu.Cycle()
 	}
+	cpu.RenderToDisplayBuffer()
 }
 
 //export displayPtr

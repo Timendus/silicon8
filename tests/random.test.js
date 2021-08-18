@@ -33,11 +33,13 @@ describe('random-hires.ch8', () => {
 });
 
 function expectPixel(display, xPos, yPos, w, h) {
-  for ( x = 0; x < (w / 8); x++ )
-    for ( y = 0; y < h; y++ )
-      if ( x == Math.floor(xPos / 8) && y == yPos ) {
-        expect(display[y * (w / 8) + x]).toBe(0b10000000 >> xPos % 8);
-      } else {
-        expect(display[y * (w / 8) + x]).toBe(0);
-      }
+  for ( x = 0; x < w; x++ ) {
+    for ( y = 0; y < h; y++ ) {
+      const index = (y * w + x) * 3;
+      const expectation = x == xPos && y == yPos ? 255 : 0;
+      expect(display[index+0]).toBe(expectation);
+      expect(display[index+1]).toBe(expectation);
+      expect(display[index+2]).toBe(expectation);
+    }
+  }
 }

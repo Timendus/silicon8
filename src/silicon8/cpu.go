@@ -45,7 +45,7 @@ func (cpu *CPU) ClockTick() {
 
 	// Render display if dirty
 	if cpu.SD {
-		cpu.renderToDisplayBuffer()
+		cpu.RenderToDisplayBuffer()
 		cpu.render(int(cpu.DispWidth), int(cpu.DispHeight), cpu.Display)
 		cpu.SD = false
 	}
