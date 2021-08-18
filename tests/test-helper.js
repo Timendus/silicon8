@@ -29,9 +29,6 @@ module.exports = {
     cpu.reset(type);
     const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
 
-    // Clear RAM
-    const ramSize = cpu.ramSize();
-    for ( let i = 0; i < ramSize; i++ ) ram[i] = 0;
     // Load font and program into RAM
     const fontData = font(type);
     for ( let i = 0; i < fontData.length; i++ ) ram[i] = fontData[i];
