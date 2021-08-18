@@ -97,3 +97,15 @@ still expect to be run on SCHIP with all the quirks of that platform, for
 example. Same with developers writing programs for XO-CHIP without actually
 using anything beyond CHIP-8 and SCHIP instructions. No way to tell.
 
+## TODO
+
+In no particular order 😉
+
+* [ ] Move font data from JS to Go, and select the right one based on
+interpreter type
+* [ ] Fix NodeJS terminal version
+* [ ] Write more tests for SCHIP and XO-CHIP instructions
+* [ ] Rewrite scroll routines to scroll selected plane(s)
+* [ ] Re-implement clipQuirk in draw function
+* [ ] Properly skip over i := long 0xNNNN
+* [ ] Implement XO-CHIP's `audio`
