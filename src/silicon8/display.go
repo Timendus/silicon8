@@ -1,7 +1,10 @@
 package silicon8
 
 func (cpu *CPU) clearScreen() {
-  planes := cpu.plane ^ 0xFF
+  cpu.clearPlanes(cpu.plane ^ 0xFF)
+}
+
+func (cpu *CPU) clearPlanes(planes uint8) {
   for i := range cpu.planeBuffer {
     cpu.planeBuffer[i] = cpu.planeBuffer[i] & planes
   }
@@ -71,6 +74,14 @@ func (cpu *CPU) draw(x, y, n uint8 ) {
     if plane & cpu.plane != 0 {          // If this plane is currently selected
       planeBufPointer := uint16(yPos)*cpu.DispWidth + uint16(xPos)
     	for i = 0; i < height; i++ {       // Draw N lines
+        // Does this line fall off the bottom of the screen?
+        if planeBufPointer > cpu.DispWidth * cpu.DispHeight {
+          if cpu.clipQuirk {
+            continue
+          } else {
+            planeBufPointer -= cpu.DispWidth * cpu.DispHeight
+          }
+        }
         lineErases := cpu.drawLine(ramPointer, planeBufPointer, plane)
         erases = erases || lineErases
         ramPointer++
@@ -124,6 +135,14 @@ func (cpu *CPU) drawLine(ramPointer uint16, planeBufPointer uint16, plane uint8)
       cpu.planeBuffer[planeBufPointer] ^= plane
     }
     planeBufPointer++
+    // Did we cross the edge of the screen?
+    if planeBufPointer % cpu.DispWidth == 0 {
+      if cpu.clipQuirk {
+        break
+      } else {
+        planeBufPointer -= cpu.DispWidth
+      }
+    }
   }
   return erases
 }

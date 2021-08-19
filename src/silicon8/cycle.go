@@ -210,10 +210,12 @@ func (cpu *CPU) machineCall(op uint16, n uint8) {
 	case 0x00FE:
 		// Set normal screen resolution
 		cpu.initDisplay(64, 32, cpu.planes)
+		cpu.clearPlanes(0)
 		cpu.bumpSpecType(SCHIP)
 	case 0x00FF:
 		// Set extended screen resolution
 		cpu.initDisplay(128, 64, cpu.planes)
+		cpu.clearPlanes(0)
 		cpu.bumpSpecType(SCHIP)
 	default:
 		warn("RCA 1802 assembly calls not supported", cpu.pc-2, op)
