@@ -144,6 +144,5 @@ In no particular order 😉
 * [ ] Move font data from JS to Go, and select the right one based on
 interpreter type
 * [ ] Write more tests for SCHIP and XO-CHIP instructions
-* [ ] Properly skip over `i := long 0xNNNN`
 * [ ] Implement XO-CHIP's `audio`
 * [ ] Fix exception when input image doesn't align with sprite size in Pixel Studio
