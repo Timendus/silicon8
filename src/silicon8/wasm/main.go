@@ -80,6 +80,7 @@ func runCycles(num int) {
 	for i := 0; i < num; i++ {
 		cpu.Cycle()
 	}
+	cpu.RenderToDisplayBuffer()
 }
 
 //export displayPtr
@@ -89,5 +90,5 @@ func displayPtr() *uint8 {
 
 //export displaySize
 func displaySize() uint16 {
-	return cpu.DispSize
+	return cpu.DispWidth * cpu.DispHeight * 3
 }

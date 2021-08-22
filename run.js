@@ -13,18 +13,23 @@ const Input = require('./input');
 const input = new Input();
 
 require('./docs/wasm_exec');
+let cpu;
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
 Object.assign(go.importObject.env, {
   'main.randomByte': () => Math.floor(Math.random() * Math.floor(256)),
   'main.playSound':  () => process.stdout.write('\x07'),
-  'main.stopSound':  () => {}
+  'main.stopSound':  () => {},
+  'main.render':     (width, height, dataPtr) => {
+    const data = new Uint8Array(cpu.memory.buffer, dataPtr, width * height * 3);
+    render(data, width, height);
+  }
 });
 const instance = new WebAssembly.Instance(mod, go.importObject);
-const cpu = instance.exports;
-
+cpu = instance.exports;
 go.run(instance);
-cpu.initialize(types.VIP);
+setInterval(() => cpu.clockTick(), 1000 / 60);
+cpu.reset(types.AUTO);
 
 // Load font and program into RAM
 const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
@@ -33,8 +38,6 @@ for ( let i = 0; i < fontData.length; i++ )
   ram[i] = fontData[i];
 for ( let i = 0x200; i < 0x200 + program.length; i++ )
   ram[i] = program[i - 0x200];
-
-const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
 
 const keys = {
   up: 5,
@@ -49,24 +52,18 @@ input.addKeyListener(key => {
   }
 });
 
-const cyclesPerFrame = 1000;
-setInterval(() => {
-  cpu.cycles(cyclesPerFrame);
-
-  if ( cpu.screenDirty() ) {
-    render(display);
-    cpu.setScreenClean();
-  }
-}, 1000 / 60);
-
-function render(display) {
-  for ( let y = 0; y < 32; y++ ) {
+function render(data, width, height) {
+  for ( let y = 0; y < height; y++ ) {
     let line = "";
-    for ( let x = 0; x < 8; x++ ) {
-      const byte = display[y * 8 + x];
-      for ( let i = 0x80; i > 0; i = i >> 1 ) {
-        line += byte & i ? '██' : '  ';
-      }
+    for ( let x = 0; x < width; x++ ) {
+      // Take the average colour, reducing the image to monochrome
+      const index = (y * width + x) * 3;
+      const byte = (data[index+0] + data[index+1] + data[index+2]) / 3;
+      let character = '  ';
+      if ( byte > 0x00 ) character = '··';
+      if ( byte > 0x55 ) character = '⠿⠿'
+      if ( byte > 0xAA ) character = '██';
+      line += character;
     }
     console.log(line);
   }

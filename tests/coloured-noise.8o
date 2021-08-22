@@ -1,0 +1,39 @@
+:macro s8plane N {
+	:byte { 0xF0 + N }
+	:byte 0x01
+}
+
+: main
+	s8plane 0xF
+	v8 := 0
+	v9 := 0
+	loop
+		i := 0x400
+		randomplane
+		randomplane
+		randomplane
+		randomplane
+		i := 0x400
+		sprite v8 v9 8
+		v8 += 8
+		if v8 == 64 begin
+			v8 := 0
+			v9 += 8
+			if v9 == 32 then jump done
+		end
+	again
+
+: done
+	loop again
+
+: randomplane
+	v0 := random 0xFF
+	v1 := random 0xFF
+	v2 := random 0xFF
+	v3 := random 0xFF
+	v4 := random 0xFF
+	v5 := random 0xFF
+	v6 := random 0xFF
+	v7 := random 0xFF
+	save v7
+	return

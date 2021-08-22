@@ -1,0 +1,40 @@
+:macro s8plane N {
+	:byte { 0xF0 + N }
+	:byte 0x01
+}
+
+: main
+	i := ball
+	v0 := 20
+	v1 := 10
+	sprite v0 v1 8
+	v0 := 60
+	sprite v0 v1 8
+	v1 := 29
+	sprite v0 v1 8
+	v0 := 20
+	sprite v0 v1 8
+
+	hires
+	i := ball
+	v0 := 30
+	v1 := 20
+	sprite v0 v1 8
+	v0 := 123
+	sprite v0 v1 8
+	v1 := 60
+	sprite v0 v1 8
+	v0 := 30
+	sprite v0 v1 8
+
+	loop again
+
+: ball
+	0b00111100
+	0b01000110
+	0b10001111
+	0b10000101
+	0b11000001
+	0b11110011
+	0b01111110
+	0b00111100
