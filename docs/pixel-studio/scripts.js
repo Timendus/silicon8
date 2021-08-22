@@ -231,14 +231,12 @@ function pixelsToPlanes(pixels) {
   ];
 
   for ( let i = 0; i < pixels.data.length; i += 4 ) {
-    const myColour = toHexString(pixels.data[i+0]) +
-                     toHexString(pixels.data[i+1]) +
-                     toHexString(pixels.data[i+2]);
+    const myColour = [ pixels.data[i+0], pixels.data[i+1], pixels.data[i+2] ];
     const myPlanes = colourToPlanes(myColour);
-    planes[0][planeIndex] |= myPlanes[0] == 1 ? bitmask : 0;
-    planes[1][planeIndex] |= myPlanes[1] == 1 ? bitmask : 0;
-    planes[2][planeIndex] |= myPlanes[2] == 1 ? bitmask : 0;
-    planes[3][planeIndex] |= myPlanes[3] == 1 ? bitmask : 0;
+    planes[0][planeIndex] |= myPlanes[3] == 1 ? bitmask : 0;
+    planes[1][planeIndex] |= myPlanes[2] == 1 ? bitmask : 0;
+    planes[2][planeIndex] |= myPlanes[1] == 1 ? bitmask : 0;
+    planes[3][planeIndex] |= myPlanes[0] == 1 ? bitmask : 0;
     bitmask = bitmask >> 1;
     if ( bitmask == 0 ) {
       bitmask = 128;
@@ -279,90 +277,45 @@ function planesToSprites(planes, width, height) {
 
 /** Palette definitions **/
 
+const colours = {
+  // Palette zero: four shades of gray
+  0: [ 0x00, 0x00, 0x00 ],
+  1: [ 0xFF, 0xFF, 0xFF ],
+  2: [ 0xAA, 0xAA, 0xAA ],
+  3: [ 0x55, 0x55, 0x55 ],
+
+  // Palette one: red, green, blue, yellow
+  4: [ 0xFF, 0x00, 0x00 ],
+  5: [ 0x00, 0xFF, 0x00 ],
+  6: [ 0x00, 0x00, 0xFF ],
+  7: [ 0xFF, 0xFF, 0x00 ],
+
+	// Palette two: bordeaux, olive, navy, orange
+	8: [ 0x88, 0x00, 0x00 ],
+	9: [ 0x00, 0x88, 0x00 ],
+	10: [ 0x00, 0x00, 0x88 ],
+	11: [ 0x88, 0x88, 0x00 ],
+
+	// Palette three: pink and cyan, purple and ocean
+	12: [ 0xFF, 0x00, 0xFF ],
+	13: [ 0x00, 0xFF, 0xFF ],
+	14: [ 0x88, 0x00, 0x88 ],
+	15: [ 0x00, 0x88, 0x88 ]
+};
+
 function palette(plane) {
-  switch(plane) {
-    case '1':
-      return [
-        [0x00, 0x00, 0x00],
-        [0xFF, 0xFF, 0xFF]
-      ];
-    case '3':
-      return [
-        [0x00, 0x00, 0x00],
-        [0x55, 0x55, 0x55],
-        [0xAA, 0xAA, 0xAA],
-        [0xFF, 0xFF, 0xFF]
-      ];
-    case '7':
-      return [
-        [0x00, 0x00, 0x00],
-        [0x00, 0x00, 0xFF],
-        [0x00, 0xFF, 0x00],
-        [0x55, 0x55, 0x55],
-        [0xAA, 0xAA, 0xAA],
-        [0xFF, 0x00, 0x00],
-        [0xFF, 0xFF, 0x00],
-        [0xFF, 0xFF, 0xFF]
-      ];
-    case '15':
-      return [
-        [0x00, 0x00, 0x00],
-        [0x00, 0x00, 0x88],
-        [0x00, 0x00, 0xFF],
-        [0x00, 0x88, 0x00],
-        [0x00, 0x88, 0x88],
-        [0x00, 0xFF, 0x00],
-        [0x00, 0xFF, 0xFF],
-        [0x55, 0x55, 0x55],
-        [0x88, 0x00, 0x00],
-        [0x88, 0x00, 0x88],
-        [0x88, 0x88, 0x00],
-        [0xAA, 0xAA, 0xAA],
-        [0xFF, 0x00, 0x00],
-        [0xFF, 0x00, 0xFF],
-        [0xFF, 0xFF, 0x00],
-        [0xFF, 0xFF, 0xFF]
-      ];
+  const valid = [];
+  for ( let i = 0; i < 16; i++ ) {
+    if ( (i & plane) == i ) valid.push(i);
   }
+  return valid.map(v => colours[v]);
 }
 
 function colourToPlanes(colour) {
-  switch(colour) {
-    case '000000':
-      return [0,0,0,0];
-    case 'ffffff':
-      return [1,0,0,0];
-    case 'aaaaaa':
-      return [0,1,0,0];
-    case '555555':
-      return [1,1,0,0];
-
-    case 'ff0000':
-      return [0,0,1,0];
-    case '00ff00':
-      return [1,0,1,0];
-    case '0000ff':
-      return [0,1,1,0];
-    case 'ffff00':
-      return [1,1,1,0];
-
-    case '880000':
-      return [0,0,0,1];
-    case '008800':
-      return [1,0,0,1];
-    case '000088':
-      return [0,1,0,1];
-    case '888800':
-      return [1,1,0,1];
-
-    case 'ff00ff':
-      return [0,0,1,1];
-    case '00ffff':
-      return [1,0,1,1];
-    case '880088':
-      return [0,1,1,1];
-    case '008888':
-      return [1,1,1,1];
-  }
-  assert(false); // We should never get here
+  // Find the right key in our colours map
+  const key = Object.keys(colours).find(key =>
+    colours[key].every((channel,index) => channel == colour[index])
+  );
+  // Integer key to array of bits
+  return (1 * key).toString(2).padStart(4, "0").split("");
 }

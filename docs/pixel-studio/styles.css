@@ -59,6 +59,7 @@ html, body {
 
 #settings {
   height: 100%;
+  min-width: 520px;
   overflow-y: auto;
 }
 #settings fieldset {

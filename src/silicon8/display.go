@@ -232,7 +232,7 @@ func (cpu *CPU) RenderToDisplayBuffer() {
 			g = 0xFF
 			b = 0x00
 
-		// Palette two: bordeaux, dark green, navy, orange
+		// Palette two: bordeaux, olive, navy, orange
 		case 8:
 			r = 0x88
 			g = 0x00
