@@ -65,7 +65,8 @@ The feature works, but the number of programs that are accurately auto-detected
 is lower than I expected. A program can use none of the SCHIP features, and
 still expect to be run on SCHIP with all the quirks of that platform, for
 example. Same with developers writing programs for XO-CHIP without actually
-using anything beyond CHIP-8 and SCHIP instructions. No way to tell.
+using anything beyond CHIP-8 and SCHIP instructions. No way to tell from just
+the binary.
 
 ### Second half of August 2021
 
