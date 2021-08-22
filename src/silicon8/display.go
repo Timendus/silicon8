@@ -12,37 +12,59 @@ func (cpu *CPU) clearPlanes(planes uint8) {
 }
 
 func (cpu *CPU) scrollDown(n uint8) {
-	for i := 8 * (32 - n); i > 8*n; i-- {
-		cpu.Display[i+8*n] = cpu.Display[i]
-	}
+  offset := cpu.DispWidth * uint16(n)
+  for i := cpu.DispWidth * cpu.DispHeight; i > 0; i-- {
+    j := i - 1
+    var pixel uint8
+    if j > offset {
+      pixel = cpu.planeBuffer[j - offset] & cpu.plane
+    } else {
+      pixel = 0
+    }
+    cpu.planeBuffer[j] = cpu.planeBuffer[j] & (cpu.plane ^ 0xFF) | pixel
+  }
+  cpu.SD = true
 }
 
 func (cpu *CPU) scrollUp(n uint8) {
-	for i := 8 * n; i < 8*(32-n); i++ {
-		cpu.Display[i-8*n] = cpu.Display[i]
-	}
+  offset := cpu.DispWidth * uint16(n)
+  for i := uint16(0); i < cpu.DispWidth * cpu.DispHeight; i++ {
+    var pixel uint8
+    if i + offset < cpu.DispWidth * cpu.DispHeight {
+      pixel = cpu.planeBuffer[i + offset] & cpu.plane
+    } else {
+      pixel = 0
+    }
+    cpu.planeBuffer[i] = cpu.planeBuffer[i] & (cpu.plane ^ 0xFF) | pixel
+  }
+  cpu.SD = true
 }
 
 func (cpu *CPU) scrollLeft() {
-	for y := 0; y < 32; y++ {
-		for x := 0; x < 7; x++ {
-			i := y*32 + x
-			cpu.Display[i] = cpu.Display[i]<<4 | cpu.Display[i+1]>>4
-		}
-		i := y*32 + 7
-		cpu.Display[i] = cpu.Display[i] << 4
-	}
+  for i := uint16(0); i < cpu.DispWidth * cpu.DispHeight; i++ {
+    var pixel uint8
+    if i % cpu.DispWidth < cpu.DispWidth - 4 {
+      pixel = cpu.planeBuffer[i + 4] & cpu.plane
+    } else {
+      pixel = 0
+    }
+    cpu.planeBuffer[i] = cpu.planeBuffer[i] & (cpu.plane ^ 0xFF) | pixel
+  }
+  cpu.SD = true
 }
 
 func (cpu *CPU) scrollRight() {
-	for y := 0; y < 32; y++ {
-		for x := 7; x > 0; x-- {
-			i := y*32 + x
-			cpu.Display[i] = cpu.Display[i]>>4 | cpu.Display[i-1]<<4
-		}
-		i := y * 32
-		cpu.Display[i] = cpu.Display[i] >> 4
-	}
+  for i := cpu.DispWidth * cpu.DispHeight; i > 0; i-- {
+    j := i - 1
+    var pixel uint8
+    if j % cpu.DispWidth >= 4 {
+      pixel = cpu.planeBuffer[j - 4] & cpu.plane
+    } else {
+      pixel = 0
+    }
+    cpu.planeBuffer[j] = cpu.planeBuffer[j] & (cpu.plane ^ 0xFF) | pixel
+  }
+  cpu.SD = true
 }
 
 func (cpu *CPU) draw(x, y, n uint8 ) {
