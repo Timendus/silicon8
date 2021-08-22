@@ -136,13 +136,3 @@ npm run build # Should rebuild the WebAssembly Go module
 npm install
 npm test # Should run the tests
 ```
-
-## TODO
-
-In no particular order 😉
-
-* [ ] Move font data from JS to Go, and select the right one based on
-interpreter type
-* [ ] Write more tests for SCHIP and XO-CHIP instructions
-* [ ] Implement XO-CHIP's `audio`
-* [ ] Fix exception when input image doesn't align with sprite size in Pixel Studio
