@@ -40,6 +40,7 @@ type CPU struct {
 	waitForKey     bool  // Waiting for key press?
 	WaitForInt     uint8 // Waiting for display refresh "interrupt"?
 	playing        bool  // Playing sound?
+	soundEnabled   bool  // To disable sound if we detect complex XO-CHIP sounds
 	SD             bool  // Screen dirty?
 	plane          uint8 // XO-Chip: Current drawing plane
 	planes         uint8 //          How many planes in total?

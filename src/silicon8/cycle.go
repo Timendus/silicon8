@@ -117,8 +117,10 @@ func (cpu *CPU) Cycle() {
 			cpu.plane = x
 			cpu.bumpSpecType(XOCHIP)
 		case 0x02:
-			// Load 16 bytes of audio buffer from (i)
-			// (No-op in our implementation, at least for now)
+			// XO-CHIP: Load 16 bytes of audio buffer from (i)
+			// No-op in our implementation, at least for now
+			// Disables further sounds because they will just be annoying
+			cpu.soundEnabled = false
 			cpu.bumpSpecType(XOCHIP)
 		case 0x07:
 			// Set register to value of delay timer

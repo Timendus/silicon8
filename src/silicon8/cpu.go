@@ -18,7 +18,7 @@ func (cpu *CPU) ClockTick() {
 		cpu.dt--
 	}
 
-	if cpu.st > 0 {
+	if cpu.st > 0 && cpu.soundEnabled {
 		if !cpu.playing {
 			cpu.playing = true
 			cpu.playSound()
@@ -99,6 +99,7 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.waitForKey = false
 	cpu.WaitForInt = 0
 	cpu.playing = false
+	cpu.soundEnabled = true
 	cpu.SD = true
 	cpu.running = true
 	cpu.plane = 1
