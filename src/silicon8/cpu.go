@@ -8,8 +8,10 @@ func (cpu *CPU) Stop() {
 	cpu.running = false
 }
 
+var cyclesPerFrame int = 30;
 func (cpu *CPU) SetCyclesPerFrame(cycles int) {
 	cpu.cyclesPerFrame = cycles
+	cyclesPerFrame = cycles
 }
 
 func (cpu *CPU) ClockTick() {
@@ -104,7 +106,7 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.running = true
 	cpu.plane = 1
 	cpu.planes = 1
-	cpu.cyclesPerFrame = 30
+	cpu.cyclesPerFrame = cyclesPerFrame
 
 	// Determine quirks to use
 	cpu.setQuirks()

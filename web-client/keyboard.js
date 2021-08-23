@@ -1,3 +1,5 @@
+let cyclesPerFrame = 30;
+
 module.exports = instance => {
   const keys = {
     // Arrow keys
@@ -34,14 +36,24 @@ module.exports = instance => {
   };
 
   window.addEventListener('keydown', e => {
-    if ( e.keyCode == 13 && instance )
-      instance.dumpStatus();
-    if ( keys[e.keyCode] && instance )
-      instance.pressKey(keys[e.keyCode]);
+    if ( !instance ) return;
+    switch(e.keyCode) {
+      case 13:  // Enter
+        return instance.dumpStatus();
+      case 187: // +
+        cyclesPerFrame *= 2;
+        return instance.setCyclesPerFrame(cyclesPerFrame);
+      case 189: // -
+        cyclesPerFrame /= 2;
+        return instance.setCyclesPerFrame(cyclesPerFrame);
+      default:
+        if ( keys[e.keyCode] )
+          instance.pressKey(keys[e.keyCode]);
+    }
   });
 
   window.addEventListener('keyup', e => {
-    if ( instance )
+    if ( instance && keys[e.keyCode] )
       instance.releaseKey(keys[e.keyCode]);
   });
 
