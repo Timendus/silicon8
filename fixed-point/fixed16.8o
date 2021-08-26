@@ -1,0 +1,282 @@
+:const scale 8 # 1/2^8
+:macro asFixed X Y D {
+	vB := X
+	:calc remainder { ( Y / D ) * ( 1 << scale ) }
+	vC := remainder
+}
+:macro asInt16 X {
+	:calc leftByte { X >> 8 }
+	:calc rightByte { X & 0xFF }
+	vB := leftByte
+	vC := rightByte
+}
+
+: main
+	set-monitors
+
+  vA := 0
+	asFixed 5 6 10 # 5 + 6/10 = 5.6
+  store-fixed16
+
+	vA := 2
+	asFixed 7 9 10 # 7 + 9/10 = 7.9
+	store-fixed16
+
+	vA := 0
+	vB := 2
+	add-fixed16
+	vA := 4
+	store-fixed16
+
+	vA := 0
+	vB := 2
+	sub-fixed16
+	vA := 6
+	store-fixed16
+
+	vA := 8
+	vB := 0
+	vC := 18
+	store-int16
+	int16-to-fixed16
+
+	vA := 4
+	load-fixed16
+	vA := 10
+	store-fixed16
+	fixed16-to-int16
+
+	vA := 12
+	asInt16 10 # Should be 0x0 0xA
+	store-int16
+	vA := 14
+	asInt16 1359 # Should be 0x5 0x4F
+	store-int16
+	vA := 14
+	vB := 12
+	mult-int16
+	vA := 16
+	store-int16 # Should be 0x35 0x16 (13590)
+
+	vA := 2
+	vB := 0
+	mult-fixed16
+	vA := 18
+	store-fixed16
+
+	vA := 20
+	#asInt16 -40
+	vB := 0
+	vC := -40
+	store-int16
+	vB := 12
+	mult-int16
+	vA := 22
+	store-int16 # Should be 0xFE 0x70 (-400)
+
+	vA := 20
+	int16-to-fixed16
+	vA := 24
+	asFixed -4 264 1000 # -4 - 264/1000 = -4,264
+	store-fixed16
+	vB := 20
+	mult-fixed16
+	vA := 26
+	store-fixed16 # Should be 0xAA 0x8F (170,56)
+
+	loop again
+
+: mult-fixed16
+	abs-mult-int16
+	vD |= vE
+	# Do a poor man's (but fast!) result >> 8
+	vC := vB
+	vB := vD
+	return
+
+: mult-int16
+	abs-mult-int16
+	vB |= vE
+	return
+
+# This basically implements this function:
+#
+# function mult_signed(a,b) {
+#   const invert = a < 0 ^ b < 0;
+#   a = Math.abs(a);
+#   b = Math.abs(b);
+#   const res = mult_unsigned(a,b);
+#   // This last bit is handled by the mult- routines above
+#   if ( invert )
+#     return -1 * res;
+#   else
+#     return res;
+# }
+: abs-mult-int16
+	vE := 128 # 10000000
+	v5 := 128 # 10000000
+	v6 := 127 # 01111111
+	i := variable-storage
+	i += vA
+	load v1
+	vE &= v0 # a < 0?
+	v0 &= v6 # Math.abs(a)
+	v3 := v0
+	v4 := v1
+	i := variable-storage
+	i += vB
+	load v1
+	v5 &= v0 # b < 0?
+	v0 &= v6 # Math.abs(b)
+	vE ^= v5 # const invert = a < 0 ^ b < 0;
+	jump mult-core
+
+# This basically implements this function:
+#
+# function mult(a,b) {
+#   let res = 0;
+#   if ( b > a ) {
+#     const t = a;
+#     a = b;
+#     b = t;
+#   }
+#   while(b) {
+#     if ( b & 1 ) res += a;
+#     b >>= 1;
+#     a <<= 1;
+#   }
+#   return res;
+# }
+#
+# The result is really 24-bits (vD, vB, vC) so we can use it for fixed point too
+: mult-uint16
+	i := variable-storage
+	i += vA
+	load v1
+	v3 := v0
+	v4 := v1
+	i := variable-storage
+	i += vB
+	load v1
+: mult-core
+	vD := 0
+	vB := 0
+	vC := 0
+	v5 := 0
+
+	# Swap operands if second operand is (significantly) larger than first
+	if v0 > v3 begin
+		v6 := v0
+		v7 := v1
+		v0 := v3
+		v1 := v4
+		v3 := v6
+		v4 := v7
+	end
+
+	loop
+		# while ( b )
+		v2 := v0
+		v2 |= v1
+		if v2 == 0 then return
+
+		# if ( b & 1 ) res += a
+		v2 := 1
+		v2 &= v1
+		if v2 == 1 begin
+			vC += v4
+			vB += vF
+			vD += vF
+			vB += v3
+			vD += vF
+			vD += v5
+		end
+
+		# b >>= 1
+		v1 >>= v1
+		v0 >>= v0
+		if vF == 1 then v1 += 128
+
+		# a <<= 1
+		v5 <<= v5
+		v3 <<= v3
+		v5 += vF  # if vF == 1 then v5 += 1
+		v4 <<= v4
+		v3 += vF  # if vF == 1 then v3 += 1
+	again
+
+: add-fixed16
+: add-int16
+  i := variable-storage
+  i += vA
+  load v1
+  v3 := v0
+  v4 := v1
+  i := variable-storage
+  i += vB
+  load v1
+  vC := v4
+  vC += v1
+  vB := vF
+  vB += v3
+  vB += v0
+  return
+
+: sub-fixed16
+: sub-int16
+	i := variable-storage
+	i += vA
+	load v1
+	v3 := v0
+	v4 := v1
+	i := variable-storage
+	i += vB
+	load v1
+	vC := v4
+	vC -= v1
+	vB := v3
+	if vF == 0 then vB -= 1
+	vB -= v0
+	return
+
+: store-fixed16
+: store-int16
+  i := variable-storage
+  i += vA
+  v0 := vB
+  v1 := vC
+  save v1
+  return
+
+: load-fixed16
+: load-int16
+  i := variable-storage
+  i += vA
+  load v1
+  vB := v0
+  vC := v1
+  return
+
+: fixed16-to-int16
+	load-int16
+	vC := vB
+	vB := 0
+	jump store-int16
+
+: int16-to-fixed16
+	load-int16
+	vB := vC
+	vC := 0
+	jump store-int16
+
+:org 0x400
+
+: variable-storage
+
+# Space here
+
+:org 0x0800
+
+: set-monitors
+  :monitor variable-storage 30
+  return
