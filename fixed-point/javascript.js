@@ -15,7 +15,7 @@ function mult_unsigned(a,b) {
   return res;
 }
 
-// TODO this one too
+// Implemented this one (bug to fix)
 function mult_signed(a,b) {
   const invert = a < 0 ^ b < 0;
   a = Math.abs(a);
@@ -27,14 +27,13 @@ function mult_signed(a,b) {
     return res;
 }
 
-function divide_unsigned(N, D)
-  Q := 0; R := N
-  while R ≥ D do
-    Q := Q + 1
-    R := R − D
-  end
-  return (Q, R)
-end
+// Doesn't work in Javascript, but should work fine in CHIP-8
+function abs_signed(a) {
+  if ( a < 0 )
+    return (a ^ 0xFFFF) + 1;
+  else
+    return a;
+}
 
 // This one just subtracts untill it runs out of the input value
 function div(n,d) {
@@ -59,7 +58,7 @@ for i := n − 1 .. 0 do  -- Where n is number of bits in N
   end
 end
 
-// This seems like the fastest option
+// This seems like the fastest option, to implement
 function div(n,d) {
   if ( d == 0 ) throw "Can't divide by 0";
   let q = 0;

@@ -2,9 +2,12 @@ const {types, run} = require('../tests/test-helper');
 
 const scale = 8; // 1/2^8
 function bytesAsFixed(a, b) {
-  let fixed = (a * (1 << scale) + b) / (1 << scale);
-  if ( a & 128 ) fixed = fixed - (1 << scale);
-  return rounded(fixed);
+  let number = a * (1 << scale) + b;
+  if ( number & (1 << 15) ) number -= (1 << 16);
+  return rounded(number/(1<<scale));
+  //let fixed = (a * (1 << scale) + b) / (1 << scale);
+  //if ( a & 128 ) fixed = fixed - (1 << scale);
+  //return rounded(fixed);
 }
 function bytesAsInt16(a, b) {
   let res = a * 256 + b;
@@ -47,10 +50,14 @@ run({
         expect(rounded(bytesAsFixed(ram[0x412], ram[0x413]), 10)).toBe(rounded(5.6 * 7.9, 10));
       });
       test('multiplies negative numbers correctly', () => {
+        // int16 to fixed16
         expect(bytesAsFixed(ram[0x414], ram[0x415])).toBe(-40);
+        // mult-int16 -40 * 10
         expect(bytesAsInt16(ram[0x416], ram[0x417])).toBe(-400);
-        expect(bytesAsFixed(ram[0x418], ram[0x419])).toBe(-4.264);
-        expect(bytesAsFixed(ram[0x41A], ram[0x41B])).toBe(170.56);
+        // static input
+        expect(bytesAsFixed(ram[0x418], ram[0x419])).toBe(-2.25);
+        // mult-fixed16 -2.25 * -40 = 90
+        expect(bytesAsFixed(ram[0x41A], ram[0x41B])).toBe(-2.25 * -40);
       });
     });
   }

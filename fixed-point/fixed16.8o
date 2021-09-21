@@ -4,6 +4,12 @@
 	:calc remainder { ( Y / D ) * ( 1 << scale ) }
 	vC := remainder
 }
+:macro asNegativeFixed X Y D {
+	:calc whole { X ^ 0xFF }
+	vB := whole
+	:calc remainder { ( -1 * Y / D ) * ( 1 << scale ) }
+	vC := remainder
+}
 :macro asInt16 X {
 	:calc leftByte { X >> 8 }
 	:calc rightByte { X & 0xFF }
@@ -66,7 +72,7 @@
 
 	vA := 20
 	#asInt16 -40
-	vB := 0
+	vB := 0xFF
 	vC := -40
 	store-int16
 	vB := 12
@@ -77,7 +83,7 @@
 	vA := 20
 	int16-to-fixed16
 	vA := 24
-	asFixed -4 264 1000 # -4 - 264/1000 = -4,264
+	asNegativeFixed 2 25 100 # -4 - 264/1000 = -4,264
 	store-fixed16
 	vB := 20
 	mult-fixed16
@@ -86,9 +92,23 @@
 
 	loop again
 
+
+
+
+
+
 : mult-fixed16
 	abs-mult-int16
-	vD |= vE
+	if vE != 0 begin
+		# res = -1 * res through 2s complement
+		v0 := 0xFF
+		vD ^= v0
+		vB ^= v0
+		vC ^= v0
+		vC += 1
+		vB += vF
+		vD += vF
+	end
 	# Do a poor man's (but fast!) result >> 8
 	vC := vB
 	vB := vD
@@ -96,7 +116,14 @@
 
 : mult-int16
 	abs-mult-int16
-	vB |= vE
+	if vE != 0 begin
+		# res = -1 * res through 2s complement
+		v0 := 0xFF
+		vB ^= v0
+		vC ^= v0
+		vC += 1
+		vB += vF
+	end
 	return
 
 # This basically implements this function:
@@ -113,23 +140,37 @@
 #     return res;
 # }
 : abs-mult-int16
-	vE := 128 # 10000000
-	v5 := 128 # 10000000
-	v6 := 127 # 01111111
+	vE := 128  # 10000000
+	v5 := 128  # 10000000
+	v6 := 0xFF # 01111111
+
 	i := variable-storage
 	i += vA
 	load v1
-	vE &= v0 # a < 0?
-	v0 &= v6 # Math.abs(a)
+	# Math.abs(a)
+	vE &= v0
+	if vE != 0 then abs-mult-int16-2s-complement
+
 	v3 := v0
 	v4 := v1
+
 	i := variable-storage
 	i += vB
 	load v1
-	v5 &= v0 # b < 0?
-	v0 &= v6 # Math.abs(b)
-	vE ^= v5 # const invert = a < 0 ^ b < 0;
+	# Math.abs(b)
+	v5 &= v0
+	if v5 != 0 then abs-mult-int16-2s-complement
+
+	# const invert = a < 0 ^ b < 0;
+	vE ^= v5
 	jump mult-core
+
+: abs-mult-int16-2s-complement
+	v0 ^= v6
+	v1 ^= v6
+	v1 += 1
+	v0 += vF
+	return
 
 # This basically implements this function:
 #
