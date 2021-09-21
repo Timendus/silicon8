@@ -8,12 +8,14 @@
     "go-install": "GOPATH=$(pwd) go get silicon8-qt",
     "go-start": "GOPATH=$(pwd) go run silicon8-qt",
     "serve": "webpack serve --open",
-    "test": "jest --verbose"
+    "test": "npm run assemble && jest --verbose",
+    "assemble": "echo 'Assembling all *.8o files...'; for file in `find . -type f -name \"*.8o\"`; do echo \"  * $file\"; target=${file%.8o}; octo $file ${target}.ch8; done"
   },
   "devDependencies": {
     "binary-loader": "^0.0.1",
     "bmp-js": "^0.1.0",
     "jest": "^27.0.6",
+    "octo-assembler": "^0.1.1",
     "webpack": "^5.47.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.0"
