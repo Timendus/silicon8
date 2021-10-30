@@ -18,14 +18,14 @@ window.addEventListener('load', async () => {
 
   instance.loadProgram(types.AUTO, welcomeProgram);
 
-  const fileTarget = Thimbleful.FileTarget.instance();
-  fileTarget.register('#display', (file, data) => {
-    if ( file.name.substr(-4) != '.ch8' )
-      return alert('You can only load *.ch8 CHIP-8 ROMs');
-    data = atob(data.split(',')[1]);
-    const program = new Uint8Array(new ArrayBuffer(data.length));
-    for ( let i = 0; i < data.length; i++ )
-      program[i] = data.charCodeAt(i);
-    instance.loadProgram(types.AUTO, program);
-  });
+  // const fileTarget = Thimbleful.FileTarget.instance();
+  // fileTarget.register('#display', (file, data) => {
+  //   if ( file.name.substr(-4) != '.ch8' )
+  //     return alert('You can only load *.ch8 CHIP-8 ROMs');
+  //   data = atob(data.split(',')[1]);
+  //   const program = new Uint8Array(new ArrayBuffer(data.length));
+  //   for ( let i = 0; i < data.length; i++ )
+  //     program[i] = data.charCodeAt(i);
+  //   instance.loadProgram(types.AUTO, program);
+  // });
 });

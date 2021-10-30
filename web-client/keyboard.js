@@ -1,4 +1,4 @@
-let cyclesPerFrame = 30;
+let cyclesPerFrame = 200000;
 
 module.exports = instance => {
   const keys = {
@@ -33,6 +33,14 @@ module.exports = instance => {
     55: 7,
     56: 8,
     57: 9,
+
+    // Special keys
+    32: 6,     // Space bar
+    16: 4,     // Shift
+    17: 6,     // Control
+    18: 4,     // Alt
+    91: 4,     // Left Command (MacBook)
+    93: 6,     // Right Command (MacBook)
   };
 
   window.addEventListener('keydown', e => {
@@ -47,8 +55,11 @@ module.exports = instance => {
         cyclesPerFrame /= 2;
         return instance.setCyclesPerFrame(cyclesPerFrame);
       default:
-        if ( keys[e.keyCode] )
+        if ( keys[e.keyCode] ) {
           instance.pressKey(keys[e.keyCode]);
+          e.preventDefault();
+          return false;
+        }
     }
   });
 

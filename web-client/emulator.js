@@ -33,6 +33,7 @@ module.exports = class {
     .then(result => {
       this._cpu = result.instance.exports;
       go.run(result.instance);
+      this.setCyclesPerFrame(200000);
       setInterval(() => this._cpu.clockTick(), 1000 / 60);
     })
     .catch(e => {
