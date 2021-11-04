@@ -36,6 +36,27 @@ canvas.dragging {
   border-radius: 1vw;
 }
 
+.notification {
+  box-sizing: border-box;
+  position: fixed;
+  right: 2em;
+  top: 2em;
+  width: 18em;
+  height: 6em;
+  padding: 1em;
+
+  border-radius: 1em;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  font-family: Tahoma, Arial, sans-serif;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.notification.active {
+  opacity: 1;
+}
+
 .keyboard {
   display: none;
   position: fixed;

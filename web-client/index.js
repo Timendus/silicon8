@@ -9,12 +9,14 @@ for (let i = 0; i < welcome.length; i++)
 window.addEventListener('load', async () => {
   const Emulator = require('./emulator');
   const keyboard = require('./keyboard');
+  const gamepad = require('./gamepad');
   const display = require('./display');
   const { playSound, stopSound } = require('./sound');
 
   const instance = new Emulator({ display, playSound, stopSound });
   await instance.init();
   keyboard(instance);
+  gamepad(instance);
 
   instance.loadProgram(types.AUTO, welcomeProgram);
 
