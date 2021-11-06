@@ -2,7 +2,8 @@ const notify = require('./notification');
 
 module.exports = instance => {
 
-  let gamepads = [];
+  const gamepads = {};
+  let unannouncedGamepads = [];
   let running = false;
 
   // Default buttons for a standard controller
@@ -18,12 +19,13 @@ module.exports = instance => {
 
   window.addEventListener('gamepadconnected', e => {
     // Ignore controllers that are not standard controllers
-    if ( e.gamepad.mapping != "standard" )
-      return console.log("🎮 Ignoring:", e.gamepad);
+    if ( e.gamepad.mapping != "standard" ) {
+      unannouncedGamepads.push(e.gamepad.index);
+      return console.log(`🎮 Ignoring gamepad ${e.gamepad.id} because it is not a 'standard mapping' gamepad`);
+    }
 
-    console.log("🎮 Connected:", e.gamepad);
     notify(`🎮 Connected to gamepad "${e.gamepad.id}"`);
-    gamepads.push(e.gamepad.index);
+    saveState(e.gamepad);
     if ( !running ) {
       running = true;
       requestAnimationFrame(pollGamepads);
@@ -31,14 +33,16 @@ module.exports = instance => {
   });
 
   window.addEventListener('gamepaddisconnected', e => {
-    // Ignore controllers that are not in our list
-    if ( !gamepads.includes(e.gamepad.index) )
-      return console.log("🎮 Ignoring:", e.gamepad);
+    // Remove unannounced gamepads from our list if they leave
+    if ( unannouncedGamepads.includes(e.gamepad.index) )
+      unannouncedGamepads = unannouncedGamepads.filter(g => g != e.gamepad.index);
+    // Ignore controllers that are not in our main list
+    if ( !gamepads[e.gamepad.index] )
+      return;
 
-    console.log("🎮 Disconnected:", e.gamepad);
-    notify(`🎮 Disconnected from gamepad "${e.gamepad.id}"`);
-    gamepads = gamepads.filter(g => g != e.gamepad.index);
-    if ( gamepads.length == 0 ) running = false;
+    notify(`🎮 Gamepad "${e.gamepad.id}" disconnected`);
+    delete gamepads[e.gamepad.index];
+    if ( Object.keys(gamepads).length == 0 ) running = false;
   });
 
   function pollGamepads() {
@@ -48,25 +52,42 @@ module.exports = instance => {
     if ( !currentGamepads ) return;
 
     for ( const gamepad of currentGamepads ) {
-      // Don't use non-existant gamepads
+      // Don't use non-existant gamepads (looking at you, Chrome)
       if ( !gamepad ) continue;
 
       // Only use gamepads that we got a valid connect event for
-      if ( !gamepads.includes(gamepad.index) ) continue;
-
-      // If any of the right buttons are pressed or released on any of the
-      // gamepads, let Silicon8 know. This is not really compatible with having
-      // multiple gamepads connected, but I suppose that's not a big issue.
-      for ( const key in keys ) {
-        if ( gamepad.buttons[key].pressed )
-          instance.pressKey(keys[key]);
-        else
-          instance.releaseKey(keys[key]);
+      if ( !gamepads[gamepad.index] ) {
+        if ( !unannouncedGamepads.includes(gamepad.index) ) {
+          console.warn("Got an unannounced gamepad:", gamepad);
+          unannouncedGamepads.push(gamepad.index);
+        }
+        continue;
       }
+
+      // If any of the (useful) buttons change state on any of the gamepads,
+      // let Silicon8 know.
+      for ( const key in keys ) {
+        if ( gamepad.buttons[key].pressed != gamepads[gamepad.index][key] ) {
+          if ( gamepad.buttons[key].pressed )
+            instance.pressKey(keys[key]);
+          else
+            instance.releaseKey(keys[key]);
+        }
+      }
+
+      // Save new state for next loop
+      saveState(gamepad);
     }
 
     // Keep polling
     requestAnimationFrame(pollGamepads);
+  }
+
+  function saveState(gamepad) {
+    gamepads[gamepad.index] =
+      Object.keys(keys)
+            .map(key => [key, gamepad.buttons[key].pressed])
+            .reduce((acc, value) => (acc[value[0]] = value[1], acc), {});
   }
 
 };
