@@ -1,8 +1,19 @@
-let gainNode;
+let gainNode, oscillator;
 
 module.exports = {
-  playSound: () => {
-    setVolume(0.1);
+  playSound: (playingPattern, pattern, pitch) => {
+    if ( playingPattern ) {
+      // Play XO-Chip pattern at pitch
+      // Honestly, I have no idea how to go from a pattern and a pitch to some
+      // sound in the browser. So this is a TODO. Disable sound for now it we
+      // use XO-Chip sound (because otherwise it's just annoying).
+
+      // This makes interesting noises, but is not the real deal:
+      // setVolume(0.1);
+      // oscillator.frequency.value = pitch / 4;
+    } else {
+      setVolume(0.1);
+    }
   },
   stopSound: () => {
     setVolume(0);
@@ -18,7 +29,7 @@ function setVolume(gain) {
 function setupSound() {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
 
-  const oscillator = audioCtx.createOscillator();
+  oscillator = audioCtx.createOscillator();
   gainNode = audioCtx.createGain();
 
   gainNode.gain.value = 0;

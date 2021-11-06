@@ -20,10 +20,10 @@ func (cpu *CPU) ClockTick() {
 		cpu.dt--
 	}
 
-	if cpu.st > 0 && cpu.soundEnabled {
+	if cpu.st > 0 {
 		if !cpu.playing {
 			cpu.playing = true
-			cpu.playSound()
+			cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
 		}
 		cpu.st--
 	} else {
@@ -86,6 +86,11 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.dt = 0
 	cpu.st = 0
 
+	// Initialize XO-Chip audio "registers"
+	cpu.pattern = [16]uint8{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+	cpu.pitch = 4000
+	cpu.playingPattern = false
+
 	// Initialize memory
 	cpu.initDisplay(64, 32, 1)
 	cpu.stack = make([]uint16, cpu.stackSize)
@@ -101,7 +106,6 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.waitForKey = false
 	cpu.WaitForInt = 0
 	cpu.playing = false
-	cpu.soundEnabled = true
 	cpu.SD = true
 	cpu.running = true
 	cpu.plane = 1

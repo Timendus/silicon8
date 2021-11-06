@@ -13,7 +13,8 @@ const XOCHIP_RAM_SIZE    uint16 = 65023 + 512
 const DEFAULT_STACK_SIZE uint8  = 12
 const SCHIP_STACK_SIZE   uint8  = 16  // According to http://devernay.free.fr/hacks/chip8/schip.txt: "Subroutine nesting is limited to 16 levels"
 
-type soundEvent func()
+type playSoundEvent func(bool, *[16]uint8, float64)
+type stopSoundEvent func()
 type randomByte func() uint8
 type renderEvent func(int, int, []uint8)
 
@@ -35,12 +36,16 @@ type CPU struct {
 	dt             uint8
 	st             uint8
 
+	// XO-Chip audio "registers"
+	pattern        [16]uint8
+	pitch          float64
+	playingPattern bool  // Are we playing an XO-Chip pattern, or just a beep?
+
 	// Interpreter internal state
 	Keyboard       [16]bool
 	waitForKey     bool  // Waiting for key press?
 	WaitForInt     uint8 // Waiting for display refresh "interrupt"?
 	playing        bool  // Playing sound?
-	soundEnabled   bool  // To disable sound if we detect complex XO-CHIP sounds
 	SD             bool  // Screen dirty?
 	plane          uint8 // XO-Chip: Current drawing plane
 	planes         uint8 //          How many planes in total?
@@ -59,8 +64,8 @@ type CPU struct {
 	drawQuirk      bool // Draw instruction messes up i, v[x] and v[y]
 
 	// External event handlers
-	playSound      soundEvent
-	stopSound      soundEvent
+	playSound      playSoundEvent
+	stopSound      stopSoundEvent
 	random         randomByte
 	render         renderEvent
 }

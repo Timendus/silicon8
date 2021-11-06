@@ -16,7 +16,7 @@ func main() {
 
 // To implement in host environment:
 
-func playSound()
+func playSound(bool, *[16]uint8, float64)
 func stopSound()
 func randomByte() int  // This too, because math/rand gives weird errors with tinygo
 func render(int, int, []uint8) // width, height, pointer to display data

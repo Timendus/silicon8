@@ -1,5 +1,7 @@
 package silicon8
 
+import "math"
+
 // Run the CPU for one cycle and return control
 
 func (cpu *CPU) Cycle() {
@@ -117,10 +119,13 @@ func (cpu *CPU) Cycle() {
 			cpu.plane = x
 			cpu.bumpSpecType(XOCHIP)
 		case 0x02:
-			// XO-CHIP: Load 16 bytes of audio buffer from (i)
-			// No-op in our implementation, at least for now
-			// Disables further sounds because they will just be annoying
-			cpu.soundEnabled = false
+			// XO-Chip: Load 16 bytes of audio buffer from (i)
+			var i uint16
+			for i = 0; i < 16; i++ {
+				cpu.pattern[i] = cpu.RAM[cpu.a(cpu.i+i)]
+			}
+			cpu.playingPattern = true
+			cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
 			cpu.bumpSpecType(XOCHIP)
 		case 0x07:
 			// Set register to value of delay timer
@@ -166,6 +171,12 @@ func (cpu *CPU) Cycle() {
 			cpu.RAM[cpu.a(cpu.i+0)] = cpu.v[x] / 100
 			cpu.RAM[cpu.a(cpu.i+1)] = cpu.v[x] % 100 / 10
 			cpu.RAM[cpu.a(cpu.i+2)] = cpu.v[x] % 10
+		case 0x3A:
+			// XO-Chip: Change pitch of audio pattern
+			cpu.pitch = 4000 * math.Pow(2, (float64(cpu.v[x])-64)/48)
+			cpu.playingPattern = true
+			cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
+			cpu.bumpSpecType(XOCHIP)
 		case 0x55:
 			// Store registers to memory (regular VIP/SCHIP)
 			var i uint8

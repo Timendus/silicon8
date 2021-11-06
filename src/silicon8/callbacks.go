@@ -1,6 +1,6 @@
 package silicon8
 
-func (cpu *CPU) RegisterSoundCallbacks(playSound soundEvent, stopSound soundEvent) {
+func (cpu *CPU) RegisterSoundCallbacks(playSound playSoundEvent, stopSound stopSoundEvent) {
 	cpu.playSound = playSound
 	cpu.stopSound = stopSound
 }
