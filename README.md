@@ -102,6 +102,31 @@ to convert images to sprite data in a what-you-see-is-what-you-get type of way.
 It supports one through four planes of colour, all possible sprite sizes and
 optional dithering.
 
+### November 2021
+
+Just a few small changes. So far at least.
+
+Having recently discovered the existence of the [Gamepad
+API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API)
+I figured I should add gamepad support to Silicon8. It's a pretty simple API and
+the code wasn't that complicated, but for some reason I'm not seeing my gamepad
+in any browser other than Safari. That may have to do with my gamepad, but it is
+pretty weird. Anyway, it works fine in Safari, and it "should work" for other
+browsers too, I guess. To use it, open Silicon8, connect your gamepad if it
+isn't already connected and press a button on it. Silicon8 should give you a
+notification that it found your gamepad.
+
+I also moved the fonts from the host environment to the Go module, so host
+environments don't have to bother with that mess. And I added support for the
+new XO-Chip opcode `pitch`. That is to say, Silicon8 knows `pitch` exists and
+doesn't throw any errors, and I have made the `audio` pattern and the `pitch`
+available to the host environment, but to be honest I don't really have a clue
+how to turn those two into a sound that makes sense. The
+[specification](https://github.com/JohnEarnest/Octo/blob/gh-pages/docs/XO-ChipSpecification.md#audio)
+is vague to say the least and the [implementation in
+Octo](https://github.com/JohnEarnest/Octo/blob/77fc843d9f44a45ebb0cbd9f3ea2ec14caba4851/js/shared.js#L198)
+kinda goes over my head. So that's something to fix for future Timendus 😉
+
 ## Developer instructions
 
 ### How to run
