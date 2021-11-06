@@ -116,16 +116,27 @@ browsers too, I guess. To use it, open Silicon8, connect your gamepad if it
 isn't already connected and press a button on it. Silicon8 should give you a
 notification that it found your gamepad.
 
-I also moved the fonts from the host environment to the Go module, so host
-environments don't have to bother with that mess. And I added support for the
-new XO-Chip opcode `pitch`. That is to say, Silicon8 knows `pitch` exists and
-doesn't throw any errors, and I have made the `audio` pattern and the `pitch`
-available to the host environment, but to be honest I don't really have a clue
-how to turn those two into a sound that makes sense. The
+Next, I moved the fonts from the host environment to the Go module, so host
+environments don't have to bother with that mess. This is something I had been
+planning on doing for a long time, because it makes moving the interpreter to
+other platforms easier, which is something I kinda plan on doing 👌🏻
+
+Then, [Kouzeru](https://github.com/Kouzeru) reached out to me, and urged me to
+implement the new XO-Chip opcode `pitch` in Silicon8. When I admitted to him
+that the prerequisite opcode `audio` wasn't even working, he immediately offered
+his support. Step one was just making the `audio` pattern and the `pitch`
+available to the host environment. Then I had to turn those two into a sound
+that makes sense. The
 [specification](https://github.com/JohnEarnest/Octo/blob/gh-pages/docs/XO-ChipSpecification.md#audio)
 is vague to say the least and the [implementation in
 Octo](https://github.com/JohnEarnest/Octo/blob/77fc843d9f44a45ebb0cbd9f3ea2ec14caba4851/js/shared.js#L198)
-kinda goes over my head. So that's something to fix for future Timendus 😉
+kinda went over my head. But with a snippet of FFT code from Kouzeru, some
+patient explanations and some experimentation I managed to get it working. So
+now Silicon8 finally has XO-Chip sound support! 😄
+
+The only question that remains is: should all this frequency calculation magic
+be in the host environment, or should it really be moved to the Go module? And
+it so, what exactly does the module pass to the host? I'm not sure. We'll see.
 
 ## Developer instructions
 
