@@ -1,7 +1,6 @@
 // This is just a wrapper for all the WebAssembly stuff.
 
 // require('./wasm_exec.js');
-const font = require('../shared/font');
 const go = new Go();
 
 if (!WebAssembly.instantiateStreaming) { // polyfill
@@ -47,9 +46,7 @@ module.exports = class {
   loadProgram(type, program) {
     this._cpu.reset(type);
     const ram = new Uint8Array(this._cpu.memory.buffer, this._cpu.ramPtr(), this._cpu.ramSize());
-    // Load font and program into RAM
-    const fontData = font(type);
-    for ( let i = 0; i < fontData.length; i++ ) ram[i] = fontData[i];
+    // Load program into RAM
     for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
   }
 

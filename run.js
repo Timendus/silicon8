@@ -7,7 +7,6 @@ if ( process.argv.length != 3 || process.argv[2].substr(-4) != ".ch8" ) {
 const fs = require('fs');
 const program = new Uint8Array(fs.readFileSync(process.argv[2]));
 
-const font = require('./shared/font');
 const types = require('./shared/types');
 const Input = require('./input');
 const input = new Input();
@@ -31,11 +30,8 @@ go.run(instance);
 setInterval(() => cpu.clockTick(), 1000 / 60);
 cpu.reset(types.AUTO);
 
-// Load font and program into RAM
+// Load program into RAM
 const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
-const fontData = font(types.VIP);
-for ( let i = 0; i < fontData.length; i++ )
-  ram[i] = fontData[i];
 for ( let i = 0x200; i < 0x200 + program.length; i++ )
   ram[i] = program[i - 0x200];
 

@@ -1,7 +1,6 @@
 // WebAssembly Silicon8 module loading and running stuff
 
 const fs = require('fs');
-const font = require('../shared/font');
 const types = require('../shared/types');
 require('../docs/wasm_exec');
 
@@ -31,9 +30,7 @@ module.exports = {
     cpu.reset(type);
     const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
 
-    // Load font and program into RAM
-    const fontData = font(type);
-    for ( let i = 0; i < fontData.length; i++ ) ram[i] = fontData[i];
+    // Load program into RAM
     for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
 
     cpu.runCycles(cycles);

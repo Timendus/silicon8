@@ -111,6 +111,9 @@ func (cpu *CPU) Reset(interpreter int) {
 	// Determine quirks to use
 	cpu.setQuirks()
 
+	// Load the appropriate font
+	cpu.loadFont()
+
 	cpu.Start()
 }
 

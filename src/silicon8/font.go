@@ -1,17 +1,19 @@
-const types = require('../shared/types');
+package silicon8
 
-module.exports = type => {
-  switch(type) {
-    case types.SCHIP:
-    case types.XOCHIP:
-      return fonts.schip;
-    default:
-      return fonts.chip8;
+func (cpu *CPU) loadFont() {
+  var font []uint8
+	switch cpu.specType {
+  case SCHIP, XOCHIP:
+    font = schipFont[:]
+  default:
+    font = chip8Font[:]
   }
-};
+  for i, b := range font {
+    cpu.RAM[i] = b
+  }
+}
 
-const fonts = {
-  chip8: new Uint8Array([
+var chip8Font = [...]uint8{
     0b11110000,
     0b10010000,
     0b10010000,
@@ -217,8 +219,9 @@ const fonts = {
     0b00000011,
     0b00111110,
     0b01111100,
-  ]),
-  schip: new Uint8Array([
+  }
+
+  var schipFont = [...]uint8{
     0b11110000,
     0b10010000,
     0b10010000,
@@ -424,8 +427,9 @@ const fonts = {
     0b00000011,
     0b00111110,
     0b01111100,
-  ]),
-  silicon8: new Uint8Array([
+  }
+
+  var silicon8Font = [...]uint8{
     0b01100000,
     0b10010000,
     0b10010000,
@@ -631,5 +635,4 @@ const fonts = {
     0b00000011,
     0b00111110,
     0b01111100,
-  ])
-};
+  }
