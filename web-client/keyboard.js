@@ -47,7 +47,7 @@ module.exports = instance => {
         cyclesPerFrame /= 2;
         return instance.setCyclesPerFrame(cyclesPerFrame);
       default:
-        if ( keys[e.keyCode] )
+        if ( Object.keys(keys).includes(e.keyCode.toString()) )
           instance.pressKey(keys[e.keyCode]);
     }
   });
