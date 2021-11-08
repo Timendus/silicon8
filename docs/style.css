@@ -29,10 +29,10 @@ canvas {
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  filter: blur(0.05vw) sepia(0.5) brightness(0.8);
+  filter: blur(0.05vw) sepia(0.3) brightness(0.9);
 }
 canvas.dragging {
-  filter: blur(0.05vw) sepia(0.5) brightness(0.8) drop-shadow(0px 0px 4vw #FF6633);
+  filter: blur(0.05vw) sepia(0.3) brightness(0.9) drop-shadow(0px 0px 4vw #FF6633);
   border-radius: 1vw;
 }
 
@@ -101,7 +101,7 @@ canvas.dragging {
     left: calc(50% - 14.5vh);
     width: 34vh;
     margin-top: -9.5vh;
-    filter: blur(0.05vh);
+    filter: blur(0.05vw) sepia(0.3) brightness(0.9);
   }
 
   .keyboard {

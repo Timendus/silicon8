@@ -33,6 +33,11 @@ module.exports = instance => {
     55: 7,
     56: 8,
     57: 9,
+
+    // Special keys
+    32: 6,     // Space bar
+    16: 4,     // Shift
+    17: 6,     // Control
   };
 
   window.addEventListener('keydown', e => {
