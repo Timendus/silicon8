@@ -40,6 +40,7 @@ type CPU struct {
 	pattern        [16]uint8
 	pitch          float64
 	playingPattern bool  // Are we playing an XO-Chip pattern, or just a beep?
+	audioDirty     bool  // Did anything change this frame?
 
 	// Interpreter internal state
 	Keyboard       [16]bool

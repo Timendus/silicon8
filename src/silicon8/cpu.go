@@ -24,11 +24,13 @@ func (cpu *CPU) ClockTick() {
 		if !cpu.playing {
 			cpu.playing = true
 			cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
+			cpu.audioDirty = false
 		}
 		cpu.st--
 	} else {
 		if cpu.playing {
 			cpu.playing = false
+			cpu.audioDirty = false
 			cpu.stopSound()
 		}
 	}
@@ -36,6 +38,12 @@ func (cpu *CPU) ClockTick() {
 	// Run cycles
 	for i := 0; i < cpu.cyclesPerFrame; i++ {
 		cpu.Cycle()
+	}
+
+	// Trigger audio updates if dirty
+	if cpu.audioDirty {
+		cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
+		cpu.audioDirty = false
 	}
 
 	// Render display if dirty
@@ -90,6 +98,7 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.pattern = [16]uint8{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	cpu.pitch = 4000
 	cpu.playingPattern = false
+	cpu.audioDirty = false
 
 	// Initialize memory
 	cpu.initDisplay(64, 32, 1)

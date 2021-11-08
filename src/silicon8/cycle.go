@@ -125,7 +125,7 @@ func (cpu *CPU) Cycle() {
 				cpu.pattern[i] = cpu.RAM[cpu.a(cpu.i+i)]
 			}
 			cpu.playingPattern = true
-			cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
+			cpu.audioDirty = true
 			cpu.bumpSpecType(XOCHIP)
 		case 0x07:
 			// Set register to value of delay timer
@@ -175,7 +175,7 @@ func (cpu *CPU) Cycle() {
 			// XO-Chip: Change pitch of audio pattern
 			cpu.pitch = 4000 * math.Pow(2, (float64(cpu.v[x])-64)/48)
 			cpu.playingPattern = true
-			cpu.playSound(cpu.playingPattern, &cpu.pattern, cpu.pitch)
+			cpu.audioDirty = true
 			cpu.bumpSpecType(XOCHIP)
 		case 0x55:
 			// Store registers to memory (regular VIP/SCHIP)
