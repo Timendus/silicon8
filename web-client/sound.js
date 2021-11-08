@@ -44,9 +44,10 @@ class Bleeps {
     this._oscillator.setPeriodicWave(
       this._periodicWave(this._patternToBits(pattern))
     );
-    // 130 is a magic number 🪄, discovered by trial and error and comparing the
-    // sound to Octo. No idea why this is the "right" value 😉
-    this._oscillator.frequency.value = pitch / 130;
+    // 128 is a magic number 🪄, discovered by trial and error, comparing the
+    // sound to Octo and a little educated guesswork. It matches the number of
+    // one-bit samples in 16 bytes, which is why we think it's correct.
+    this._oscillator.frequency.value = pitch / 128;
   }
 
   // Extend the pattern to an array of individual bits, quadrupling each bit to
