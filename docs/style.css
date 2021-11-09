@@ -14,14 +14,16 @@ body {
   background-repeat: no-repeat;
   perspective: 700px;
 }
-
-canvas {
+.display-wrapper {
   position: absolute;
   top: 50%;
   left: 35.5vw;
   margin-top: -9.5vw;
+  transform: rotateZ(2deg);
+}
+canvas {
   width: 34vw;
-  transform: rotateY(-5deg) rotateZ(2deg);
+  transform: rotateY(-5deg);
   z-index: 1;
 
   cursor: pointer;
