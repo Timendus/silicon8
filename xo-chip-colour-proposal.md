@@ -187,6 +187,34 @@ different in-between value of `0xAA` and reorders the colours a bit. Again, bit
 | 14 | `0b1110` | `#ffff55` | ![#ffff55](https://via.placeholder.com/15/ffff55/000000?text=+) Yellow        |
 | 15 | `0b1111` | `#ffffff` | ![#ffffff](https://via.placeholder.com/15/ffffff/000000?text=+) White         |
 
+### Pico-8 16-colour palette
+
+If I understand correctly the 16 colours in Pico-8 can be mapped to other
+colours, but these are the 16 system colors the screen palette is mapped to when
+PICO-8 starts up.
+
+I like how this palette is much more stylized, like the Apple one, but still
+manages to look very 8-bit-like when used.
+
+|  # | Binary # | HEX colour | Colour                                                                     |
+|----|----------|-----------|-----------------------------------------------------------------------------|
+| 0  | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) black       |
+| 1  | `0b0001` | `#1D2B53` | ![#1D2B53](https://via.placeholder.com/15/1D2B53/000000?text=+) dark-blue   |
+| 2  | `0b0010` | `#7E2553` | ![#7E2553](https://via.placeholder.com/15/7E2553/000000?text=+) dark-purple |
+| 3  | `0b0011` | `#008751` | ![#008751](https://via.placeholder.com/15/008751/000000?text=+) dark-green  |
+| 4  | `0b0100` | `#AB5236` | ![#AB5236](https://via.placeholder.com/15/AB5236/000000?text=+) brown       |
+| 5  | `0b0101` | `#5F574F` | ![#5F574F](https://via.placeholder.com/15/5F574F/000000?text=+) dark-grey   |
+| 6  | `0b0110` | `#C2C3C7` | ![#C2C3C7](https://via.placeholder.com/15/C2C3C7/000000?text=+) light-grey  |
+| 7  | `0b0111` | `#FFF1E8` | ![#FFF1E8](https://via.placeholder.com/15/FFF1E8/000000?text=+) white       |
+| 8  | `0b1000` | `#FF004D` | ![#FF004D](https://via.placeholder.com/15/FF004D/000000?text=+) red         |
+| 9  | `0b1001` | `#FFA300` | ![#FFA300](https://via.placeholder.com/15/FFA300/000000?text=+) orange      |
+| 10 | `0b1010` | `#FFEC27` | ![#FFEC27](https://via.placeholder.com/15/FFEC27/000000?text=+) yellow      |
+| 11 | `0b1011` | `#00E436` | ![#00E436](https://via.placeholder.com/15/00E436/000000?text=+) green       |
+| 12 | `0b1100` | `#29ADFF` | ![#29ADFF](https://via.placeholder.com/15/29ADFF/000000?text=+) blue        |
+| 13 | `0b1101` | `#83769C` | ![#83769C](https://via.placeholder.com/15/83769C/000000?text=+) lavender    |
+| 14 | `0b1110` | `#FF77A8` | ![#FF77A8](https://via.placeholder.com/15/FF77A8/000000?text=+) pink        |
+| 15 | `0b1111` | `#FFCCAA` | ![#FFCCAA](https://via.placeholder.com/15/FFCCAA/000000?text=+) light-peach |
+
 ## Silicon8 palette
 
 ### v1.0
@@ -227,7 +255,7 @@ Advantages of this palette:
 Disadvantages of this palette:
   * Bit 3 doesn't function like a "brightness toggle" like the MS and CGA
     palettes do (is that a big disadvantage? I don't know)
-  * The colours aren't as pretty as the Apple ones
+  * The colours aren't as pretty as the Apple or Pico-8 ones
   * Individual planes don't represent very useful colours (white, light gray,
     red, bordeax)
 
