@@ -1,3 +1,7 @@
+const notify = require('./notification');
+const io = require("socket.io-client");
+const remoteKeypad = io('http://localhost:3000/keypresses');
+
 let cyclesPerFrame = 30;
 
 module.exports = instance => {
@@ -53,21 +57,43 @@ module.exports = instance => {
         return instance.setCyclesPerFrame(cyclesPerFrame);
       default:
         if ( Object.keys(keys).includes(e.keyCode.toString()) )
-          instance.pressKey(keys[e.keyCode]);
+          pressKey(keys[e.keyCode]);
     }
   });
 
   window.addEventListener('keyup', e => {
     if ( instance && keys[e.keyCode] )
-      instance.releaseKey(keys[e.keyCode]);
+      releaseKey(keys[e.keyCode]);
   });
 
   document.querySelectorAll('.keyboard button').forEach(button => {
     button.addEventListener('touchstart', () => {
-      instance.pressKey(button.dataset.value);
+      pressKey(button.dataset.value);
     }, { passive: true });
     button.addEventListener('touchend', () => {
-      instance.releaseKey(button.dataset.value);
+      releaseKey(button.dataset.value);
     }, { passive: true });
+  });
+
+  function pressKey(key) {
+    instance.pressKey(key);
+    remoteKeypad.emit('press', key);
+  }
+
+  function releaseKey(key) {
+    instance.releaseKey(key);
+    remoteKeypad.emit('release', key);
+  }
+
+  remoteKeypad.on('numClients', num => {
+    notify(`🌎 Netplay: There are now ${num} clients connected`);
+  });
+
+  remoteKeypad.on('press', key => {
+    instance.pressKey(key);
+  });
+
+  remoteKeypad.on('release', key => {
+    instance.releaseKey(key);
   });
 };
