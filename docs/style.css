@@ -4,6 +4,7 @@ html, body {
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
+  cursor: auto;
 }
 
 body {
@@ -13,14 +14,17 @@ body {
   background-repeat: no-repeat;
   perspective: 700px;
 }
-
-canvas {
+.display-wrapper {
   position: absolute;
   top: 50%;
   left: 35.5vw;
   margin-top: -9.5vw;
+  transform: rotateZ(2deg);
+}
+canvas {
   width: 34vw;
-  transform: rotateY(-5deg) rotateZ(2deg);
+  transform: rotateY(-5deg);
+  z-index: 1;
 
   cursor: pointer;
   background-color: #000;
@@ -41,14 +45,16 @@ canvas.dragging {
   position: fixed;
   right: 2em;
   top: 2em;
-  width: 18em;
-  height: 6em;
+  width: 22em;
+  height: 8em;
   padding: 1em;
+  z-index: 3;
 
   border-radius: 1em;
   background-color: rgba(0,0,0,0.5);
   color: white;
-  font-family: Tahoma, Arial, sans-serif;
+  font-family: "Press Start 2P";
+  font-size: 0.8em;
 
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -96,11 +102,71 @@ canvas.dragging {
   right: 1vw;
 }
 
+.settings {
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -400px;
+  margin-top: -300px;
+  width: 800px;
+  height: 600px;
+  padding: 2em;
+  overflow-y: auto;
+  z-index: 2;
+
+  border: 4px solid white;
+  border-radius: 1em;
+  background-color: black;
+  color: white;
+  font-family: "Press Start 2P";
+
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.settings.active {
+  pointer-events: all;
+  opacity: 1;
+  transform: scale(1);
+}
+.settings .nes-container {
+  margin-bottom: 1em;
+  border-color: white;
+}
+.settings label {
+  display: block;
+}
+.settings .align-right {
+  text-align: right;
+}
+.nes-btn, .nes-select select, .nes-radio, .nes-radio ~ span {
+  border-color: white !important;
+  cursor: pointer !important;
+}
+
+@media screen and (max-width: 768px) {
+  .settings {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: auto;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
 @media screen and (max-aspect-ratio: 1/1) {
-  canvas {
+  .display-wrapper {
     left: calc(50% - 14.5vh);
-    width: 34vh;
     margin-top: -9.5vh;
+  }
+  canvas {
+    width: 34vh;
     filter: blur(0.05vw) sepia(0.3) brightness(0.9);
   }
 

@@ -15,6 +15,8 @@ module.exports = class {
   constructor({playSound, stopSound, display}) {
     playSound ||= () => {};
     stopSound ||= () => {};
+    this._running = false;
+    this._stopSound = stopSound;
 
     Object.assign(go.importObject.env, {
       'main.randomByte': () => Math.floor(Math.random() * 256) & 0xFF,
@@ -35,7 +37,10 @@ module.exports = class {
     .then(result => {
       this._cpu = result.instance.exports;
       go.run(result.instance);
-      setInterval(() => this._cpu.clockTick(), 1000 / 60);
+      this._interval = setInterval(() => {
+        if (this._running)
+          this._cpu.clockTick()
+      }, 1000 / 60);
     })
     .catch(e => {
       console.error(e);
@@ -63,6 +68,15 @@ module.exports = class {
 
   releaseKey(key) {
     this._cpu.releaseKey(key);
+  }
+
+  start() {
+    this._running = true;
+  }
+
+  stop() {
+    this._stopSound();
+    this._running = false;
   }
 
 }

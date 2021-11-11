@@ -10,6 +10,7 @@ window.addEventListener('load', async () => {
   const Emulator = require('./emulator');
   const keyboard = require('./keyboard');
   const gamepad = require('./gamepad');
+  const settings = require('./settings');
   const display = require('./display');
   const { playSound, stopSound } = require('./sound');
 
@@ -17,8 +18,10 @@ window.addEventListener('load', async () => {
   await instance.init();
   keyboard(instance);
   gamepad(instance);
+  const showSettings = settings(instance);
 
   instance.loadProgram(types.AUTO, welcomeProgram);
+  instance.start();
 
   const fileTarget = Thimbleful.FileTarget.instance();
   fileTarget.register('#display', (file, data) => {
@@ -28,6 +31,7 @@ window.addEventListener('load', async () => {
     const program = new Uint8Array(new ArrayBuffer(data.length));
     for ( let i = 0; i < data.length; i++ )
       program[i] = data.charCodeAt(i);
-    instance.loadProgram(types.AUTO, program);
+    instance.stop();
+    showSettings(program);
   });
 });

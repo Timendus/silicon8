@@ -7,12 +7,18 @@
 		<title>Silicon8</title>
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
 		<link rel="stylesheet" href="style.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+		<link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
 		<script type="text/javascript" src="wasm_exec.js"></script>
 		<script type="text/javascript" src="index.js"></script>
 	</head>
 
 	<body>
-		<canvas id="display"></canvas>
+		<div class="display-wrapper">
+			<canvas id="display"></canvas>
+		</div>
 
 		<div class="notification"></div>
 
@@ -27,6 +33,65 @@
 			<button data-value="6">6</button>  <button data-value="13">D</button>
 			<button data-value="9">9</button>  <button data-value="14">E</button>
 			<button data-value="11">B</button> <button data-value="15">F</button>
+		</div>
+
+		<div class="settings">
+			<div class="nes-container">
+				<h3>Interpreter type</h3>
+				<label>
+					<input type="radio" class="nes-radio is-dark" name="interpreter" value="0" checked>
+					<span>Auto-detect</span>
+				</label>
+				<label>
+					<input type="radio" class="nes-radio is-dark" name="interpreter" value="1">
+					<span>Strict VIP</span>
+				</label>
+				<label>
+					<input type="radio" class="nes-radio is-dark" name="interpreter" value="2">
+					<span>VIP</span>
+				</label>
+				<label>
+					<input type="radio" class="nes-radio is-dark" name="interpreter" value="4">
+					<span>SCHIP</span>
+				</label>
+				<label>
+					<input type="radio" class="nes-radio is-dark" name="interpreter" value="5">
+					<span>XO-CHIP</span>
+				</label>
+			</div>
+			<div class="nes-container">
+				<h3>Execution speed</h3>
+				<div class="nes-select">
+					<select name="speed">
+						<option value="7">420Hz - 7 cycles per frame</option>
+						<option value="15">900Hz - 15 cycles per frame</option>
+						<option value="20">1.2KHz - 20 cycles per frame</option>
+						<option value="30" selected>1.8KHz - 30 cycles per frame</option>
+						<option value="100">6KHz - 100 cycles per frame</option>
+						<option value="200">12KHz - 200 cycles per frame</option>
+						<option value="500">30KHz - 500 cycles per frame</option>
+						<option value="1000">60KHz - 1000 cycles per frame</option>
+						<option value="20000">1.2MHz - Octo Ludicrous speed</option>
+						<option value="50000">3MHz - 50000 cycles per frame</option>
+						<option value="100000">6MHz - 100000 cycles per frame</option>
+						<option value="200000">12MHz - 200000 cycles per frame</option>
+						<option value="400000">24MHz - 400000 cycles per frame</option>
+					</select>
+				</div>
+			</div>
+			<!---
+			<fieldset id="xo-colours">
+				<legend>Colour palette</legend>
+				<p>?</p>
+			</fieldset>
+			<fieldset>
+				<legend>Quirks</legend>
+				<p>?</p>
+			</fieldset>
+			//-->
+			<div class="align-right">
+				<button class="nes-btn is-success">Start!</button>
+			</div>
 		</div>
 	</body>
 
