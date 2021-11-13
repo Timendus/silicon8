@@ -138,6 +138,13 @@ The only question that remains is: should all this frequency calculation magic
 be in the host environment, or should it really be moved to the Go module? And
 it so, what exactly does the module pass to the host? I'm not sure. We'll see.
 
+Finally, I added an overlay that allows the user to select the compatibility
+type and execution speed of the interpreter. I was really hoping the
+auto-detection would be enough, but it clearly isn't. Also, only being able to
+set the execution speed "blind" with the -/+ keys was not to my liking.
+
+A big thanks to @MinThaMi for fixing a nasty CSS issue with Safari 🎉
+
 ## Developer instructions
 
 ### How to run
