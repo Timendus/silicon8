@@ -71,9 +71,6 @@ func (cpu *CPU) Reset(interpreter int) {
 	}
 
 	switch interpreter {
-	case STRICTVIP:
-		cpu.RAMSize = STRICTVIP_RAM_SIZE
-		cpu.stackSize = DEFAULT_STACK_SIZE
 	case VIP, BLINDVIP:
 		cpu.RAMSize = VIP_SCHIP_RAM_SIZE
 		cpu.stackSize = DEFAULT_STACK_SIZE
@@ -134,10 +131,9 @@ func (cpu *CPU) setQuirks() {
 	cpu.shiftQuirk = cpu.specType == SCHIP
 	cpu.jumpQuirk = cpu.specType == SCHIP
 	cpu.memQuirk = cpu.specType != SCHIP
-	cpu.vfQuirk = cpu.specType == VIP || cpu.specType == STRICTVIP || cpu.specType == BLINDVIP
+	cpu.vfQuirk = cpu.specType == VIP || cpu.specType == BLINDVIP
 	cpu.clipQuirk = cpu.specType != XOCHIP
-	cpu.dispQuirk = cpu.specType == VIP || cpu.specType == STRICTVIP
-	cpu.drawQuirk = cpu.specType == STRICTVIP
+	cpu.dispQuirk = cpu.specType == VIP
 }
 
 func (cpu *CPU) DumpStatus() {
@@ -157,7 +153,6 @@ func (cpu *CPU) DumpStatus() {
 	println("   vfQuirk:   ", cpu.vfQuirk)
 	println("   clipQuirk: ", cpu.clipQuirk)
 	println("   dispQuirk: ", cpu.dispQuirk)
-	println("   drawQuirk: ", cpu.drawQuirk)
 }
 
 func (cpu *CPU) bumpSpecType(newType int) {

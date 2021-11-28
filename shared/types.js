@@ -1,8 +1,7 @@
 module.exports = {
-  AUTO:      0,
-  STRICTVIP: 1,  // Note that these two halt for display refresh, use BLINDVIP
-  VIP:       2,  // instead for headless testing
-  BLINDVIP:  3,
-  SCHIP:     4,
-  XOCHIP:    5
+  AUTO:      0, // Note that this one halts for display refresh, use BLINDVIP
+  VIP:       1, // instead for headless testing
+  BLINDVIP:  2,
+  SCHIP:     3,
+  XOCHIP:    4
 };
