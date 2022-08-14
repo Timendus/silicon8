@@ -57,10 +57,10 @@ to any colour. However, we can take a look at the default colours Octo uses:
 
 | Bits   | Colour                                                                  |
 |--------|-------------------------------------------------------------------------|
-| `0b00` | ![#996600](https://via.placeholder.com/15/996600/000000?text=+) #996600 |
-| `0b01` | ![#FFCC00](https://via.placeholder.com/15/FFCC00/000000?text=+) #FFCC00 |
-| `0b10` | ![#FF6600](https://via.placeholder.com/15/FF6600/000000?text=+) #FF6600 |
-| `0b11` | ![#662200](https://via.placeholder.com/15/662200/000000?text=+) #662200 |
+| `0b00` | ![#996600](https://via.placeholder.com/15/996600/996600.png) #996600 |
+| `0b01` | ![#FFCC00](https://via.placeholder.com/15/FFCC00/FFCC00.png) #FFCC00 |
+| `0b10` | ![#FF6600](https://via.placeholder.com/15/FF6600/FF6600.png) #FF6600 |
+| `0b11` | ![#662200](https://via.placeholder.com/15/662200/662200.png) #662200 |
 
 As you can see these are fairly warm colours on a spectrum from lighter to
 darker. Essentially giving the user four levels of "grayscale", but in a much
