@@ -94,22 +94,22 @@ becomes a "brightness toggle", which is nice I guess.
 
 |  # | Binary # | HEX colour | Colour                                                                 |
 |----|----------|-----------|-------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black   |
-|  1 | `0b0001` | `#800000` | ![#800000](https://via.placeholder.com/15/880000/000000?text=+) Maroon  |
-|  2 | `0b0010` | `#008000` | ![#008000](https://via.placeholder.com/15/008800/000000?text=+) Green   |
-|  3 | `0b0011` | `#808000` | ![#808000](https://via.placeholder.com/15/888800/000000?text=+) Olive   |
-|  4 | `0b0100` | `#000080` | ![#000080](https://via.placeholder.com/15/000088/000000?text=+) Navy    |
-|  5 | `0b0101` | `#800080` | ![#800080](https://via.placeholder.com/15/880088/000000?text=+) Purple  |
-|  6 | `0b0110` | `#008080` | ![#008080](https://via.placeholder.com/15/008888/000000?text=+) Teal    |
-|  7 | `0b0111` | `#C0C0C0` | ![#C0C0C0](https://via.placeholder.com/15/C0C0C0/000000?text=+) Silver  |
-|  8 | `0b1000` | `#808080` | ![#808080](https://via.placeholder.com/15/808080/000000?text=+) Gray    |
-|  9 | `0b1001` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red     |
-| 10 | `0b1010` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) Lime    |
-| 11 | `0b1011` | `#FFFF00` | ![#FFFF00](https://via.placeholder.com/15/FFFF00/000000?text=+) Yellow  |
-| 12 | `0b1100` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/000000?text=+) Blue    |
-| 13 | `0b1101` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/000000?text=+) Fuchsia |
-| 14 | `0b1110` | `#00FFFF` | ![#00FFFF](https://via.placeholder.com/15/00FFFF/000000?text=+) Aqua    |
-| 15 | `0b1111` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White   |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black   |
+|  1 | `0b0001` | `#800000` | ![#800000](https://via.placeholder.com/15/880000/880000.png) Maroon  |
+|  2 | `0b0010` | `#008000` | ![#008000](https://via.placeholder.com/15/008800/008800.png) Green   |
+|  3 | `0b0011` | `#808000` | ![#808000](https://via.placeholder.com/15/888800/888800.png) Olive   |
+|  4 | `0b0100` | `#000080` | ![#000080](https://via.placeholder.com/15/000088/000088.png) Navy    |
+|  5 | `0b0101` | `#800080` | ![#800080](https://via.placeholder.com/15/880088/880088.png) Purple  |
+|  6 | `0b0110` | `#008080` | ![#008080](https://via.placeholder.com/15/008888/008888.png) Teal    |
+|  7 | `0b0111` | `#C0C0C0` | ![#C0C0C0](https://via.placeholder.com/15/C0C0C0/C0C0C0.png) Silver  |
+|  8 | `0b1000` | `#808080` | ![#808080](https://via.placeholder.com/15/808080/808080.png) Gray    |
+|  9 | `0b1001` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red     |
+| 10 | `0b1010` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/00FF00.png) Lime    |
+| 11 | `0b1011` | `#FFFF00` | ![#FFFF00](https://via.placeholder.com/15/FFFF00/FFFF00.png) Yellow  |
+| 12 | `0b1100` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/0000FF.png) Blue    |
+| 13 | `0b1101` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/FF00FF.png) Fuchsia |
+| 14 | `0b1110` | `#00FFFF` | ![#00FFFF](https://via.placeholder.com/15/00FFFF/00FFFF.png) Aqua    |
+| 15 | `0b1111` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White   |
 
 ### Apple Macintosh default 16-color palette
 
@@ -120,22 +120,22 @@ you a lot less.
 
 |  # | Binary # | HEX colour | Colour                                                                     |
 |----|----------|-----------|-----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White       |
-|  1 | `0b0001` | `#fbf305` | ![#fbf305](https://via.placeholder.com/15/fbf305/000000?text=+) Yellow      |
-|  2 | `0b0010` | `#ff6403` | ![#ff6403](https://via.placeholder.com/15/ff6403/000000?text=+) Orange      |
-|  3 | `0b0011` | `#dd0907` | ![#dd0907](https://via.placeholder.com/15/dd0907/000000?text=+) Red         |
-|  4 | `0b0100` | `#f20884` | ![#f20884](https://via.placeholder.com/15/f20884/000000?text=+) Magenta     |
-|  5 | `0b0101` | `#4700a5` | ![#4700a5](https://via.placeholder.com/15/4700a5/000000?text=+) Purple      |
-|  6 | `0b0110` | `#0000d3` | ![#0000d3](https://via.placeholder.com/15/0000d3/000000?text=+) Blue        |
-|  7 | `0b0111` | `#02abea` | ![#02abea](https://via.placeholder.com/15/02abea/000000?text=+) Cyan        |
-|  8 | `0b1000` | `#1fb714` | ![#1fb714](https://via.placeholder.com/15/1fb714/000000?text=+) Green       |
-|  9 | `0b1001` | `#006412` | ![#006412](https://via.placeholder.com/15/006412/000000?text=+) Dark Green  |
-| 10 | `0b1010` | `#562c05` | ![#562c05](https://via.placeholder.com/15/562c05/000000?text=+) Brown       |
-| 11 | `0b1011` | `#90713a` | ![#90713a](https://via.placeholder.com/15/90713a/000000?text=+) Tan         |
-| 12 | `0b1100` | `#C0C0C0` | ![#C0C0C0](https://via.placeholder.com/15/C0C0C0/000000?text=+) Light gray  |
-| 13 | `0b1101` | `#808080` | ![#808080](https://via.placeholder.com/15/808080/000000?text=+) Medium gray |
-| 14 | `0b1110` | `#404040` | ![#404040](https://via.placeholder.com/15/404040/000000?text=+) Dark gray   |
-| 15 | `0b1111` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black       |
+|  0 | `0b0000` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White       |
+|  1 | `0b0001` | `#fbf305` | ![#fbf305](https://via.placeholder.com/15/fbf305/fbf305.png) Yellow      |
+|  2 | `0b0010` | `#ff6403` | ![#ff6403](https://via.placeholder.com/15/ff6403/ff6403.png) Orange      |
+|  3 | `0b0011` | `#dd0907` | ![#dd0907](https://via.placeholder.com/15/dd0907/dd0907.png) Red         |
+|  4 | `0b0100` | `#f20884` | ![#f20884](https://via.placeholder.com/15/f20884/f20884.png) Magenta     |
+|  5 | `0b0101` | `#4700a5` | ![#4700a5](https://via.placeholder.com/15/4700a5/4700a5.png) Purple      |
+|  6 | `0b0110` | `#0000d3` | ![#0000d3](https://via.placeholder.com/15/0000d3/0000d3.png) Blue        |
+|  7 | `0b0111` | `#02abea` | ![#02abea](https://via.placeholder.com/15/02abea/02abea.png) Cyan        |
+|  8 | `0b1000` | `#1fb714` | ![#1fb714](https://via.placeholder.com/15/1fb714/1fb714.png) Green       |
+|  9 | `0b1001` | `#006412` | ![#006412](https://via.placeholder.com/15/006412/006412.png) Dark Green  |
+| 10 | `0b1010` | `#562c05` | ![#562c05](https://via.placeholder.com/15/562c05/562c05.png) Brown       |
+| 11 | `0b1011` | `#90713a` | ![#90713a](https://via.placeholder.com/15/90713a/90713a.png) Tan         |
+| 12 | `0b1100` | `#C0C0C0` | ![#C0C0C0](https://via.placeholder.com/15/C0C0C0/C0C0C0.png) Light gray  |
+| 13 | `0b1101` | `#808080` | ![#808080](https://via.placeholder.com/15/808080/808080.png) Medium gray |
+| 14 | `0b1110` | `#404040` | ![#404040](https://via.placeholder.com/15/404040/404040.png) Dark gray   |
+| 15 | `0b1111` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black       |
 
 ### RISC OS default palette
 
@@ -145,22 +145,22 @@ looking fonts, but probably not so great for others, like flashy games.
 
 |  # | Binary # | HEX colour | Colour                                                                     |
 |----|----------|-----------|-----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White       |
-|  1 | `0b0001` | `#dddddd` | ![#dddddd](https://via.placeholder.com/15/dddddd/000000?text=+) Gray #1     |
-|  2 | `0b0010` | `#bbbbbb` | ![#bbbbbb](https://via.placeholder.com/15/bbbbbb/000000?text=+) Gray #2     |
-|  3 | `0b0011` | `#999999` | ![#999999](https://via.placeholder.com/15/999999/000000?text=+) Gray #3     |
-|  4 | `0b0100` | `#777777` | ![#777777](https://via.placeholder.com/15/777777/000000?text=+) Gray #4     |
-|  5 | `0b0101` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/000000?text=+) Gray #5     |
-|  6 | `0b0110` | `#333333` | ![#333333](https://via.placeholder.com/15/333333/000000?text=+) Gray #6     |
-|  7 | `0b0111` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black       |
-|  8 | `0b1000` | `#004499` | ![#004499](https://via.placeholder.com/15/004499/000000?text=+) Dark blue   |
-|  9 | `0b1001` | `#eeee00` | ![#eeee00](https://via.placeholder.com/15/eeee00/000000?text=+) Yellow      |
-| 10 | `0b1010` | `#00cc00` | ![#00cc00](https://via.placeholder.com/15/00cc00/000000?text=+) Green       |
-| 11 | `0b1011` | `#dd0000` | ![#dd0000](https://via.placeholder.com/15/dd0000/000000?text=+) Red         |
-| 12 | `0b1100` | `#eeeebb` | ![#eeeebb](https://via.placeholder.com/15/eeeebb/000000?text=+) Beige       |
-| 13 | `0b1101` | `#558800` | ![#558800](https://via.placeholder.com/15/558800/000000?text=+) Dark green  |
-| 14 | `0b1110` | `#ffbb00` | ![#ffbb00](https://via.placeholder.com/15/ffbb00/000000?text=+) Gold/Orange |
-| 15 | `0b1111` | `#00bbff` | ![#00bbff](https://via.placeholder.com/15/00bbff/000000?text=+) Light blue  |
+|  0 | `0b0000` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White       |
+|  1 | `0b0001` | `#dddddd` | ![#dddddd](https://via.placeholder.com/15/dddddd/dddddd.png) Gray #1     |
+|  2 | `0b0010` | `#bbbbbb` | ![#bbbbbb](https://via.placeholder.com/15/bbbbbb/bbbbbb.png) Gray #2     |
+|  3 | `0b0011` | `#999999` | ![#999999](https://via.placeholder.com/15/999999/999999.png) Gray #3     |
+|  4 | `0b0100` | `#777777` | ![#777777](https://via.placeholder.com/15/777777/777777.png) Gray #4     |
+|  5 | `0b0101` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/555555.png) Gray #5     |
+|  6 | `0b0110` | `#333333` | ![#333333](https://via.placeholder.com/15/333333/333333.png) Gray #6     |
+|  7 | `0b0111` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black       |
+|  8 | `0b1000` | `#004499` | ![#004499](https://via.placeholder.com/15/004499/004499.png) Dark blue   |
+|  9 | `0b1001` | `#eeee00` | ![#eeee00](https://via.placeholder.com/15/eeee00/eeee00.png) Yellow      |
+| 10 | `0b1010` | `#00cc00` | ![#00cc00](https://via.placeholder.com/15/00cc00/00cc00.png) Green       |
+| 11 | `0b1011` | `#dd0000` | ![#dd0000](https://via.placeholder.com/15/dd0000/dd0000.png) Red         |
+| 12 | `0b1100` | `#eeeebb` | ![#eeeebb](https://via.placeholder.com/15/eeeebb/eeeebb.png) Beige       |
+| 13 | `0b1101` | `#558800` | ![#558800](https://via.placeholder.com/15/558800/558800.png) Dark green  |
+| 14 | `0b1110` | `#ffbb00` | ![#ffbb00](https://via.placeholder.com/15/ffbb00/ffbb00.png) Gold/Orange |
+| 15 | `0b1111` | `#00bbff` | ![#00bbff](https://via.placeholder.com/15/00bbff/00bbff.png) Light blue  |
 
 ### CGA 16-color palette
 
@@ -170,22 +170,22 @@ different in-between value of `0xAA` and reorders the colours a bit. Again, bit
 
 |  # | Binary # | HEX colour | Colour                                                                       |
 |----|----------|-----------|-------------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black         |
-|  1 | `0b0001` | `#0000aa` | ![#0000aa](https://via.placeholder.com/15/0000aa/000000?text=+) Blue          |
-|  2 | `0b0010` | `#00aa00` | ![#00aa00](https://via.placeholder.com/15/00aa00/000000?text=+) Green         |
-|  3 | `0b0011` | `#00aaaa` | ![#00aaaa](https://via.placeholder.com/15/00aaaa/000000?text=+) Cyan          |
-|  4 | `0b0100` | `#aa0000` | ![#aa0000](https://via.placeholder.com/15/aa0000/000000?text=+) Red           |
-|  5 | `0b0101` | `#aa00aa` | ![#aa00aa](https://via.placeholder.com/15/aa00aa/000000?text=+) Magenta       |
-|  6 | `0b0110` | `#aa5500` | ![#aa5500](https://via.placeholder.com/15/aa5500/000000?text=+) Brown         |
-|  7 | `0b0111` | `#aaaaaa` | ![#aaaaaa](https://via.placeholder.com/15/aaaaaa/000000?text=+) Light gray    |
-|  8 | `0b1000` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/000000?text=+) Dark gray     |
-|  9 | `0b1001` | `#5555ff` | ![#5555ff](https://via.placeholder.com/15/5555ff/000000?text=+) Light blue    |
-| 10 | `0b1010` | `#55ff55` | ![#55ff55](https://via.placeholder.com/15/55ff55/000000?text=+) Light green   |
-| 11 | `0b1011` | `#55ffff` | ![#55ffff](https://via.placeholder.com/15/55ffff/000000?text=+) Light cyan    |
-| 12 | `0b1100` | `#ff5555` | ![#ff5555](https://via.placeholder.com/15/ff5555/000000?text=+) Light red     |
-| 13 | `0b1101` | `#ff55ff` | ![#ff55ff](https://via.placeholder.com/15/ff55ff/000000?text=+) Light magenta |
-| 14 | `0b1110` | `#ffff55` | ![#ffff55](https://via.placeholder.com/15/ffff55/000000?text=+) Yellow        |
-| 15 | `0b1111` | `#ffffff` | ![#ffffff](https://via.placeholder.com/15/ffffff/000000?text=+) White         |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black         |
+|  1 | `0b0001` | `#0000aa` | ![#0000aa](https://via.placeholder.com/15/0000aa/0000aa.png) Blue          |
+|  2 | `0b0010` | `#00aa00` | ![#00aa00](https://via.placeholder.com/15/00aa00/00aa00.png) Green         |
+|  3 | `0b0011` | `#00aaaa` | ![#00aaaa](https://via.placeholder.com/15/00aaaa/00aaaa.png) Cyan          |
+|  4 | `0b0100` | `#aa0000` | ![#aa0000](https://via.placeholder.com/15/aa0000/aa0000.png) Red           |
+|  5 | `0b0101` | `#aa00aa` | ![#aa00aa](https://via.placeholder.com/15/aa00aa/aa00aa.png) Magenta       |
+|  6 | `0b0110` | `#aa5500` | ![#aa5500](https://via.placeholder.com/15/aa5500/aa5500.png) Brown         |
+|  7 | `0b0111` | `#aaaaaa` | ![#aaaaaa](https://via.placeholder.com/15/aaaaaa/aaaaaa.png) Light gray    |
+|  8 | `0b1000` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/555555.png) Dark gray     |
+|  9 | `0b1001` | `#5555ff` | ![#5555ff](https://via.placeholder.com/15/5555ff/5555ff.png) Light blue    |
+| 10 | `0b1010` | `#55ff55` | ![#55ff55](https://via.placeholder.com/15/55ff55/55ff55.png) Light green   |
+| 11 | `0b1011` | `#55ffff` | ![#55ffff](https://via.placeholder.com/15/55ffff/55ffff.png) Light cyan    |
+| 12 | `0b1100` | `#ff5555` | ![#ff5555](https://via.placeholder.com/15/ff5555/ff5555.png) Light red     |
+| 13 | `0b1101` | `#ff55ff` | ![#ff55ff](https://via.placeholder.com/15/ff55ff/ff55ff.png) Light magenta |
+| 14 | `0b1110` | `#ffff55` | ![#ffff55](https://via.placeholder.com/15/ffff55/ffff55.png) Yellow        |
+| 15 | `0b1111` | `#ffffff` | ![#ffffff](https://via.placeholder.com/15/ffffff/ffffff.png) White         |
 
 ### Pico-8 16-colour palette
 
@@ -198,22 +198,22 @@ manages to look very 8-bit-like when used.
 
 |  # | Binary # | HEX colour | Colour                                                                     |
 |----|----------|-----------|-----------------------------------------------------------------------------|
-| 0  | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) black       |
-| 1  | `0b0001` | `#1D2B53` | ![#1D2B53](https://via.placeholder.com/15/1D2B53/000000?text=+) dark-blue   |
-| 2  | `0b0010` | `#7E2553` | ![#7E2553](https://via.placeholder.com/15/7E2553/000000?text=+) dark-purple |
-| 3  | `0b0011` | `#008751` | ![#008751](https://via.placeholder.com/15/008751/000000?text=+) dark-green  |
-| 4  | `0b0100` | `#AB5236` | ![#AB5236](https://via.placeholder.com/15/AB5236/000000?text=+) brown       |
-| 5  | `0b0101` | `#5F574F` | ![#5F574F](https://via.placeholder.com/15/5F574F/000000?text=+) dark-grey   |
-| 6  | `0b0110` | `#C2C3C7` | ![#C2C3C7](https://via.placeholder.com/15/C2C3C7/000000?text=+) light-grey  |
-| 7  | `0b0111` | `#FFF1E8` | ![#FFF1E8](https://via.placeholder.com/15/FFF1E8/000000?text=+) white       |
-| 8  | `0b1000` | `#FF004D` | ![#FF004D](https://via.placeholder.com/15/FF004D/000000?text=+) red         |
-| 9  | `0b1001` | `#FFA300` | ![#FFA300](https://via.placeholder.com/15/FFA300/000000?text=+) orange      |
-| 10 | `0b1010` | `#FFEC27` | ![#FFEC27](https://via.placeholder.com/15/FFEC27/000000?text=+) yellow      |
-| 11 | `0b1011` | `#00E436` | ![#00E436](https://via.placeholder.com/15/00E436/000000?text=+) green       |
-| 12 | `0b1100` | `#29ADFF` | ![#29ADFF](https://via.placeholder.com/15/29ADFF/000000?text=+) blue        |
-| 13 | `0b1101` | `#83769C` | ![#83769C](https://via.placeholder.com/15/83769C/000000?text=+) lavender    |
-| 14 | `0b1110` | `#FF77A8` | ![#FF77A8](https://via.placeholder.com/15/FF77A8/000000?text=+) pink        |
-| 15 | `0b1111` | `#FFCCAA` | ![#FFCCAA](https://via.placeholder.com/15/FFCCAA/000000?text=+) light-peach |
+| 0  | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) black       |
+| 1  | `0b0001` | `#1D2B53` | ![#1D2B53](https://via.placeholder.com/15/1D2B53/1D2B53.png) dark-blue   |
+| 2  | `0b0010` | `#7E2553` | ![#7E2553](https://via.placeholder.com/15/7E2553/7E2553.png) dark-purple |
+| 3  | `0b0011` | `#008751` | ![#008751](https://via.placeholder.com/15/008751/008751.png) dark-green  |
+| 4  | `0b0100` | `#AB5236` | ![#AB5236](https://via.placeholder.com/15/AB5236/AB5236.png) brown       |
+| 5  | `0b0101` | `#5F574F` | ![#5F574F](https://via.placeholder.com/15/5F574F/5F574F.png) dark-grey   |
+| 6  | `0b0110` | `#C2C3C7` | ![#C2C3C7](https://via.placeholder.com/15/C2C3C7/C2C3C7.png) light-grey  |
+| 7  | `0b0111` | `#FFF1E8` | ![#FFF1E8](https://via.placeholder.com/15/FFF1E8/FFF1E8.png) white       |
+| 8  | `0b1000` | `#FF004D` | ![#FF004D](https://via.placeholder.com/15/FF004D/FF004D.png) red         |
+| 9  | `0b1001` | `#FFA300` | ![#FFA300](https://via.placeholder.com/15/FFA300/FFA300.png) orange      |
+| 10 | `0b1010` | `#FFEC27` | ![#FFEC27](https://via.placeholder.com/15/FFEC27/FFEC27.png) yellow      |
+| 11 | `0b1011` | `#00E436` | ![#00E436](https://via.placeholder.com/15/00E436/00E436.png) green       |
+| 12 | `0b1100` | `#29ADFF` | ![#29ADFF](https://via.placeholder.com/15/29ADFF/29ADFF.png) blue        |
+| 13 | `0b1101` | `#83769C` | ![#83769C](https://via.placeholder.com/15/83769C/83769C.png) lavender    |
+| 14 | `0b1110` | `#FF77A8` | ![#FF77A8](https://via.placeholder.com/15/FF77A8/FF77A8.png) pink        |
+| 15 | `0b1111` | `#FFCCAA` | ![#FFCCAA](https://via.placeholder.com/15/FFCCAA/FFCCAA.png) light-peach |
 
 ## Silicon8 palette
 
@@ -223,22 +223,22 @@ The current palette that Silicon8 uses is the following:
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/000000?text=+) Dark gray  |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) Green      |
-|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/000000?text=+) Blue       |
-|  7 | `0b0111` | `#FFFF00` | ![#FFFF00](https://via.placeholder.com/15/FFFF00/000000?text=+) Yellow     |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/000000?text=+) Olive      |
-| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000000?text=+) Navy       |
-| 11 | `0b1011` | `#888800` | ![#888800](https://via.placeholder.com/15/888800/000000?text=+) Orange     |
-| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/000000?text=+) Pink       |
-| 13 | `0b1101` | `#00FFFF` | ![#00FFFF](https://via.placeholder.com/15/00FFFF/000000?text=+) Cyan       |
-| 14 | `0b1110` | `#880088` | ![#880088](https://via.placeholder.com/15/880088/000000?text=+) Purple     |
-| 15 | `0b1111` | `#008888` | ![#008888](https://via.placeholder.com/15/008888/000000?text=+) Ocean      |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/555555.png) Dark gray  |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/00FF00.png) Green      |
+|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/0000FF.png) Blue       |
+|  7 | `0b0111` | `#FFFF00` | ![#FFFF00](https://via.placeholder.com/15/FFFF00/FFFF00.png) Yellow     |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/008800.png) Olive      |
+| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000088.png) Navy       |
+| 11 | `0b1011` | `#888800` | ![#888800](https://via.placeholder.com/15/888800/888800.png) Orange     |
+| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/FF00FF.png) Pink       |
+| 13 | `0b1101` | `#00FFFF` | ![#00FFFF](https://via.placeholder.com/15/00FFFF/00FFFF.png) Cyan       |
+| 14 | `0b1110` | `#880088` | ![#880088](https://via.placeholder.com/15/880088/880088.png) Purple     |
+| 15 | `0b1111` | `#008888` | ![#008888](https://via.placeholder.com/15/008888/008888.png) Ocean      |
 
 This palette looks a lot like the Microsoft and CGA ones, except that my
 in-between value is `0x88` (which may or may not be a good idea) and that I
@@ -265,118 +265,118 @@ Let's break this palette up in it's "sub-palettes".
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
 
 #### Planes 0 and 1
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/000000?text=+) Dark gray  |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/555555.png) Dark gray  |
 
 #### Planes 0 and 2
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) Green      |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/00FF00.png) Green      |
 
 #### Planes 0 and 3
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/000000?text=+) Olive      |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/008800.png) Olive      |
 
 #### Planes 1 and 2
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/000000?text=+) Blue       |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/0000FF.png) Blue       |
 
 #### Planes 1 and 3
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000000?text=+) Navy       |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000088.png) Navy       |
 
 #### Planes 2 and 3
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/000000?text=+) Pink       |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/FF00FF.png) Pink       |
 
 #### Planes 0, 1 and 2
 
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/000000?text=+) Dark gray  |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) Green      |
-|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/000000?text=+) Blue       |
-|  7 | `0b0111` | `#FFFF00` | ![#FFFF00](https://via.placeholder.com/15/FFFF00/000000?text=+) Yellow     |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/555555.png) Dark gray  |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/00FF00.png) Green      |
+|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/0000FF.png) Blue       |
+|  7 | `0b0111` | `#FFFF00` | ![#FFFF00](https://via.placeholder.com/15/FFFF00/FFFF00.png) Yellow     |
 
 #### Planes 0, 1 and 3
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/000000?text=+) Dark gray  |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/000000?text=+) Olive      |
-| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000000?text=+) Navy       |
-| 11 | `0b1011` | `#888800` | ![#888800](https://via.placeholder.com/15/888800/000000?text=+) Orange     |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  3 | `0b0011` | `#555555` | ![#555555](https://via.placeholder.com/15/555555/555555.png) Dark gray  |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/008800.png) Olive      |
+| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000088.png) Navy       |
+| 11 | `0b1011` | `#888800` | ![#888800](https://via.placeholder.com/15/888800/888800.png) Orange     |
 
 #### Planes 0, 2 and 3
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/000000?text=+) White      |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/000000?text=+) Green      |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/000000?text=+) Olive      |
-| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/000000?text=+) Pink       |
-| 13 | `0b1101` | `#00FFFF` | ![#00FFFF](https://via.placeholder.com/15/00FFFF/000000?text=+) Cyan       |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  1 | `0b0001` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/15/FFFFFF/FFFFFF.png) White      |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  5 | `0b0101` | `#00FF00` | ![#00FF00](https://via.placeholder.com/15/00FF00/00FF00.png) Green      |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+|  9 | `0b1001` | `#008800` | ![#008800](https://via.placeholder.com/15/008800/008800.png) Olive      |
+| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/FF00FF.png) Pink       |
+| 13 | `0b1101` | `#00FFFF` | ![#00FFFF](https://via.placeholder.com/15/00FFFF/00FFFF.png) Cyan       |
 
 #### Planes 1, 2 and 3
 
 |  # | Binary # | HEX colour | Colour                                                                    |
 |----|----------|-----------|----------------------------------------------------------------------------|
-|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000?text=+) Black      |
-|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/000000?text=+) Light gray |
-|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) Red        |
-|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/000000?text=+) Blue       |
-|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/000000?text=+) Bordeaux   |
-| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000000?text=+) Navy       |
-| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/000000?text=+) Pink       |
-| 14 | `0b1110` | `#880088` | ![#880088](https://via.placeholder.com/15/880088/000000?text=+) Purple     |
+|  0 | `0b0000` | `#000000` | ![#000000](https://via.placeholder.com/15/000000/000000.png) Black      |
+|  2 | `0b0010` | `#AAAAAA` | ![#AAAAAA](https://via.placeholder.com/15/AAAAAA/AAAAAA.png) Light gray |
+|  4 | `0b0100` | `#FF0000` | ![#FF0000](https://via.placeholder.com/15/FF0000/FF0000.png) Red        |
+|  6 | `0b0110` | `#0000FF` | ![#0000FF](https://via.placeholder.com/15/0000FF/0000FF.png) Blue       |
+|  8 | `0b1000` | `#880000` | ![#880000](https://via.placeholder.com/15/880000/880000.png) Bordeaux   |
+| 10 | `0b1010` | `#000088` | ![#000088](https://via.placeholder.com/15/000088/000088.png) Navy       |
+| 12 | `0b1100` | `#FF00FF` | ![#FF00FF](https://via.placeholder.com/15/FF00FF/FF00FF.png) Pink       |
+| 14 | `0b1110` | `#880088` | ![#880088](https://via.placeholder.com/15/880088/880088.png) Purple     |
 
 ## Conclusion so far
 
