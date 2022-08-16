@@ -120,7 +120,6 @@ func (cpu *CPU) draw(x, y, n uint8 ) {
 
   cpu.SD = true
   cpu.setFlag(erases)
-	cpu.messUpRegisters(x, y)
 	if n == 0 {
 		cpu.bumpSpecType(SCHIP)
 	}
@@ -167,22 +166,6 @@ func (cpu *CPU) drawLine(ramPointer uint16, planeBufPointer uint16, plane uint8)
     }
   }
   return erases
-}
-
-func (cpu *CPU) messUpRegisters(x, y uint8) {
-	if !cpu.drawQuirk {
-		return
-	}
-
-	/**
-	 * "First is that I, VX and VY are all altered by this routine, so the
-	 * Chip-8 programmer should not expect them to be available for reuse with
-	 * their original values. These would have to be explicitly set again."
-	 * -- https://laurencescotford.com/chip-8-on-the-cosmac-vip-drawing-sprites/
-	 **/
-	cpu.i = 0
-	cpu.v[x] = 0
-	cpu.v[y] = 0
 }
 
 func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {

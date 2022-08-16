@@ -1,13 +1,11 @@
 package silicon8
 
 const AUTO      int = 0
-const STRICTVIP int = 1
-const VIP       int = 2
-const BLINDVIP  int = 3  // To run the emulator in headless VIP mode, which doesn't wait for display refresh
-const SCHIP     int = 4
-const XOCHIP    int = 5
+const VIP       int = 1
+const BLINDVIP  int = 2  // To run the emulator in headless VIP mode, which doesn't wait for display refresh
+const SCHIP     int = 3
+const XOCHIP    int = 4
 
-const STRICTVIP_RAM_SIZE uint16 = 3216 + 512
 const VIP_SCHIP_RAM_SIZE uint16 = 3583 + 512
 const XOCHIP_RAM_SIZE    uint16 = 65023 + 512
 const DEFAULT_STACK_SIZE uint8  = 12
@@ -62,7 +60,6 @@ type CPU struct {
 	vfQuirk        bool // vF is cleared after OR, AND and XOR opcodes
 	clipQuirk      bool // Sprites are clipped instead of wrapped at edges of display
 	dispQuirk      bool // Halt for display refresh before drawing sprite
-	drawQuirk      bool // Draw instruction messes up i, v[x] and v[y]
 
 	// External event handlers
 	playSound      playSoundEvent
