@@ -58,6 +58,12 @@ func (cpu *CPU) Cycle() {
 				cpu.v[i] = cpu.RAM[cpu.a(cpu.i+uint16(i-x))]
 			}
 			cpu.bumpSpecType(XOCHIP)
+		case 4:
+			// Load range of palette "registers" from memory
+			for i := x; i <= y; i++ {
+				cpu.palette[i] = cpu.RAM[cpu.a(cpu.i+uint16(i-x))]
+			}
+			cpu.bumpSpecType(XOCHIP)
 		default:
 			if cpu.v[x] == cpu.v[y] {
 				cpu.skipNextInstruction()
