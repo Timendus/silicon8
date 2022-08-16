@@ -145,6 +145,14 @@ set the execution speed "blind" with the -/+ keys was not to my liking.
 
 A big thanks to @MinThaMi for fixing a nasty CSS issue with Safari 🎉
 
+### August 2022
+
+In June and July of this year I wrote a [CHIP-8 test
+suite](https://github.com/Timendus/chip8-test-suite) that people can use to test
+if their interpreter works as it should. I discovered to my dismay that Silicon8
+didn't do so well when it came to my very own keypad tests. So I fixed the
+keyboard 😉
+
 ## Developer instructions
 
 ### How to run
