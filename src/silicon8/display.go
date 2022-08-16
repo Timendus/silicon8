@@ -175,86 +175,12 @@ func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
 }
 
 func (cpu *CPU) RenderToDisplayBuffer() {
-	var r, g, b uint8
+	var colour uint8
 	for i := 0; i < int(cpu.DispHeight * cpu.DispWidth); i++ {
-		switch cpu.planeBuffer[i] {
-
-		// Palette zero: four shades of gray
-		case 0:
-			r = 0x00
-			g = 0x00
-			b = 0x00
-		case 1:
-			r = 0xFF
-			g = 0xFF
-			b = 0xFF
-		case 2:
-			r = 0xAA
-			g = 0xAA
-			b = 0xAA
-		case 3:
-			r = 0x55
-			g = 0x55
-			b = 0x55
-
-		// Palette one: red, green, blue, yellow
-		case 4:
-			r = 0xFF
-			g = 0x00
-			b = 0x00
-		case 5:
-			r = 0x00
-			g = 0xFF
-			b = 0x00
-		case 6:
-			r = 0x00
-			g = 0x00
-			b = 0xFF
-		case 7:
-			r = 0xFF
-			g = 0xFF
-			b = 0x00
-
-		// Palette two: bordeaux, olive, navy, orange
-		case 8:
-			r = 0x88
-			g = 0x00
-			b = 0x00
-		case 9:
-			r = 0x00
-			g = 0x88
-			b = 0x00
-		case 10:
-			r = 0x00
-			g = 0x00
-			b = 0x88
-		case 11:
-			r = 0x88
-			g = 0x88
-			b = 0x00
-
-		// Palette three: pink and cyan, purple and ocean
-		case 12:
-			r = 0xFF
-			g = 0x00
-			b = 0xFF
-		case 13:
-			r = 0x00
-			g = 0xFF
-			b = 0xFF
-		case 14:
-			r = 0x88
-			g = 0x00
-			b = 0x88
-		case 15:
-			r = 0x00
-			g = 0x88
-			b = 0x88
-
-		}
+    colour = cpu.palette[cpu.planeBuffer[i]]
 		dispBufOffset := i * 3
-		cpu.Display[dispBufOffset+0] = r
-		cpu.Display[dispBufOffset+1] = g
-		cpu.Display[dispBufOffset+2] = b
+		cpu.Display[dispBufOffset+0] = (colour >> 5) * (255 / 7)
+		cpu.Display[dispBufOffset+1] = (colour >> 2 & 7) * (255 / 7)
+		cpu.Display[dispBufOffset+2] = (colour & 3) * (255 / 3)
 	}
 }

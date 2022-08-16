@@ -91,11 +91,15 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.dt = 0
 	cpu.st = 0
 
-	// Initialize XO-Chip audio "registers"
+	// Initialize XO-CHIP audio "registers"
 	cpu.pattern = [16]uint8{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	cpu.pitch = 4000
 	cpu.playingPattern = false
 	cpu.audioDirty = false
+
+	// Initialize XO-CHIP palette "registers"
+	cpu.palette = [16]uint8{0x00,0xFF,0xB6,0x49,0xE0,0x1C,0x03,0xFC,
+													0x80,0x10,0x02,0x90,0xE3,0x1F,0x82,0x12}
 
 	// Initialize memory
 	cpu.initDisplay(64, 32, 1)
