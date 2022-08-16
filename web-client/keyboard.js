@@ -52,13 +52,13 @@ module.exports = instance => {
         cyclesPerFrame /= 2;
         return instance.setCyclesPerFrame(cyclesPerFrame);
       default:
-        if ( Object.keys(keys).includes(e.keyCode.toString()) )
+        if ( instance && Object.keys(keys).includes(e.keyCode.toString()) )
           instance.pressKey(keys[e.keyCode]);
     }
   });
 
   window.addEventListener('keyup', e => {
-    if ( instance && keys[e.keyCode] )
+    if ( instance && Object.keys(keys).includes(e.keyCode.toString()) )
       instance.releaseKey(keys[e.keyCode]);
   });
 

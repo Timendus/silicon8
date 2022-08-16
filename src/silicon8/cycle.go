@@ -132,23 +132,32 @@ func (cpu *CPU) Cycle() {
 			cpu.v[x] = cpu.dt
 		case 0x0A:
 			// Wait for keypress and return key in vX
-			if cpu.waitForKey {
-				for i, p := range cpu.Keyboard {
-					if p {
-						cpu.v[x] = uint8(i)
-						cpu.waitForKey = false
-						return
-					}
-				}
-				cpu.pc -= 2
-			} else {
+			switch cpu.waitForKey {
+			case 0:
 				cpu.pc -= 2
 				for _, p := range cpu.Keyboard {
 					if p {
 						return
 					}
 				}
-				cpu.waitForKey = true
+				cpu.waitForKey = 1
+			case 1:
+				cpu.pc -= 2
+				for i, p := range cpu.Keyboard {
+					if p {
+						cpu.v[x] = uint8(i)
+						cpu.waitForKey = 2
+						return
+					}
+				}
+			case 2:
+				for _, p := range cpu.Keyboard {
+					if p {
+						cpu.pc -= 2
+						return
+					}
+				}
+				cpu.waitForKey = 0
 			}
 		case 0x15:
 			// Set delay timer to value in vX

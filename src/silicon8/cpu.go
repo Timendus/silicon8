@@ -112,7 +112,7 @@ func (cpu *CPU) Reset(interpreter int) {
 		cpu.Keyboard[i] = false
 	}
 
-	cpu.waitForKey = false
+	cpu.waitForKey = 0
 	cpu.WaitForInt = 0
 	cpu.playing = false
 	cpu.SD = true

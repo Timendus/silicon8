@@ -44,7 +44,7 @@ type CPU struct {
 
 	// Interpreter internal state
 	Keyboard       [16]bool
-	waitForKey     bool  // Waiting for key press?
+	waitForKey     uint8 // Waiting for key press?
 	WaitForInt     uint8 // Waiting for display refresh "interrupt"?
 	playing        bool  // Playing sound?
 	SD             bool  // Screen dirty?
