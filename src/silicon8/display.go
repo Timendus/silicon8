@@ -175,12 +175,14 @@ func (cpu *CPU) initDisplay(width uint16, height uint16, planes uint8) {
 }
 
 func (cpu *CPU) RenderToDisplayBuffer() {
+  var b3 = [8]uint8{0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, 0xff}
+  var b2 = [4]uint8{0x00, 0x60, 0xA0, 0xff}
 	var colour uint8
 	for i := 0; i < int(cpu.DispHeight * cpu.DispWidth); i++ {
     colour = cpu.palette[cpu.planeBuffer[i]]
 		dispBufOffset := i * 3
-		cpu.Display[dispBufOffset+0] = (colour >> 5) * (255 / 7)
-		cpu.Display[dispBufOffset+1] = (colour >> 2 & 7) * (255 / 7)
-		cpu.Display[dispBufOffset+2] = (colour & 3) * (255 / 3)
+		cpu.Display[dispBufOffset+0] = b3[colour >> 5 & 7]
+		cpu.Display[dispBufOffset+1] = b3[colour >> 2 & 7]
+		cpu.Display[dispBufOffset+2] = b2[colour & 3]
 	}
 }
