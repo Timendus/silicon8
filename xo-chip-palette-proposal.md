@@ -31,32 +31,32 @@ The `plane` instruction takes a 2-bit bitmask which selects one, both or neither
 
 When a `sprite` is drawn with both planes selected the operation will consume twice as many bytes of graphics data as it normally would, first drawing the specified sprite height to the first plane and then drawing the same number of bytes to the second plane. If the sprite was 4 pixels high, the first plane would be drawn to using bytes at the addresses `i` to `i`+3 and the second plane would be drawn using bytes at the addresses `i`+4 to `i`+7. This means that drawing sprites with both planes selected will naturally and conveniently draw or erase 4-color sprites. With both planes selected the `vf` collision flag will be set after a sprite drawing operation if pixels from _either_ plane are toggled from on to off.
 
-When a program starts, the colors that appear on the display for the planes are the default colors of the interpreter. Or the interpreter can have the user set the colors manually. But a program can override these colors programmatically by using the `palette` instruction. `palette` takes two plane bitmasks as parameters, that together form a range. Thus, `palette 0 1` changes only the background color and the color of the first plane. `palette 0 3` changes all four colors. `palette 1 2` only changes the colors for when a single plane has set pixels, et cetera. Color values are loaded from memory at the address that `i` points to.
+When a program starts, the colors that appear on the display for the planes are the default colors of the interpreter. Or the interpreter can have the user set the colors manually. But a program can override these colors programmatically by using the `palette` instruction. `palette` takes two plane bitmasks as parameters, that together form a range. Thus, `palette 0 1` changes only the background color and the color of the first plane. `palette 0 3` changes all four colors. `palette 1 2` only changes the colors for when either plane has set pixels, et cetera. Color values are loaded from memory at the address that `i` points to.
 
-For example, to have a monochrome game (using only the first plane) set the colors to red pixels on a blue background:
-
-      i := colors
-      palette 0 1   # Load palette for background and first plane
-
-      ...
+For example, to have a monochrome game (using only the first plane) set its colors to red pixels on a blue background:
 
     : colors
       0x03   # Blue
       0xE0   # Red
 
-Colors are stored as single bytes in the RGB332 format. This means that the most significant three bits represent the red channel, the next three bits the green channel and the two least significant bits the blue channel. Interpreters are free to choose a method of mapping RGB332 colors to the display. But the intervals in the example conversion function below were found to provide nice results.
+    ...
+
+    i := colors
+    palette 0 1   # Load palette for background and first plane
+
+Colors are stored as single bytes in the RGB332 format. This means that the most significant three bits represent the red channel, the next three bits the green channel and the two least significant bits the blue channel. Interpreters are free to choose a method of mapping RGB332 colors to the display. But the intervals in the example conversion function below were found to provide nice results:
 
 ```javascript
 function rgb332to888(c) {
-    const map3bits = [0, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, 0xff];
-    const map2bits = [0, 0x60, 0xA0, 0xff];
+    const map3bits = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, 0xFF];
+    const map2bits = [0x00, 0x60, 0xA0, 0xFF];
     return map3bits[c >> 5 & 7] << 16 |   // Red
            map3bits[c >> 2 & 7] << 8 |    // Green
            map2bits[c & 3];               // Blue
 }
 ```
 
-This allows programs to select colors from a total palette of these 256 different colors (gray values marked).
+The chosen color format allows `palette` to select colors from these 256 different options (gray values marked):
 
 ![The 256 colors that `palette` can choose from](./xo-chip-palette-proposal.png)
 
