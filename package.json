@@ -21,6 +21,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "chip8-binary-format": "^0.1.0",
     "thimbleful": "^1.0.0"
   }
 }
