@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T0DOOWP)
+
 # Silicon8
 
 Silicon8 is an implementation of a runtime for Chip-8, SCHIP and XO-Chip in Go
