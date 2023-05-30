@@ -63,14 +63,20 @@ canvas.dragging {
   border-radius: 1vw;
 }
 
-.notification {
-  box-sizing: border-box;
+.notifications {
   position: fixed;
   right: 2em;
   top: 2em;
   width: 22em;
+  margin: 0;
+  padding: 0;
+}
+.notifications div {
+  box-sizing: border-box;
+  width: 100%;
   height: 8em;
   padding: 1em;
+  margin-bottom: 2em;
   z-index: 3;
 
   border-radius: 1em;
@@ -82,7 +88,7 @@ canvas.dragging {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.notification.active {
+.notifications div.active {
   opacity: 1;
 }
 
@@ -131,9 +137,9 @@ canvas.dragging {
   left: 50%;
   top: 50%;
   margin-left: -400px;
-  margin-top: -300px;
+  margin-top: -400px;
   width: 800px;
-  height: 600px;
+  height: 800px;
   padding: 2em;
   overflow-y: auto;
   z-index: 2;
@@ -148,6 +154,7 @@ canvas.dragging {
   pointer-events: none;
   transform: scale(0.6);
   transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 6px 4px 20px rgba(0,0,0,0.4);
 }
 .settings.active {
   pointer-events: all;
@@ -161,12 +168,42 @@ canvas.dragging {
 .settings label {
   display: block;
 }
+.settings dl dt {
+  float: left;
+  width: 30%;
+}
+.settings dl dd {
+  margin-left: 30%;
+}
 .settings .align-right {
   text-align: right;
+  margin-bottom: 1em;
 }
 .nes-btn, .nes-select select, .nes-radio, .nes-radio ~ span {
   border-color: white !important;
   cursor: pointer !important;
+}
+
+#keys .row {
+  display: flex;
+  flex-direction: row;
+}
+#keys h4 {
+  height: 48px;
+  line-height: 48px;
+  flex: 1 0 10%;
+}
+#keys .nes-select {
+  width: auto;
+  flex: 1 1 auto;
+}
+#keys .row button {
+  width: 140px;
+  flex: 0 0 140px;
+  display: none;
+}
+.settings.gamepad-found #keys .row button {
+  display: block;
 }
 
 @media screen and (max-width: 768px) {

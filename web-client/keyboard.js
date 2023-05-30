@@ -1,73 +1,103 @@
-let cyclesPerFrame = 30;
+module.exports = class Keyboard {
 
-module.exports = instance => {
-  const keys = {
-    // Arrow keys
-    38: 5, 		// up
-    37: 7, 		// left
-    39: 9, 		// right
-    40: 8, 		// down
+  constructor(instance) {
+    if (!instance) throw 'Keyboard requires an emulator instance to run';
+    this._instance = instance;
+    this._attachEventListeners();
+  }
 
-    // 16 key pad
-    49: 1,		// 1
-    50: 2,		// 2
-    51: 3,		// 3
-    52: 0xC,	// 4
-    81: 4, 		// Q
-    87: 5, 		// W
-    69: 6, 		// E
-    82: 0xD, 	// R
-    65: 7, 		// A
-    83: 8, 		// S
-    68: 9, 		// D
-    70: 0xE, 	// F
-    90: 0xA, 	// Z
-    88: 0, 		// X
-    67: 0xB, 	// C
-    86: 0xF, 	// V
+  setMapping(keymap) {
+    this._keymap = keymap;
+  }
 
-    // Other number keys
-    48: 0,
-    53: 5,
-    54: 6,
-    55: 7,
-    56: 8,
-    57: 9,
-
-    // Special keys
-    32: 6,     // Space bar
-    16: 4,     // Shift
-    17: 6,     // Control
-  };
-
-  window.addEventListener('keydown', e => {
-    if ( !instance ) return;
-    switch(e.keyCode) {
-      case 13:  // Enter
-        return instance.dumpStatus();
-      case 187: // +
-        cyclesPerFrame *= 2;
-        return instance.setCyclesPerFrame(cyclesPerFrame);
-      case 189: // -
-        cyclesPerFrame /= 2;
-        return instance.setCyclesPerFrame(cyclesPerFrame);
-      default:
-        if ( instance && Object.keys(keys).includes(e.keyCode.toString()) )
-          instance.pressKey(keys[e.keyCode]);
+  _attachEventListeners() {
+    window.addEventListener('keydown', e => this._keydownListener(e));
+    window.addEventListener('keyup', e => this._keyupListener(e));
+    for (const button of document.querySelectorAll('.keyboard button')) {
+      button.addEventListener('touchstart',
+        () => instance.pressKey(button.dataset.value),
+        { passive: true }
+      );
+      button.addEventListener('touchend',
+        () => instance.releaseKey(button.dataset.value),
+        { passive: true }
+      );
     }
-  });
+  }
 
-  window.addEventListener('keyup', e => {
-    if ( instance && Object.keys(keys).includes(e.keyCode.toString()) )
-      instance.releaseKey(keys[e.keyCode]);
-  });
+  _keydownListener(e) {
+    if (e.code == "Enter")
+      return this._instance.dumpStatus();
+    if (e.code in this._fixedKeys)
+      this._instance.pressKey(this._fixedKeys[e.code]);
+    if (e.code in this._gamepadKeys && this._keymap) {
+      const key = parseInt(this._keymap[this._gamepadKeys[e.code]]);
+      if (!isNaN(key)) this._instance.pressKey(key);
+    }
+  }
 
-  document.querySelectorAll('.keyboard button').forEach(button => {
-    button.addEventListener('touchstart', () => {
-      instance.pressKey(button.dataset.value);
-    }, { passive: true });
-    button.addEventListener('touchend', () => {
-      instance.releaseKey(button.dataset.value);
-    }, { passive: true });
-  });
-};
+  _keyupListener(e) {
+    if (e.code in this._fixedKeys)
+      this._instance.releaseKey(this._fixedKeys[e.code]);
+    if (e.code in this._gamepadKeys && this._keymap) {
+      const key = parseInt(this._keymap[this._gamepadKeys[e.code]]);
+      if (!isNaN(key)) this._instance.releaseKey(key);
+    }
+  }
+
+  _fixedKeys = {
+    // 16 key pad
+    "Digit1": 1,
+    "Digit2": 2,
+    "Digit3": 3,
+    "Digit4": 0xC,
+    "KeyW":   5,
+    "KeyQ":   4,
+    "KeyE":   6,
+    "KeyR":   0xD,
+    "KeyA":   7,
+    "KeyS":   8,
+    "KeyD":   9,
+    "KeyF":   0xE,
+    "KeyZ":   0xA,
+    "KeyX":   0,
+    "KeyC":   0xB,
+    "KeyV":   0xF,
+  
+    // Other number keys
+    "Digit5": 5,
+    "Digit6": 6,
+    "Digit7": 7,
+    "Digit8": 8,
+    "Digit9": 9,
+    "Digit0": 0,
+  }
+
+  _gamepadKeys = {
+    // Arrow keys
+    "ArrowUp": "up",
+    "ArrowDown": "down",
+    "ArrowLeft": "left",
+    "ArrowRight": "right",
+
+    // Vim bindings
+    "KeyK": "up",
+    "KeyJ": "down",
+    "KeyH": "left",
+    "KeyL": "right",
+  
+    // Action button A
+    "Space": "a",
+    "ControlLeft": "a",
+    "ControlRight": "a",
+    "MetaLeft": "a",
+    "MetaRight": "a",
+
+    // Action button B
+    "ShiftLeft": "b",
+    "ShiftRight": "b",
+    "AltLeft": "b",
+    "AltRight": "b"
+  }
+
+}
