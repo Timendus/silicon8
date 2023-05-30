@@ -29,7 +29,7 @@
 			<canvas id="display"></canvas>
 		</div>
 
-		<div class="notification"></div>
+		<div class="notifications"></div>
 
 		<div class="keyboard left-keyboard">
 			<button data-value="1">1</button>  <button data-value="2">2</button>
@@ -45,6 +45,11 @@
 		</div>
 
 		<div class="settings">
+			<div class="align-right">
+				<button class="nes-btn is-error">Cancel</button>
+				<button class="nes-btn is-success">Start!</button>
+			</div>
+			<div id="info"></div>
 			<div class="nes-container">
 				<h3>Interpreter type</h3>
 				<label>
@@ -84,6 +89,168 @@
 					</select>
 				</div>
 			</div>
+			<div class="nes-container" id="keys">
+				<h3>Key mapping</h3>
+				<p>Default Silicon8 settings</p>
+
+				<div class="row">
+					<h4>Up:</h4>
+					<div class="nes-select">
+						<select name="up">
+							<option value="false">Not mapped</option>
+							<option value="0">Key 0</option>
+							<option value="1">Key 1</option>
+							<option value="2">Key 2</option>
+							<option value="3">Key 3</option>
+							<option value="4">Key 4</option>
+							<option value="5" selected>Key 5</option>
+							<option value="6">Key 6</option>
+							<option value="7">Key 7</option>
+							<option value="8">Key 8</option>
+							<option value="9">Key 9</option>
+							<option value="10">Key A</option>
+							<option value="11">Key B</option>
+							<option value="12">Key C</option>
+							<option value="13">Key D</option>
+							<option value="14">Key E</option>
+							<option value="15">Key F</option>
+						</select>
+					</div>
+					<button class="nes-btn" id="gamepad-up">🎮1 🔘12</button>
+					<input type="hidden" name="gamepad-up" value="0-12"/>
+				</div>
+				<div class="row">
+					<h4>Down:</h4>
+					<div class="nes-select">
+						<select name="down">
+							<option value="false">Not mapped</option>
+							<option value="0">Key 0</option>
+							<option value="1">Key 1</option>
+							<option value="2">Key 2</option>
+							<option value="3">Key 3</option>
+							<option value="4">Key 4</option>
+							<option value="5">Key 5</option>
+							<option value="6">Key 6</option>
+							<option value="7">Key 7</option>
+							<option value="8" selected>Key 8</option>
+							<option value="9">Key 9</option>
+							<option value="10">Key A</option>
+							<option value="11">Key B</option>
+							<option value="12">Key C</option>
+							<option value="13">Key D</option>
+							<option value="14">Key E</option>
+							<option value="15">Key F</option>
+						</select>
+					</div>
+					<button class="nes-btn" id="gamepad-down">🎮1 🔘13</button>
+					<input type="hidden" name="gamepad-down" value="0-13"/>
+				</div>
+				<div class="row">
+					<h4>Left:</h4>
+					<div class="nes-select">
+						<select name="left">
+							<option value="false">Not mapped</option>
+							<option value="0">Key 0</option>
+							<option value="1">Key 1</option>
+							<option value="2">Key 2</option>
+							<option value="3">Key 3</option>
+							<option value="4">Key 4</option>
+							<option value="5">Key 5</option>
+							<option value="6">Key 6</option>
+							<option value="7" selected>Key 7</option>
+							<option value="8">Key 8</option>
+							<option value="9">Key 9</option>
+							<option value="10">Key A</option>
+							<option value="11">Key B</option>
+							<option value="12">Key C</option>
+							<option value="13">Key D</option>
+							<option value="14">Key E</option>
+							<option value="15">Key F</option>
+						</select>
+					</div>
+					<button class="nes-btn" id="gamepad-left">🎮1 🔘14</button>
+					<input type="hidden" name="gamepad-left" value="0-14"/>
+				</div>
+				<div class="row">
+					<h4>Right:</h4>
+					<div class="nes-select">
+						<select name="right">
+							<option value="false">Not mapped</option>
+							<option value="0">Key 0</option>
+							<option value="1">Key 1</option>
+							<option value="2">Key 2</option>
+							<option value="3">Key 3</option>
+							<option value="4">Key 4</option>
+							<option value="5">Key 5</option>
+							<option value="6">Key 6</option>
+							<option value="7">Key 7</option>
+							<option value="8">Key 8</option>
+							<option value="9" selected>Key 9</option>
+							<option value="10">Key A</option>
+							<option value="11">Key B</option>
+							<option value="12">Key C</option>
+							<option value="13">Key D</option>
+							<option value="14">Key E</option>
+							<option value="15">Key F</option>
+						</select>
+					</div>
+					<button class="nes-btn" id="gamepad-right">🎮1 🔘15</button>
+					<input type="hidden" name="gamepad-right" value="0-15"/>
+				</div>
+				<div class="row">
+					<h4>A:</h4>
+					<div class="nes-select">
+						<select name="a">
+							<option value="false">Not mapped</option>
+							<option value="0">Key 0</option>
+							<option value="1">Key 1</option>
+							<option value="2">Key 2</option>
+							<option value="3">Key 3</option>
+							<option value="4">Key 4</option>
+							<option value="5">Key 5</option>
+							<option value="6" selected>Key 6</option>
+							<option value="7">Key 7</option>
+							<option value="8">Key 8</option>
+							<option value="9">Key 9</option>
+							<option value="10">Key A</option>
+							<option value="11">Key B</option>
+							<option value="12">Key C</option>
+							<option value="13">Key D</option>
+							<option value="14">Key E</option>
+							<option value="15">Key F</option>
+						</select>
+					</div>
+					<button class="nes-btn" id="gamepad-a">🎮1 🔘0</button>
+					<input type="hidden" name="gamepad-a" value="0-0"/>
+				</div>
+				<div class="row">
+					<h4>B:</h4>
+					<div class="nes-select">
+						<select name="b">
+							<option value="false">Not mapped</option>
+							<option value="0">Key 0</option>
+							<option value="1">Key 1</option>
+							<option value="2">Key 2</option>
+							<option value="3">Key 3</option>
+							<option value="4" selected>Key 4</option>
+							<option value="5">Key 5</option>
+							<option value="6">Key 6</option>
+							<option value="7">Key 7</option>
+							<option value="8">Key 8</option>
+							<option value="9">Key 9</option>
+							<option value="10">Key A</option>
+							<option value="11">Key B</option>
+							<option value="12">Key C</option>
+							<option value="13">Key D</option>
+							<option value="14">Key E</option>
+							<option value="15">Key F</option>
+						</select>
+					</div>
+					<button class="nes-btn" id="gamepad-b">🎮1 🔘1</button>
+					<input type="hidden" name="gamepad-b" value="0-1"/>
+				</div>
+
+			</div>
 			<!---
 			<fieldset id="xo-colours">
 				<legend>Colour palette</legend>
@@ -95,6 +262,7 @@
 			</fieldset>
 			//-->
 			<div class="align-right">
+				<button class="nes-btn is-error">Cancel</button>
 				<button class="nes-btn is-success">Start!</button>
 			</div>
 		</div>
