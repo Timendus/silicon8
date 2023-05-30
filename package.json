@@ -12,16 +12,16 @@
     "assemble": "echo 'Assembling all *.8o files...'; for file in `find . -type f -name \"*.8o\"`; do echo \"  * $file\"; target=${file%.8o}; octo $file ${target}.ch8; done"
   },
   "devDependencies": {
+    "@chipcode/octo-assembler": "^0.2.0",
     "binary-loader": "^0.0.1",
     "bmp-js": "^0.1.0",
     "jest": "^27.0.6",
-    "octo-assembler": "^0.1.1",
     "webpack": "^5.47.0",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^4.10.0"
   },
   "dependencies": {
-    "chip8-binary-format": "^0.1.0",
+    "chip8-binary-format": "^0.1.1",
     "thimbleful": "^1.0.0"
   }
 }
