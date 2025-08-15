@@ -155,6 +155,12 @@ if their interpreter works as it should. I discovered to my dismay that Silicon8
 didn't do so well when it came to my very own keypad tests. So I fixed the
 keyboard 😉
 
+Also, I added an opcode that allows an XO-CHIP program to programmatically
+select a colour palette from a master palette of 256 colours. This was an
+experiment with a couple of people on the EmuDev Discord to see if such an
+extension to XO-CHIP would be a good idea. Although it was well received it did
+not make it into the XO-CHIP spec, and as such it's no more than a curiousity 😄
+
 ## Developer instructions
 
 ### How to run
