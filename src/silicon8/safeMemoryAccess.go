@@ -34,7 +34,7 @@ func (cpu *CPU) error(msg string) {
 func (cpu *CPU) warnAtCurrentPC(msg string) {
 	opcodeAddr := cpu.pc - 2
 	var opcode uint16 = 0
-	if opcodeAddr >= 0 && int(opcodeAddr) < len(cpu.RAM) {
+	if int(opcodeAddr) < len(cpu.RAM) {
 		opcode = uint16(cpu.RAM[opcodeAddr])<<8 | uint16(cpu.RAM[opcodeAddr+1])
 	}
 	warn(msg, opcodeAddr, opcode)

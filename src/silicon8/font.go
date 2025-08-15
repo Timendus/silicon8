@@ -8,9 +8,7 @@ func (cpu *CPU) loadFont() {
   default:
     font = chip8Font[:]
   }
-  for i, b := range font {
-    cpu.RAM[i] = b
-  }
+  copy(cpu.RAM, font)
 }
 
 var chip8Font = [...]uint8{
