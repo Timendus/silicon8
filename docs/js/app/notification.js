@@ -1,4 +1,4 @@
-module.exports = message => {
+export default message => {
   const notification = document.querySelector('.notification');
   notification.innerText = message;
   notification.classList.add('active');

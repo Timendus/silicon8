@@ -1,19 +1,18 @@
-module.exports = {
-  playSound: (playingPattern, pattern, pitch) => {
-    if ( playingPattern ) {
-      // Play XO-Chip `pattern` at `pitch`
-      Bleeps.instance().setToSound(pattern, pitch);
-      Bleeps.instance().setVolume(0.0003);
-    } else {
-      // Play a regular old CHIP-8 "beep"
-      Bleeps.instance().setToBleep();
-      Bleeps.instance().setVolume(0.1);
-    }
-  },
-  stopSound: () => {
-    Bleeps.instance().setVolume(0);
+export function playSound(playingPattern, pattern, pitch) {
+  if ( playingPattern ) {
+    // Play XO-Chip `pattern` at `pitch`
+    Bleeps.instance().setToSound(pattern, pitch);
+    Bleeps.instance().setVolume(0.0003);
+  } else {
+    // Play a regular old CHIP-8 "beep"
+    Bleeps.instance().setToBleep();
+    Bleeps.instance().setVolume(0.1);
   }
-};
+}
+
+export function stopSound() {
+  Bleeps.instance().setVolume(0);
+}
 
 class Bleeps {
   constructor() {

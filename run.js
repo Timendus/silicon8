@@ -7,7 +7,7 @@ if ( process.argv.length != 3 || process.argv[2].substr(-4) != ".ch8" ) {
 const fs = require('fs');
 const program = new Uint8Array(fs.readFileSync(process.argv[2]));
 
-const types = require('./shared/types');
+const types = require('./docs/js/shared/types');
 const Input = require('./input');
 const input = new Input();
 

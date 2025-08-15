@@ -1,6 +1,6 @@
 let cyclesPerFrame = 30;
 
-module.exports = instance => {
+export default instance => {
   const keys = {
     // Arrow keys
     38: 5, 		// up

@@ -1,7 +1,7 @@
 const canvas  = document.getElementById('display');
 const context = canvas.getContext('2d');
 
-module.exports = {
+export default {
   render: (width, height, bytes) => {
     canvas.width = width;
     canvas.height = height;
