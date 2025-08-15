@@ -54,7 +54,9 @@ jobs:
       - name: Remove old WASM file for the test
         run: rm ./docs/silicon8.wasm
       - name: Build binaries
-        run: npm run build
+        run: |
+          npm install
+          npm run build
       - name: Upload WASM binary
         uses: actions/upload-artifact@v4
         with:
