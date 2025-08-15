@@ -11,7 +11,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
 
@@ -20,11 +20,43 @@ jobs:
         node-version: [latest]
 
     steps:
-    - uses: actions/checkout@v5
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm test
+      - uses: actions/checkout@v5
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ['1.21']
+        node-version: [latest]
+        tinygo-version: ['0.30']
+    steps:
+      - name: Remove old WASM file for the test
+        run: rm ./docs/silicon8.wasm
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache-dependency-path: silicon8/go.sum
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - uses: acifani/setup-tinygo@v2
+        with:
+          tinygo-version: ${{ matrix.tinygo-version }}
+      - name: Build binaries
+        run: npm run build
+      - name: Upload WASM binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: silicon8.wasm
+          path: ./docs/silicon8.wasm
