@@ -1,7 +1,7 @@
 {
   "name": "silicon8",
   "scripts": {
-    "build": "webpack --mode production && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/wasm_exec.js && GOPATH=$(pwd) GOTOOLCHAIN=go1.21.13+auto tinygo build -o ./docs/silicon8.wasm -target wasm ./src/wasm",
+    "build": "webpack --mode production && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/wasm_exec.js && GOTOOLCHAIN=go1.21.13+auto tinygo build -o ./docs/silicon8.wasm -target wasm ./src/wasm",
     "run": "./run.js ./tests/abc.ch8",
     "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm silicon8/wasm",
     "start": "npm run build && npm run run",
