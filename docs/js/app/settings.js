@@ -1,4 +1,4 @@
-module.exports = instance => {
+export default instance => {
   const settings = document.querySelector('.settings');
   let program;
 

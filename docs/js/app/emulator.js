@@ -1,6 +1,6 @@
 // This is just a wrapper for all the WebAssembly stuff.
 
-// require('./wasm_exec.js');
+import "../lib/wasm_exec.js";
 const go = new Go();
 
 if (!WebAssembly.instantiateStreaming) { // polyfill
@@ -10,7 +10,7 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
   };
 }
 
-module.exports = class {
+export default class {
 
   constructor({playSound, stopSound, display}) {
     playSound ||= () => {};

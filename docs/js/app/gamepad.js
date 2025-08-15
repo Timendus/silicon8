@@ -1,6 +1,6 @@
-const notify = require('./notification');
+import notify from "./notification.js";
 
-module.exports = instance => {
+export default instance => {
 
   const gamepads = {};
   let unannouncedGamepads = [];
