@@ -9,16 +9,26 @@ var cpu silicon8.CPU
 
 func main() {
 	cpu = silicon8.CPU{}
-	cpu.RegisterSoundCallbacks(playSound, stopSound)
+	cpu.RegisterSoundCallbacks(
+		func(b bool, p *[16]uint8, v float64) { playSound(b, p, v) },
+		func() { stopSound() },
+	)
 	cpu.RegisterRandomGenerator(func() uint8 { return uint8(randomByte()) })
-	cpu.RegisterDisplayCallback(render)
+	cpu.RegisterDisplayCallback(func(w int, h int, b []uint8) { render(w, h, b) })
 }
 
 // To implement in host environment:
 
+//export playSound
 func playSound(bool, *[16]uint8, float64)
+
+//export stopSound
 func stopSound()
-func randomByte() int          // This too, because math/rand gives weird errors with tinygo
+
+//export randomByte
+func randomByte() int // This too, because math/rand gives weird errors with tinygo
+
+//export render
 func render(int, int, []uint8) // width, height, pointer to display data
 
 // API for use in the host environment:
