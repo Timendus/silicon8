@@ -8,10 +8,10 @@ let randomByte, playSound, stopSound, render;
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
 Object.assign(go.importObject.env, {
-  'main.randomByte': () => randomByte(),
-  'main.playSound':  () => playSound(),
-  'main.stopSound':  () => stopSound(),
-  'main.render':     () => render()
+  randomByte: () => randomByte(),
+  playSound:  () => playSound(),
+  stopSound:  () => stopSound(),
+  render:     () => render()
 });
 const instance = new WebAssembly.Instance(mod, go.importObject);
 const cpu = instance.exports;

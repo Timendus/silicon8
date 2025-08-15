@@ -16,10 +16,10 @@ let cpu;
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
 Object.assign(go.importObject.env, {
-  'main.randomByte': () => Math.floor(Math.random() * Math.floor(256)),
-  'main.playSound':  () => process.stdout.write('\x07'),
-  'main.stopSound':  () => {},
-  'main.render':     (width, height, dataPtr) => {
+  randomByte: () => Math.floor(Math.random() * Math.floor(256)),
+  playSound:  () => process.stdout.write('\x07'),
+  stopSound:  () => {},
+  render:     (width, height, dataPtr) => {
     const data = new Uint8Array(cpu.memory.buffer, dataPtr, width * height * 3);
     render(data, width, height);
   }
