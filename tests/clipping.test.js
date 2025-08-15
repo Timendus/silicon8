@@ -1,61 +1,61 @@
-const {types, run} = require('./test-helper');
+const { types, run } = require("./test-helper");
 
-describe('clipping-xochip.ch8', () => {
+describe("clipping-xochip.ch8", () => {
   run({
     type: types.XOCHIP,
-    rom: './tests/clipping-xochip.ch8',
+    rom: "./tests/clipping-xochip.ch8",
     cycles: 11,
     test: (ram, display) => {
-      describe('in low resolution mode', () => {
-        test('shows sprites wrapping around all screen edges', () => {
-          // expect(display).toRenderTo('./tests/clipping-xochip-lowres.bmp');
-          expect(display).toLookLike('./tests/clipping-xochip-lowres.bmp');
+      describe("in low resolution mode", () => {
+        test("shows sprites wrapping around all screen edges", () => {
+          // expect(display).toRenderTo("./tests/clipping-xochip-lowres.bmp");
+          expect(display).toLookLike("./tests/clipping-xochip-lowres.bmp");
         });
       });
-    }
+    },
   });
 
   run({
     type: types.XOCHIP,
-    rom: './tests/clipping-xochip.ch8',
+    rom: "./tests/clipping-xochip.ch8",
     cycles: 22,
     test: (ram, display) => {
-      describe('in high resolution mode', () => {
-        test('shows sprites wrapping around all screen edges', () => {
-          // expect(display).toRenderTo('./tests/clipping-xochip-hires.bmp');
-          expect(display).toLookLike('./tests/clipping-xochip-hires.bmp');
+      describe("in high resolution mode", () => {
+        test("shows sprites wrapping around all screen edges", () => {
+          // expect(display).toRenderTo("./tests/clipping-xochip-hires.bmp");
+          expect(display).toLookLike("./tests/clipping-xochip-hires.bmp");
         });
       });
-    }
+    },
   });
 });
 
-describe('clipping-schip.ch8', () => {
+describe("clipping-schip.ch8", () => {
   run({
     type: types.SCHIP,
-    rom: './tests/clipping-schip.ch8',
+    rom: "./tests/clipping-schip.ch8",
     cycles: 10,
     test: (ram, display) => {
-      describe('in low resolution mode', () => {
-        test('shows sprites clipping at screen edges', () => {
-          // expect(display).toRenderTo('./tests/clipping-schip-lowres.bmp');
-          expect(display).toLookLike('./tests/clipping-schip-lowres.bmp');
+      describe("in low resolution mode", () => {
+        test("shows sprites clipping at screen edges", () => {
+          // expect(display).toRenderTo("./tests/clipping-schip-lowres.bmp");
+          expect(display).toLookLike("./tests/clipping-schip-lowres.bmp");
         });
       });
-    }
+    },
   });
 
   run({
     type: types.SCHIP,
-    rom: './tests/clipping-schip.ch8',
+    rom: "./tests/clipping-schip.ch8",
     cycles: 21,
     test: (ram, display) => {
-      describe('in high resolution mode', () => {
-        test('shows sprites clipping at screen edges', () => {
-          // expect(display).toRenderTo('./tests/clipping-schip-hires.bmp');
-          expect(display).toLookLike('./tests/clipping-schip-hires.bmp');
+      describe("in high resolution mode", () => {
+        test("shows sprites clipping at screen edges", () => {
+          // expect(display).toRenderTo("./tests/clipping-schip-hires.bmp");
+          expect(display).toLookLike("./tests/clipping-schip-hires.bmp");
         });
       });
-    }
+    },
   });
 });

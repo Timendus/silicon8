@@ -1,0 +1,113 @@
+: main
+	clear
+	hires
+	
+  i := arrow-left
+  v0 := 78
+  v1 := 22
+  sprite v0 v1 8
+	scroll-left
+	scroll-left
+	scroll-left
+	scroll-left
+	scroll-left
+	scroll-left
+
+  i := arrow-right
+  v0 := 42
+  v1 := 22
+  sprite v0 v1 8
+	scroll-right
+	scroll-right
+	scroll-right
+
+  i := arrow-down
+  v0 := 60
+  v1 := 11
+  sprite v0 v1 8
+	scroll-down 12
+
+  i := pixel
+  v0 := 52	# X
+  v1 := 64
+  v2 := 58
+  v3 := 43	# Y
+	v4 := 32
+	v5 := 21
+  loop
+    sprite v0 v3 1
+    sprite v1 v3 1
+		sprite v0 v4 1
+    sprite v1 v4 1
+    sprite v2 v5 1
+    v0 += 1
+		v1 += 1
+		v2 += 1
+    if v0 != 64 then
+  again
+  v0 := 52  # X
+  v1 := 63
+  v2 := 64
+  v3 := 75
+	v4 := 58
+	v5 := 69
+	v6 := 32  # Y
+	v7 := 21
+  loop
+    sprite v0 v6 1
+    sprite v1 v6 1
+    sprite v2 v6 1
+		sprite v3 v6 1
+		sprite v4 v7 1
+		sprite v5 v7 1
+    v6 += 1
+		v7 += 1
+    if v7 != 33 then
+  again
+
+  loop again
+
+
+: arrow-left
+  0b11111111
+  0b11100111
+  0b11001111
+  0b10000001
+  0b10000001
+  0b11001111
+  0b11100111
+  0b11111111
+
+: arrow-right
+  0b11111111
+  0b11100111
+  0b11110011
+  0b10000001
+  0b10000001
+  0b11110011
+  0b11100111
+  0b11111111
+
+: arrow-up
+  0b11111111
+  0b11100111
+  0b11000011
+  0b10000001
+  0b10100101
+  0b11100111
+  0b11100111
+  0b11111111
+
+: arrow-down
+  0b11111111
+  0b11100111
+  0b11100111
+  0b10100101
+  0b10000001
+  0b11000011
+  0b11100111
+  0b11111111
+
+: pixel
+  0b10000000
+	

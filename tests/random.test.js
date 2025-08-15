@@ -1,34 +1,34 @@
-const {types, run} = require('./test-helper');
+const { types, run } = require("./test-helper");
 
-describe('random.ch8', () => {
+describe("random.ch8", () => {
   run({
     type: types.BLINDVIP,
-    rom: './tests/random.ch8',
+    rom: "./tests/random.ch8",
     cycles: 4,
     callbacks: {
-      randomByte: () => 20
+      randomByte: () => 20,
     },
     test: (ram, display) => {
-      test('shows a dot at 20,20 given randomByte produces 20', () => {
+      test("shows a dot at 20,20 given randomByte produces 20", () => {
         expectPixel(display, 20, 20, 64, 32);
       });
-    }
+    },
   });
 });
 
-describe('random-hires.ch8', () => {
+describe("random-hires.ch8", () => {
   run({
     type: types.SCHIP,
-    rom: './tests/random-hires.ch8',
+    rom: "./tests/random-hires.ch8",
     cycles: 5,
     callbacks: {
-      randomByte: () => 50
+      randomByte: () => 50,
     },
     test: (ram, display) => {
-      test('shows a dot at 50,50 given randomByte produces 50', () => {
+      test("shows a dot at 50,50 given randomByte produces 50", () => {
         expectPixel(display, 50, 50, 128, 64);
       });
-    }
+    },
   });
 });
 
