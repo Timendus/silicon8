@@ -8,7 +8,8 @@ func (cpu *CPU) Stop() {
 	cpu.running = false
 }
 
-var cyclesPerFrame int = 30;
+var cyclesPerFrame int = 30
+
 func (cpu *CPU) SetCyclesPerFrame(cycles int) {
 	cpu.cyclesPerFrame = cycles
 	cyclesPerFrame = cycles
@@ -92,20 +93,20 @@ func (cpu *CPU) Reset(interpreter int) {
 	cpu.st = 0
 
 	// Initialize XO-CHIP audio "registers"
-	cpu.pattern = [16]uint8{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+	cpu.pattern = [16]uint8{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	cpu.pitch = 4000
 	cpu.playingPattern = false
 	cpu.audioDirty = false
 
 	// Initialize XO-CHIP palette "registers"
-	cpu.palette = [16]uint8{0x00,0xFF,0xB6,0x6D,0xE0,0x1C,0x03,0xFC,
-													0x80,0x10,0x02,0x90,0xE3,0x1F,0x82,0x12}
+	cpu.palette = [16]uint8{0x00, 0xFF, 0xB6, 0x6D, 0xE0, 0x1C, 0x03, 0xFC,
+		0x80, 0x10, 0x02, 0x90, 0xE3, 0x1F, 0x82, 0x12}
 
 	// Initialize memory
 	cpu.initDisplay(64, 32, 1)
 	cpu.stack = make([]uint16, cpu.stackSize)
-	cpu.planeBuffer = make([]uint8, 128 * 64) // Make space for the max display
-	cpu.Display = make([]uint8, 128 * 64 * 3) // size, we'll use the relevant part
+	cpu.planeBuffer = make([]uint8, 128*64) // Make space for the max display
+	cpu.Display = make([]uint8, 128*64*3)   // size, we'll use the relevant part
 	cpu.RAM = make([]uint8, cpu.RAMSize)
 
 	// Initialize internal variables
