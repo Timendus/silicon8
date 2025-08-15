@@ -37,8 +37,6 @@ jobs:
         node-version: [latest]
         tinygo-version: ['0.30']
     steps:
-      - name: Remove old WASM file for the test
-        run: rm ./docs/silicon8.wasm
       - uses: actions/checkout@v4
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -53,6 +51,8 @@ jobs:
       - uses: acifani/setup-tinygo@v2
         with:
           tinygo-version: ${{ matrix.tinygo-version }}
+      - name: Remove old WASM file for the test
+        run: rm ./docs/silicon8.wasm
       - name: Build binaries
         run: npm run build
       - name: Upload WASM binary
