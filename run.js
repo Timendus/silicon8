@@ -11,7 +11,7 @@ const types = require('./docs/js/shared/types');
 const Input = require('./input');
 const input = new Input();
 
-require('./docs/wasm_exec');
+require('./docs/js/lib/wasm_exec');
 let cpu;
 const go = new Go();
 const mod = new WebAssembly.Module(fs.readFileSync('./docs/silicon8.wasm'));
