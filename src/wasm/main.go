@@ -2,7 +2,7 @@ package main
 
 // This is the wrapper code to use Silicon8 as WebAssembly with TinyGo
 
-import "silicon8"
+import "github.com/timendus/silicon8/src/silicon8"
 
 // We currently support a single CPU
 var cpu silicon8.CPU
@@ -18,7 +18,7 @@ func main() {
 
 func playSound(bool, *[16]uint8, float64)
 func stopSound()
-func randomByte() int  // This too, because math/rand gives weird errors with tinygo
+func randomByte() int          // This too, because math/rand gives weird errors with tinygo
 func render(int, int, []uint8) // width, height, pointer to display data
 
 // API for use in the host environment:
@@ -55,12 +55,16 @@ func clockTick() {
 
 //export pressKey
 func pressKey(key uint8) {
-	if key < 16 { cpu.Keyboard[key] = true }
+	if key < 16 {
+		cpu.Keyboard[key] = true
+	}
 }
 
 //export releaseKey
 func releaseKey(key uint8) {
-	if key < 16 { cpu.Keyboard[key] = false }
+	if key < 16 {
+		cpu.Keyboard[key] = false
+	}
 }
 
 //export setCyclesPerFrame
@@ -70,7 +74,7 @@ func setCyclesPerFrame(cycles int) {
 
 //export dumpStatus
 func dumpStatus() {
-	cpu.DumpStatus();
+	cpu.DumpStatus()
 }
 
 // For testing purposes only:
