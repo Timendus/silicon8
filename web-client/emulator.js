@@ -19,13 +19,13 @@ module.exports = class {
     this._stopSound = stopSound;
 
     Object.assign(go.importObject.env, {
-      'main.randomByte': () => Math.floor(Math.random() * 256) & 0xFF,
-      'main.playSound':  (playingPattern, pattern, pitch) => {
+      randomByte: () => Math.floor(Math.random() * 256) & 0xFF,
+      playSound:  (playingPattern, pattern, pitch) => {
         pattern = new Uint8Array(this._cpu.memory.buffer, pattern, 16);
         playSound(playingPattern, pattern, pitch);
       },
-      'main.stopSound':  stopSound,
-      'main.render': (width, height, dataPtr) => {
+      stopSound:  stopSound,
+      render: (width, height, dataPtr) => {
         const bytes = new Uint8Array(this._cpu.memory.buffer, dataPtr, width * height * 3);
         display.render(width, height, bytes);
       }
