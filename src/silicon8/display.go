@@ -16,7 +16,7 @@ func (cpu *CPU) scrollDown(n uint8) {
   for i := cpu.DispWidth * cpu.DispHeight; i > 0; i-- {
     j := i - 1
     var pixel uint8
-    if j > offset {
+    if j >= offset {
       pixel = cpu.planeBuffer[j - offset] & cpu.plane
     } else {
       pixel = 0
@@ -73,14 +73,8 @@ func (cpu *CPU) draw(x, y, n uint8 ) {
 	}
 
 	// Get real sprite position & height
-	xPos := cpu.v[x]
-	yPos := cpu.v[y]
-	for xPos >= uint8(cpu.DispWidth) {
-		xPos -= uint8(cpu.DispWidth)
-	}
-	for yPos >= uint8(cpu.DispHeight) {
-		yPos -= uint8(cpu.DispHeight)
-	}
+	xPos := cpu.v[x] % uint8(cpu.DispWidth)
+	yPos := cpu.v[y] % uint8(cpu.DispHeight)
   height := uint16(n)
   if height == 0 {
     height = 16
