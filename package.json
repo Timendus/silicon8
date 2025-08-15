@@ -1,26 +1,22 @@
 {
   "name": "silicon8",
   "scripts": {
-    "build": "webpack --mode production && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/wasm_exec.js && GOTOOLCHAIN=go1.21.13+auto tinygo build -o ./docs/silicon8.wasm -target wasm ./src/wasm",
+    "build": "cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/js/lib/wasm_exec.js && GOTOOLCHAIN=go1.21.13+auto tinygo build -o ./docs/silicon8.wasm -target wasm ./src/wasm",
     "run": "./run.js ./tests/abc.ch8",
-    "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm silicon8/wasm",
+    "build:debug": "tinygo build -tags debug -o docs/silicon8.wasm -target wasm ./src/wasm",
     "start": "npm run build && npm run run",
     "go-install": "GOPATH=$(pwd) go get silicon8-qt",
     "go-start": "GOPATH=$(pwd) go run silicon8-qt",
-    "serve": "webpack serve --open",
     "test": "npm run assemble && jest --verbose",
-    "assemble": "echo 'Assembling all *.8o files...'; for file in `find . -type f -name \"*.8o\"`; do echo \"  * $file\"; target=${file%.8o}; octo $file ${target}.ch8; done"
+    "assemble": "echo 'Assembling all *.8o files...'; for file in `find . -type f -name \"*.8o\"`; do echo \"  * $file\"; target=${file%.8o}; octo $file ${target}.ch8; done",
+    "serve": "http-server ./docs -p 3001"
   },
   "devDependencies": {
-    "binary-loader": "^0.0.1",
     "bmp-js": "^0.1.0",
     "jest": "^27.0.6",
-    "octo-assembler": "^0.1.1",
-    "webpack": "^5.47.0",
-    "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^5.2.2"
+    "octo-assembler": "^0.1.1"
   },
   "dependencies": {
-    "thimbleful": "^1.0.0"
+    "http-server": "^14.1.1"
   }
 }
