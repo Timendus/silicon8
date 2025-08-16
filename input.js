@@ -1,4 +1,4 @@
-module.exports = class Input {
+export default class Input {
 
   constructor() {
     this._keyListener = null;
