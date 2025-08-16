@@ -14,7 +14,7 @@ window.addEventListener("load", async () => {
   gamepad(instance);
   const showSettings = settings(instance);
 
-  const response = await fetch("../../welcome.ch8");
+  const response = await fetch("welcome.ch8");
   const data = await response.bytes();
   const welcomeProgram = new Uint8Array(data);
 
