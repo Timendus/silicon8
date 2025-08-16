@@ -5,7 +5,7 @@ import gamepad from "./gamepad.js";
 import settings from "./settings.js";
 import display from "./display.js";
 import types from "../shared/types.js";
-import {playSound, stopSound} from "./sound.js";
+import { playSound, stopSound } from "./sound.js";
 
 window.addEventListener("load", async () => {
   const instance = new Emulator({ display, playSound, stopSound });

@@ -1,30 +1,30 @@
 let cyclesPerFrame = 30;
 
-export default instance => {
+export default (instance) => {
   const keys = {
     // Arrow keys
-    38: 5, 		// up
-    37: 7, 		// left
-    39: 9, 		// right
-    40: 8, 		// down
+    38: 5, // up
+    37: 7, // left
+    39: 9, // right
+    40: 8, // down
 
     // 16 key pad
-    49: 1,		// 1
-    50: 2,		// 2
-    51: 3,		// 3
-    52: 0xC,	// 4
-    81: 4, 		// Q
-    87: 5, 		// W
-    69: 6, 		// E
-    82: 0xD, 	// R
-    65: 7, 		// A
-    83: 8, 		// S
-    68: 9, 		// D
-    70: 0xE, 	// F
-    90: 0xA, 	// Z
-    88: 0, 		// X
-    67: 0xB, 	// C
-    86: 0xF, 	// V
+    49: 1, // 1
+    50: 2, // 2
+    51: 3, // 3
+    52: 0xc, // 4
+    81: 4, // Q
+    87: 5, // W
+    69: 6, // E
+    82: 0xd, // R
+    65: 7, // A
+    83: 8, // S
+    68: 9, // D
+    70: 0xe, // F
+    90: 0xa, // Z
+    88: 0, // X
+    67: 0xb, // C
+    86: 0xf, // V
 
     // Other number keys
     48: 0,
@@ -35,15 +35,15 @@ export default instance => {
     57: 9,
 
     // Special keys
-    32: 6,     // Space bar
-    16: 4,     // Shift
-    17: 6,     // Control
+    32: 6, // Space bar
+    16: 4, // Shift
+    17: 6, // Control
   };
 
-  window.addEventListener('keydown', e => {
-    if ( !instance ) return;
-    switch(e.keyCode) {
-      case 13:  // Enter
+  window.addEventListener("keydown", (e) => {
+    if (!instance) return;
+    switch (e.keyCode) {
+      case 13: // Enter
         return instance.dumpStatus();
       case 187: // +
         cyclesPerFrame *= 2;
@@ -52,22 +52,30 @@ export default instance => {
         cyclesPerFrame /= 2;
         return instance.setCyclesPerFrame(cyclesPerFrame);
       default:
-        if ( instance && Object.keys(keys).includes(e.keyCode.toString()) )
+        if (instance && Object.keys(keys).includes(e.keyCode.toString()))
           instance.pressKey(keys[e.keyCode]);
     }
   });
 
-  window.addEventListener('keyup', e => {
-    if ( instance && Object.keys(keys).includes(e.keyCode.toString()) )
+  window.addEventListener("keyup", (e) => {
+    if (instance && Object.keys(keys).includes(e.keyCode.toString()))
       instance.releaseKey(keys[e.keyCode]);
   });
 
-  document.querySelectorAll('.keyboard button').forEach(button => {
-    button.addEventListener('touchstart', () => {
-      instance.pressKey(button.dataset.value);
-    }, { passive: true });
-    button.addEventListener('touchend', () => {
-      instance.releaseKey(button.dataset.value);
-    }, { passive: true });
+  document.querySelectorAll(".keyboard button").forEach((button) => {
+    button.addEventListener(
+      "touchstart",
+      () => {
+        instance.pressKey(button.dataset.value);
+      },
+      { passive: true }
+    );
+    button.addEventListener(
+      "touchend",
+      () => {
+        instance.releaseKey(button.dataset.value);
+      },
+      { passive: true }
+    );
   });
 };

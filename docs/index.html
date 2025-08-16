@@ -1,85 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Silicon8</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link href="style/app/index.css" rel="stylesheet" />
+    <script type="module" src="js/app/index.js"></script>
 
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Silicon8</title>
-		<link rel="icon" type="image/x-icon" href="favicon.ico" />
-		<link href="style/app/index.css" rel="stylesheet" />
-		<script type="module" src="js/app/index.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-SERBNVPJ42"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-SERBNVPJ42");
+    </script>
+  </head>
 
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-SERBNVPJ42"></script>
-		<script>
-		  window.dataLayer = window.dataLayer || [];
-		  function gtag(){dataLayer.push(arguments);}
-		  gtag('js', new Date());
-		  gtag('config', 'G-SERBNVPJ42');
-		</script>
-	</head>
+  <body>
+    <div class="display-wrapper">
+      <canvas id="display"></canvas>
+    </div>
 
-	<body>
-		<div class="display-wrapper">
-			<canvas id="display"></canvas>
-		</div>
+    <div class="notification"></div>
 
-		<div class="notification"></div>
+    <div class="keyboard left-keyboard">
+      <button data-value="1">1</button> <button data-value="2">2</button>
+      <button data-value="4">4</button> <button data-value="5">5</button>
+      <button data-value="7">7</button> <button data-value="8">8</button>
+      <button data-value="10">A</button> <button data-value="0">0</button>
+    </div>
+    <div class="keyboard right-keyboard">
+      <button data-value="3">3</button> <button data-value="12">C</button>
+      <button data-value="6">6</button> <button data-value="13">D</button>
+      <button data-value="9">9</button> <button data-value="14">E</button>
+      <button data-value="11">B</button> <button data-value="15">F</button>
+    </div>
 
-		<div class="keyboard left-keyboard">
-			<button data-value="1">1</button>  <button data-value="2">2</button>
-			<button data-value="4">4</button>  <button data-value="5">5</button>
-			<button data-value="7">7</button>  <button data-value="8">8</button>
-			<button data-value="10">A</button> <button data-value="0">0</button>
-		</div>
-		<div class="keyboard right-keyboard">
-			<button data-value="3">3</button>  <button data-value="12">C</button>
-			<button data-value="6">6</button>  <button data-value="13">D</button>
-			<button data-value="9">9</button>  <button data-value="14">E</button>
-			<button data-value="11">B</button> <button data-value="15">F</button>
-		</div>
-
-		<div class="settings">
-			<div class="nes-container">
-				<h3>Interpreter type</h3>
-				<label>
-					<input type="radio" class="nes-radio is-dark" name="interpreter" value="0" checked>
-					<span>Auto-detect</span>
-				</label>
-				<label>
-					<input type="radio" class="nes-radio is-dark" name="interpreter" value="1">
-					<span>VIP</span>
-				</label>
-				<label>
-					<input type="radio" class="nes-radio is-dark" name="interpreter" value="3">
-					<span>SCHIP</span>
-				</label>
-				<label>
-					<input type="radio" class="nes-radio is-dark" name="interpreter" value="4">
-					<span>XO-CHIP</span>
-				</label>
-			</div>
-			<div class="nes-container">
-				<h3>Execution speed</h3>
-				<div class="nes-select">
-					<select name="speed">
-						<option value="7">420Hz - 7 cycles per frame</option>
-						<option value="15">900Hz - 15 cycles per frame</option>
-						<option value="20">1.2KHz - 20 cycles per frame</option>
-						<option value="30" selected>1.8KHz - 30 cycles per frame</option>
-						<option value="100">6KHz - 100 cycles per frame</option>
-						<option value="200">12KHz - 200 cycles per frame</option>
-						<option value="500">30KHz - 500 cycles per frame</option>
-						<option value="1000">60KHz - 1000 cycles per frame</option>
-						<option value="20000">1.2MHz - Octo Ludicrous speed</option>
-						<option value="50000">3MHz - 50000 cycles per frame</option>
-						<option value="100000">6MHz - 100000 cycles per frame</option>
-						<option value="200000">12MHz - 200000 cycles per frame</option>
-						<option value="400000">24MHz - 400000 cycles per frame</option>
-					</select>
-				</div>
-			</div>
-			<!---
+    <div class="settings">
+      <div class="nes-container">
+        <h3>Interpreter type</h3>
+        <label>
+          <input
+            type="radio"
+            class="nes-radio is-dark"
+            name="interpreter"
+            value="0"
+            checked
+          />
+          <span>Auto-detect</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            class="nes-radio is-dark"
+            name="interpreter"
+            value="1"
+          />
+          <span>VIP</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            class="nes-radio is-dark"
+            name="interpreter"
+            value="3"
+          />
+          <span>SCHIP</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            class="nes-radio is-dark"
+            name="interpreter"
+            value="4"
+          />
+          <span>XO-CHIP</span>
+        </label>
+      </div>
+      <div class="nes-container">
+        <h3>Execution speed</h3>
+        <div class="nes-select">
+          <select name="speed">
+            <option value="7">420Hz - 7 cycles per frame</option>
+            <option value="15">900Hz - 15 cycles per frame</option>
+            <option value="20">1.2KHz - 20 cycles per frame</option>
+            <option value="30" selected>1.8KHz - 30 cycles per frame</option>
+            <option value="100">6KHz - 100 cycles per frame</option>
+            <option value="200">12KHz - 200 cycles per frame</option>
+            <option value="500">30KHz - 500 cycles per frame</option>
+            <option value="1000">60KHz - 1000 cycles per frame</option>
+            <option value="20000">1.2MHz - Octo Ludicrous speed</option>
+            <option value="50000">3MHz - 50000 cycles per frame</option>
+            <option value="100000">6MHz - 100000 cycles per frame</option>
+            <option value="200000">12MHz - 200000 cycles per frame</option>
+            <option value="400000">24MHz - 400000 cycles per frame</option>
+          </select>
+        </div>
+      </div>
+      <!---
 			<fieldset id="xo-colours">
 				<legend>Colour palette</legend>
 				<p>?</p>
@@ -89,10 +114,9 @@
 				<p>?</p>
 			</fieldset>
 			//-->
-			<div class="align-right">
-				<button class="nes-btn is-success">Start!</button>
-			</div>
-		</div>
-	</body>
-
+      <div class="align-right">
+        <button class="nes-btn is-success">Start!</button>
+      </div>
+    </div>
+  </body>
 </html>

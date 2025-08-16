@@ -1,19 +1,20 @@
-export default instance => {
-  const settings = document.querySelector('.settings');
+export default (instance) => {
+  const settings = document.querySelector(".settings");
   let program;
 
-  settings.querySelector('button')
-          .addEventListener('click', () => {
-    const type = settings.querySelector('input[name="interpreter"]:checked').value;
+  settings.querySelector("button").addEventListener("click", () => {
+    const type = settings.querySelector(
+      'input[name="interpreter"]:checked'
+    ).value;
     const speed = settings.querySelector('select[name="speed"]').value;
     instance.loadProgram(type, program);
     instance.setCyclesPerFrame(speed);
-    settings.classList.remove('active');
+    settings.classList.remove("active");
     instance.start();
   });
 
-  return prgm => {
+  return (prgm) => {
     program = prgm;
-    settings.classList.add('active');
-  }
-}
+    settings.classList.add("active");
+  };
+};
