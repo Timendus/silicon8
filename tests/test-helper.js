@@ -1,8 +1,7 @@
 // WebAssembly Silicon8 module loading and running stuff
 
-const fs = require('fs');
-const types = require('../shared/types');
-require('../docs/wasm_exec');
+import fs from "fs";
+import "../docs/js/lib/wasm_exec.js";
 
 let randomByte, playSound, stopSound, render;
 const go = new Go();
@@ -17,31 +16,27 @@ const instance = new WebAssembly.Instance(mod, go.importObject);
 const cpu = instance.exports;
 go.run(instance);
 
-module.exports = {
-  types,
+export default function run({type, rom, cycles, test, callbacks = {}}) {
+  randomByte = () => callbacks.randomByte ? callbacks.randomByte() : Math.floor(Math.random() * Math.floor(256));
+  playSound  = () => callbacks.playSound  ? callbacks.playSound()  : null;
+  stopSound  = () => callbacks.stopSound  ? callbacks.stopSound()  : null;
+  render     = () => callbacks.render     ? callbacks.render()     : null;
 
-  run: ({type, rom, cycles, test, callbacks = {}}) => {
-    randomByte = () => callbacks.randomByte ? callbacks.randomByte() : Math.floor(Math.random() * Math.floor(256));
-    playSound  = () => callbacks.playSound  ? callbacks.playSound()  : null;
-    stopSound  = () => callbacks.stopSound  ? callbacks.stopSound()  : null;
-    render     = () => callbacks.render     ? callbacks.render()     : null;
+  const program = new Uint8Array(fs.readFileSync(rom));
+  cpu.reset(type);
+  const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
 
-    const program = new Uint8Array(fs.readFileSync(rom));
-    cpu.reset(type);
-    const ram = new Uint8Array(cpu.memory.buffer, cpu.ramPtr(), cpu.ramSize());
+  // Load program into RAM
+  for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
 
-    // Load program into RAM
-    for ( let i = 0x200; i < 0x200 + program.length; i++ ) ram[i] = program[i - 0x200];
-
-    cpu.runCycles(cycles);
-    const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
-    test(Array.from(ram), Array.from(display));
-  }
-};
+  cpu.runCycles(cycles);
+  const display = new Uint8Array(cpu.memory.buffer, cpu.displayPtr(), cpu.displaySize());
+  test(Array.from(ram), Array.from(display));
+}
 
 // Bitmap generation and comparison stuff
 
-const bmp = require("bmp-js");
+import bmp from "bmp-js";
 
 function toBMPData(input) {
   const output = [];

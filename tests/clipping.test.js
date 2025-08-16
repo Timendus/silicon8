@@ -1,4 +1,5 @@
-const { types, run } = require("./test-helper");
+import run from "./test-helper.js";
+import types from "../docs/js/shared/types";
 
 describe("clipping-xochip.ch8", () => {
   run({
