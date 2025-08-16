@@ -1,8 +1,4 @@
-# Adaptation of Node.js workflow template at https://github.com/actions/starter-workflows/blob/main/ci/node.js.yml
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: Silicon8 Jest tests
 
 on:
   push:
@@ -28,37 +24,3 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm test
-
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-version: ['1.21']
-        node-version: [latest]
-        tinygo-version: ['0.30.0']
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
-          cache-dependency-path: silicon8/go.sum
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - uses: acifani/setup-tinygo@v2
-        with:
-          tinygo-version: ${{ matrix.tinygo-version }}
-      - name: Remove old WASM file for the test
-        run: rm ./docs/silicon8.wasm
-      - name: Build binaries
-        run: |
-          npm install
-          npm run build
-      - name: Upload WASM binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: silicon8.wasm
-          path: ./docs/silicon8.wasm
