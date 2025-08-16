@@ -1,4 +1,5 @@
-const { types, run } = require("./test-helper");
+import run from "./test-helper.js";
+import types from "../docs/js/shared/types";
 
 run({
   type: types.XOCHIP,

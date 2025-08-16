@@ -1,5 +1,6 @@
 {
   "name": "silicon8",
+  "type": "module",
   "scripts": {
     "build": "cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js docs/js/lib/wasm_exec.js && GOTOOLCHAIN=go1.21.13+auto tinygo build -o ./docs/silicon8.wasm -target wasm ./src/wasm",
     "run": "./run.js ./tests/abc.ch8",
@@ -7,16 +8,20 @@
     "start": "npm run build && npm run run",
     "go-install": "GOPATH=$(pwd) go get silicon8-qt",
     "go-start": "GOPATH=$(pwd) go run silicon8-qt",
-    "test": "npm run assemble && jest --verbose",
+    "test": "npm run assemble && NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --verbose",
     "assemble": "echo 'Assembling all *.8o files...'; for file in `find . -type f -name \"*.8o\"`; do echo \"  * $file\"; target=${file%.8o}; octo $file ${target}.ch8; done",
     "serve": "http-server ./docs -p 3001"
   },
   "devDependencies": {
     "bmp-js": "^0.1.0",
-    "jest": "^27.0.6",
+    "jest": "^30.0.5",
     "octo-assembler": "^0.1.1"
   },
   "dependencies": {
     "http-server": "^14.1.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
   }
 }
