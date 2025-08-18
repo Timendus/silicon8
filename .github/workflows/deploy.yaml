@@ -29,18 +29,22 @@ jobs:
         node-version: [latest]
         tinygo-version: ['0.30.0']
     steps:
-      # Check out repository and build the project
-      - uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
-          cache-dependency-path: silicon8/go.sum
+      # Check out repository and run the tests
+      - uses: actions/checkout@v5
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+      # Build the project
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache-dependency-path: silicon8/go.sum
       - uses: acifani/setup-tinygo@v2
         with:
           tinygo-version: ${{ matrix.tinygo-version }}
@@ -49,7 +53,7 @@ jobs:
           npm install
           npm run build
 
-      # Deploy resulting files to Github pages
+      # Deploy to Github pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

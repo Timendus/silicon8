@@ -1,8 +1,6 @@
 name: Silicon8 Jest tests
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
