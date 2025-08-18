@@ -50,7 +50,6 @@ jobs:
           tinygo-version: ${{ matrix.tinygo-version }}
       - name: Build binaries
         run: |
-          npm install
           npm run build
 
       # Deploy to Github pages
