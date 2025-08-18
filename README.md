@@ -161,6 +161,26 @@ experiment with a couple of people on the EmuDev Discord to see if such an
 extension to XO-CHIP would be a good idea. Although it was well received it did
 not make it into the XO-CHIP spec, and as such it's no more than a curiousity 😄
 
+### August 2025
+
+I did some work on
+[Octopus2](https://github.com/Timendus/chipcode/tree/main/octopus2), integrating
+Silicon8 as a scriptable emulator for running CHIP-8 tests and automatically
+generating screenshots and such. As a part of that project, I revisited this
+repository which had unfortunately endured some bit-rot which had made it no fun
+to work on.
+
+I updated all dependencies and rewrote code where necessary to make everything
+compile happily again. I restructured the code slightly so I could properly
+depend on Silicon8 in my Octopus2 Go module. I converted the project from
+Webpack to ES6 modules so the browser could do the work and I could get rid of
+the Webpack dependency (and complexity). Finally, I automated building the
+WebAssembly file and deploying Silicon8 using Github actions.
+
+I hope that now that the project is up to date again, this will make it a bit
+easier to quickly fix a bug or two or add a feature, when needed. I also hope I
+didn't break anything 😂
+
 ## Developer instructions
 
 ### How to run
