@@ -1,5 +1,9 @@
 package silicon8
 
+import (
+	"fmt"
+)
+
 func (cpu *CPU) Start() {
 	cpu.running = true
 }
@@ -15,7 +19,11 @@ func (cpu *CPU) SetCyclesPerFrame(cycles int) {
 	cyclesPerFrame = cycles
 }
 
-func (cpu *CPU) ClockTick() {
+func (cpu *CPU) SetBreakpoints(breakpoints map[int]string) {
+	cpu.breakpoints = breakpoints
+}
+
+func (cpu *CPU) ClockTick() error {
 	// Tick timers
 	if cpu.dt > 0 {
 		cpu.dt--
@@ -37,8 +45,19 @@ func (cpu *CPU) ClockTick() {
 	}
 
 	// Run cycles
-	for i := 0; i < cpu.cyclesPerFrame; i++ {
-		cpu.Cycle()
+	if cpu.breakpoints != nil {
+		for i := 0; i < cpu.cyclesPerFrame; i++ {
+			cpu.Cycle()
+			for b, m := range cpu.breakpoints {
+				if cpu.pc == uint16(b) {
+					return fmt.Errorf("breakpoint: %s", m)
+				}
+			}
+		}
+	} else {
+		for i := 0; i < cpu.cyclesPerFrame; i++ {
+			cpu.Cycle()
+		}
 	}
 
 	// Trigger audio updates if dirty
@@ -58,6 +77,8 @@ func (cpu *CPU) ClockTick() {
 	if cpu.WaitForInt == 1 {
 		cpu.WaitForInt = 2
 	}
+
+	return nil
 }
 
 func (cpu *CPU) Reset(interpreter int) {
