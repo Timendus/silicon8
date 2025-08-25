@@ -55,6 +55,7 @@ type CPU struct {
 	typeFixed      bool
 	cyclesPerFrame int
 	running        bool
+	breakpoints    map[int]string
 
 	// Quirks flags
 	shiftQuirk bool // Shift result to source register instead of target register
